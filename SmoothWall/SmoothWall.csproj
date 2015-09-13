@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{08F5F43B-1678-4D84-9EC0-C66982DE95F3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>esm</RootNamespace>
+    <AssemblyName>SmoothWall</AssemblyName>
+    <ReleaseVersion>0.12.0.0</ReleaseVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <SynchReleaseVersion>false</SynchReleaseVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\Source-DLLs\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\Source-DLLs\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Community Core Library">
+      <HintPath>..\Source-DLLs\Community Core Library.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Designators\Designator_SmoothWall.cs" />
+    <Compile Include="JobDrivers\JobDriver_SmoothWall.cs" />
+    <Compile Include="WorkGivers\WorkGiver_SmoothWalls.cs" />
+    <Compile Include="SmoothWall.cs" />
+    <Compile Include="Buildings\Building_SmoothWall.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="WorkGivers\" />
+    <Folder Include="Buildings\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+	    copy "$(TargetPath)" "$(SolutionDir)_Mod\ESM - SmoothWall\Assemblies"
+	    copy "$(TargetPath)" "C:\Games\RimWorld A12\Mods\ESM - SmoothWall\Assemblies"
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

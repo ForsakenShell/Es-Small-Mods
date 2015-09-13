@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <ModHelperDef>
+        <defName>SmoothWall</defName>
+
+        <ModName>ESM - Smooth Wall</ModName>
+
+        <version>0.12.2</version>
+
+        <Designators>
+            <li>
+                <designatorClass>esm.Designator_SmoothWall</designatorClass>
+                <designationCategoryDef>Structure</designationCategoryDef>
+                <designatorNextTo>Designator_Deconstruct</designatorNextTo>
+            </li>
+        </Designators>
+
+    </ModHelperDef>
+
+</Defs>
