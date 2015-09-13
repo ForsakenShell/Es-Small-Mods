@@ -9,8 +9,9 @@
 *.sln.docstates
 Source-DLLs/*.dll
 
-ModPile/
 _Mod/ESM - Template/
+ModPile/
+Release Zips/
 
 # Build results
 [Dd]ebug/
