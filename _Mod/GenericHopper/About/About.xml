@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+    <name>GenericHopper</name>
+    <author>1000101</author>
+    <url>TBA</url>
+    <targetVersion>Community Core Library v0.12.2</targetVersion>
+    <description>Experimental generic hoppers.\n\nDelete or rename the refrigerated hopper xml file to remove CCL dependancy.</description>
+</ModMetaData>
