@@ -17,8 +17,8 @@ namespace esm
 	{
 		private const int 				TicksPerStrike = 100;
 		private const int				DamagePerStrike = 10;
-		private int						minerTicks;
-		private int						nextMinerStrike;
+		private int						smoothTicks;
+		private int						nextSmoothStrike;
 		private Thing					mineable;
 
 		protected override IEnumerable<Toil> MakeNewToils()
@@ -47,17 +47,34 @@ namespace esm
 					{
 						// Get the rock resource
 						mineable = MineUtility.MineableInCell( TargetA.Cell );
-						// Get this miners speed based on stat
-						nextMinerStrike = (int)( (double)TicksPerStrike / (double)pawn.GetStatValue( StatDefOf.MiningSpeed, true ) );
-						minerTicks = 0;
+						// Get this workers speed based on stats
+						var smoothingSpeed = pawn.GetStatValue( StatDef.Named( "SmoothingSpeed" ), true );
+						var stonecuttingSpeed = pawn.GetStatValue( StatDef.Named( "StonecuttingSpeed" ), true );
+						var sculptingSpeed = pawn.GetStatValue( StatDef.Named( "SculptingSpeed" ), true );
+						var averageSpeed = ( smoothingSpeed + stonecuttingSpeed + sculptingSpeed ) / 3f;
+						if( Find.ResearchManager.IsFinished( ResearchProjectDef.Named( "PneumaticPicks" ) ) )
+						{
+							averageSpeed *= 1.2f;
+						}
+						nextSmoothStrike = (int)( (float)TicksPerStrike / averageSpeed );
+						smoothTicks = 0;
 					} ),
 				// The work tick
 				tickAction = new Action(() =>
 					{
-						minerTicks += 1;
-						if( minerTicks < nextMinerStrike ) return;
+						if( pawn.skills != null )
+						{
+							const float constructionXP = 0.11f / 5f;
+							const float miningXP = 0.11f / 5f;
+							const float artisticXP = 0.11f / 5f;
+							pawn.skills.Learn( SkillDefOf.Construction, constructionXP );
+							pawn.skills.Learn( SkillDefOf.Mining, miningXP );
+							pawn.skills.Learn( SkillDefOf.Artistic, artisticXP );
+						}
+						smoothTicks += 1;
+						if( smoothTicks < nextSmoothStrike ) return;
 						// Reset counter, damage rock
-						minerTicks = 0;
+						smoothTicks = 0;
 						mineable.HitPoints -= DamagePerStrike;
 					} )
 			};

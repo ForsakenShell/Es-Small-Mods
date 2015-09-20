@@ -78,6 +78,30 @@ namespace esm
 			return AcceptanceReport.WasAccepted;
 		}
 
+		public override AcceptanceReport CanDesignateThing( Thing t )
+		{
+			if( !SmoothWall.researchProjectDef.IsFinished )
+			{
+				return (AcceptanceReport) false;
+			}
+			if( !t.def.mineable )
+			{
+				return (AcceptanceReport) false;
+			}
+			// Must have associated stone blocks
+			string blocksDef = "Blocks" + t.def.defName;
+			ThingDef stoneBlocks = DefDatabase<ThingDef>.GetNamed( blocksDef, false );
+			if( stoneBlocks == null )
+			{
+				return (AcceptanceReport) false;
+			}
+			if( Find.DesignationManager.DesignationAt( t.Position, SmoothWall.designationDef ) != null )
+			{
+				return AcceptanceReport.WasRejected;
+			}
+			return (AcceptanceReport) true;
+		}
+
 		public override void DesignateSingleCell( IntVec3 c )
 		{
 			Thing mineable = MineUtility.MineableInCell( c );
@@ -95,6 +119,11 @@ namespace esm
 					}
 				}
 			}
+		}
+
+		public override void DesignateThing( Thing t )
+		{
+			this.DesignateSingleCell( t.Position );
 		}
 
 		public override void SelectedUpdate()

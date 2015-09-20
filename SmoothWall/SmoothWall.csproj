@@ -55,11 +55,13 @@
     <Compile Include="WorkGivers\WorkGiver_SmoothWalls.cs" />
     <Compile Include="SmoothWall.cs" />
     <Compile Include="Buildings\Building_SmoothWall.cs" />
+    <Compile Include="SpecialInjectors\SpecialInjector_SmoothWall.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="WorkGivers\" />
     <Folder Include="Buildings\" />
+    <Folder Include="SpecialInjectors\" />
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>
