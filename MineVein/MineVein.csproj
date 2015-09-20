@@ -8,7 +8,7 @@
     <RootNamespace>esm</RootNamespace>
     <AssemblyName>MineVein</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ReleaseVersion>0.12.0.0</ReleaseVersion>
+    <ReleaseVersion>0.12.1</ReleaseVersion>
     <SynchReleaseVersion>false</SynchReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

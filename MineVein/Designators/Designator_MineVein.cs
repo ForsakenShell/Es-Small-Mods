@@ -26,7 +26,7 @@ namespace esm
 			this.soundDragSustain = SoundDefOf.DesignateDragStandard;
 			this.soundDragChanged = SoundDefOf.DesignateDragStandardChanged;
 			this.soundSucceeded = SoundDefOf.DesignateMine;
-			this.hotKey = KeyBindingDefOf.Misc10;
+			this.hotKey = KeyBindingDef.Named( "MineVein" );
 			this.tutorHighlightTag = "DesignatorMine";
 		}
 
