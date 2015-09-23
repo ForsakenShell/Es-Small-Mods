@@ -23,13 +23,13 @@ namespace esm
         public const float TEMPERATURE_DELTA = 0.49f;
 
         // Constant equalization factor
-        public const float EQUALIZATION_FACTOR = 120.0f * 90.0f;
+		public const float EQUALIZATION_FACTOR = 120.0f * 90.0f * 6f;
 
         // Constant invalid control temp (no active temperature controllers)
         public const int INVALID_CONTROL_TEMP = -999999;
 
         // Ticks between updates
-        public const int UPDATE_TICKS = 10;
+        public const int UPDATE_TICKS = 60;
 
         // This will house all the rooms in the world which have
         // entirely natural roofs and no heating or cooling devices

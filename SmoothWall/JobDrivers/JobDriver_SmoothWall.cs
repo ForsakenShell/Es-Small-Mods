@@ -18,8 +18,29 @@ namespace esm
 		private const int 				TicksPerStrike = 100;
 		private const int				DamagePerStrike = 10;
 		private int						smoothTicks;
-		private int						nextSmoothStrike;
-		private Thing					mineable;
+		private int						nextSmoothStrike
+		{
+			get
+			{
+				// Get this workers speed based on stats
+				var smoothingSpeed = pawn.GetStatValue( StatDef.Named( "SmoothingSpeed" ), true );
+				var stonecuttingSpeed = pawn.GetStatValue( StatDef.Named( "StonecuttingSpeed" ), true );
+				var sculptingSpeed = pawn.GetStatValue( StatDef.Named( "SculptingSpeed" ), true );
+				var averageSpeed = ( smoothingSpeed + stonecuttingSpeed + sculptingSpeed ) / 3f;
+				if( Find.ResearchManager.IsFinished( ResearchProjectDef.Named( "PneumaticPicks" ) ) )
+				{
+					averageSpeed *= 1.2f;
+				}
+				return (int)( (float)TicksPerStrike / averageSpeed );
+			}
+		}
+		private Thing					mineable
+		{
+			get
+			{
+				return MineUtility.MineableInCell( TargetA.Cell );
+			}
+		}
 
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
@@ -45,18 +66,6 @@ namespace esm
 				// When the job starts...
 				initAction = new Action(() =>
 					{
-						// Get the rock resource
-						mineable = MineUtility.MineableInCell( TargetA.Cell );
-						// Get this workers speed based on stats
-						var smoothingSpeed = pawn.GetStatValue( StatDef.Named( "SmoothingSpeed" ), true );
-						var stonecuttingSpeed = pawn.GetStatValue( StatDef.Named( "StonecuttingSpeed" ), true );
-						var sculptingSpeed = pawn.GetStatValue( StatDef.Named( "SculptingSpeed" ), true );
-						var averageSpeed = ( smoothingSpeed + stonecuttingSpeed + sculptingSpeed ) / 3f;
-						if( Find.ResearchManager.IsFinished( ResearchProjectDef.Named( "PneumaticPicks" ) ) )
-						{
-							averageSpeed *= 1.2f;
-						}
-						nextSmoothStrike = (int)( (float)TicksPerStrike / averageSpeed );
 						smoothTicks = 0;
 					} ),
 				// The work tick
@@ -117,5 +126,6 @@ namespace esm
 			// And we're done.
 			yield break;
 		}
+
 	}
 }

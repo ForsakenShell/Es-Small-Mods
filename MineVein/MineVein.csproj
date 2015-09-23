@@ -52,6 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Designators\Designator_MineVein.cs" />
     <Compile Include="MineVein.cs" />
+    <Compile Include="SpecialInjectors\SpecialInjector_MineVein.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Designators\" />
