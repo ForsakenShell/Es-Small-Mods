@@ -10,6 +10,7 @@ namespace esm
 
     public struct NaturalRoom{
         public Room room;
+		public float naturalEqualizationFactor;
         public float naturalTemp;
         public int controlledTemp;
     }
@@ -17,7 +18,7 @@ namespace esm
     public class MountainTemp : MapComponent
     {
         // Constant underground temperature
-        public const float UNDERGROUND_TEMPERATURE = 15.0f;
+        public const float UNDERGROUND_TEMPERATURE = 0.0f;
 
         // Constant delta for setting temp
         public const float TEMPERATURE_DELTA = 0.49f;
@@ -32,7 +33,7 @@ namespace esm
         public const int UPDATE_TICKS = 60;
 
         // This will house all the rooms in the world which have
-        // entirely natural roofs and no heating or cooling devices
+        // natural roofs
         List<NaturalRoom> NaturalRooms = new List<NaturalRoom>();
 
         /// <summary>
@@ -85,9 +86,9 @@ namespace esm
                     goto Skip_Room;
                 }
 
-                // Make sure the roof is all natural
-                if( roomCells.Exists(
-                    cell => cell.GetRoof().isNatural == false ) ){
+                // Make sure the roof is at least partly natural
+                if( !roomCells.Any(
+                    cell => cell.GetRoof().isNatural ) ){
                     goto Skip_Room;
                 }
 
@@ -154,18 +155,44 @@ namespace esm
 
                 float roofCount = (float)roomCells.Count;
                 float thickCount = 0;
+				float thinCount = 0;
 
                 // Count thick roofs
                 foreach( var cell in roomCells )
-                    if( cell.GetRoof().isThickRoof == true )
+				{
+					var roof = cell.GetRoof();
+                    if( roof.isThickRoof )
+					{
                         thickCount++;
+					}
+					else if ( roof.isNatural )
+					{
+						thinCount++;
+					}
+				}
 
-                // Now calculate percent of roof that is thick
-                float tempFactor = Mathf.Max( 0.5f, Mathf.Min( 1.0f, thickCount / ( roofCount / 2 ) ) );
+                // Now calculate percent of roof that is thick/thin/constructed
+				float thickFactor = thickCount / roofCount;
+				float thinFactor = thinCount / roofCount;
+				float roofedFactor = 1.0f - thickFactor - thinFactor;
+				if( roofedFactor < 0f )
+				{
+					// Handle rounding errors
+					roofedFactor = 0f;
+				}
 
-                // Calculate new temp based on percentage of thick roofs
-                naturalRoom.naturalTemp = tempFactor * UNDERGROUND_TEMPERATURE +
-                    ( 1.0f - tempFactor ) * outdoorTemp;
+				// Factor for pushing heat
+				naturalRoom.naturalEqualizationFactor = thickFactor + thinFactor * 0.5f;
+
+                // Calculate new temp based on roof factors
+				float thickRate = thickFactor * UNDERGROUND_TEMPERATURE;
+				float thinRate = thinFactor * ( outdoorTemp - UNDERGROUND_TEMPERATURE ) * 0.5f;
+				float roofedRate = roofedFactor * ( outdoorTemp - UNDERGROUND_TEMPERATURE );
+
+				// Assign the natural temp based on aggregate ratings
+                //naturalRoom.naturalTemp = thickFactor * UNDERGROUND_TEMPERATURE +
+                //    ( 1.0f - thickFactor ) * outdoorTemp;
+				naturalRoom.naturalTemp = thickRate + thinRate + roofedRate;
 
                 // Compute average controlled temperature for room
                 if( controlUnits == 0 ){
@@ -179,8 +206,10 @@ namespace esm
 				debugDump += "\n\tID: " + room.ID +
                     "\n\t\troomCells.Count: " + roomCells.Count +
                     "\n\t\troofCount: " + roofCount +
-                    "\n\t\tthickCount: " + thickCount +
-                    "\n\t\ttempFactor: " + tempFactor +
+					"\n\t\tCount thick/thin/man: " + thickCount + "/" + thinCount + "/" + ( roofCount - thickCount - thinCount ) +
+                    "\n\t\tFactor thick/thin/man: " + thickFactor + "/" + thinFactor + "/" + roofedFactor +
+					"\n\t\tRate thick/thin/man: " + thickRate + "/" + thinRate + "/" + roofedRate +
+					"\n\t\toutside.Temperature: " + outdoorTemp +
                     "\n\t\troom.Temperature: " + naturalRoom.room.Temperature +
                     "\n\t\tcontrolledTemp: " + naturalRoom.controlledTemp +
                     "\n\t\tdesiredTemp: " + naturalRoom.naturalTemp;
@@ -192,8 +221,8 @@ namespace esm
 
                 Skip_Room:;
                 // We skipped this room, need to do it this way because
-                // using 'continue' in the cooler loop will continue the
-                // cooler loop and not the room loop
+                // using 'continue' in the controller loops will
+				// continue the controller loops and not the room loop
             }
             #if DEBUG
 			/*
@@ -221,7 +250,7 @@ namespace esm
             // Go through rooms and set the temperature
             foreach (var naturalRoom in NaturalRooms)
             {
-                float equalizationRate = 1.0f;
+				float equalizationRate = naturalRoom.naturalEqualizationFactor;
                 float targetTemp = naturalRoom.naturalTemp;
 
                 if( naturalRoom.controlledTemp != INVALID_CONTROL_TEMP ){
@@ -237,7 +266,7 @@ namespace esm
                             ( naturalRoom.room.Temperature < naturalRoom.controlledTemp ) ) ){
 
                         // Temperature inside of range, adjust slowly to control temp
-                        equalizationRate = 0.25f;
+                        equalizationRate *= 0.25f;
                         targetTemp = naturalRoom.controlledTemp;
 
                     }
@@ -272,7 +301,8 @@ namespace esm
                 delta );
             // Change delta
             float change = ( ( destTemp > room.Temperature ? movement : -movement ) * ( EQUALIZATION_FACTOR * equalizationRate ) ) / room.CellCount;
-            // Change it!
+            // Push some heat
+			//room.PushHeat( change );
             room.Temperature += change;
         }
 
