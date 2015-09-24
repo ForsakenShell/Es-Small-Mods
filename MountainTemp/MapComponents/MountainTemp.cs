@@ -12,7 +12,7 @@ namespace esm
         public Room room;
 		public float naturalEqualizationFactor;
         public float naturalTemp;
-        public int controlledTemp;
+        //public int controlledTemp;
     }
 
     public class MountainTemp : MapComponent
@@ -64,13 +64,13 @@ namespace esm
             #endif
 
             // Find all the coolers in the world
-            var allCoolers = Find.ListerBuildings.AllBuildingsColonistOfClass<Building_Cooler>().ToList();
+            //var allCoolers = Find.ListerBuildings.AllBuildingsColonistOfClass<Building_Cooler>().ToList();
 
             // Itterate the rooms
             foreach( var room in allRooms ){
 
-                float controlledTemp = 0f;
-                int controlUnits = 0;
+                //float controlledTemp = 0f;
+                //int controlUnits = 0;
 
                 // Open roof?  Not what we want
                 if( room.OpenRoofCount > 0 ){
@@ -92,6 +92,7 @@ namespace esm
                     goto Skip_Room;
                 }
 
+				/*
                 // Find all heaters contained in the room
                 var heaters = room.AllContainedThings.Where( t =>
                     ( ( t as Building_Heater ) != null ) ).ToList();
@@ -123,9 +124,8 @@ namespace esm
                         if( cooler.compPowerTrader.PowerOn == true ){
 
                             #if DEBUG
-							/*
-                            debugDump += "\n\tcooler rotation: " + cooler.Rotation.FacingCell;
-                            */
+							//debugDump += "\n\tcooler rotation: " + cooler.Rotation.FacingCell;
+                            
                             #endif
                             
                             // Get heating and cooling sides of the cooler
@@ -148,6 +148,7 @@ namespace esm
                         }
                     }
                 }
+				*/
 
                 // Create new natural room entry
                 var naturalRoom = new NaturalRoom();
@@ -186,20 +187,22 @@ namespace esm
 
                 // Calculate new temp based on roof factors
 				float thickRate = thickFactor * UNDERGROUND_TEMPERATURE;
-				float thinRate = thinFactor * ( outdoorTemp - UNDERGROUND_TEMPERATURE ) * 0.5f;
-				float roofedRate = roofedFactor * ( outdoorTemp - UNDERGROUND_TEMPERATURE );
+				float thinRate = thinFactor * ( outdoorTemp - UNDERGROUND_TEMPERATURE ) * 0.25f;
+				//float roofedRate = roofedFactor * ( outdoorTemp - UNDERGROUND_TEMPERATURE ) * 0.5f;
 
 				// Assign the natural temp based on aggregate ratings
                 //naturalRoom.naturalTemp = thickFactor * UNDERGROUND_TEMPERATURE +
                 //    ( 1.0f - thickFactor ) * outdoorTemp;
-				naturalRoom.naturalTemp = thickRate + thinRate + roofedRate;
+				naturalRoom.naturalTemp = thickRate + thinRate;// + roofedRate;
 
                 // Compute average controlled temperature for room
-                if( controlUnits == 0 ){
+                /*
+				if( controlUnits == 0 ){
                     naturalRoom.controlledTemp = INVALID_CONTROL_TEMP;
                 } else {
                     naturalRoom.controlledTemp = (int)( controlledTemp / controlUnits );
                 }
+                */
 
                 #if DEBUG
 				/*
@@ -253,6 +256,7 @@ namespace esm
 				float equalizationRate = naturalRoom.naturalEqualizationFactor;
                 float targetTemp = naturalRoom.naturalTemp;
 
+				/*
                 if( naturalRoom.controlledTemp != INVALID_CONTROL_TEMP ){
                     // Room has active controllers
 
@@ -271,6 +275,7 @@ namespace esm
 
                     }
                 }
+                */
 
                 // Move the room towards the desired temp
                 float tempDelta = Mathf.Abs( naturalRoom.room.Temperature - targetTemp );
