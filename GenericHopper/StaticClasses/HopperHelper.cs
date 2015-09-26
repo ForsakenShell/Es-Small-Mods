@@ -91,33 +91,6 @@ namespace esm
 		}
 
 		/// <summary>
-		/// Finds hoppers connected to this building
-		/// </summary>
-		/// <returns>list of connected hoppers.</returns>
-		/// <param name="building">Building</param>
-		public static List< CompHopper > FindHoppers( this Building building )
-		{
-			// Find hoppers for building
-			var hoppers = new List< CompHopper >();
-			var occupiedCells = building.OccupiedRect();
-			var adjacentCells = GenAdj.CellsAdjacentCardinal( building );
-			foreach( var cell in adjacentCells )
-			{
-				var hopper = cell.FindHopper();
-				if(
-					( hopper != null )&&
-					( occupiedCells.Cells.Contains( hopper.StorageBuilding.Position + hopper.StorageBuilding.Rotation.FacingCell ) )
-				)
-				{
-					// Hopper is adjacent and rotated correctly
-					hoppers.Add( hopper );
-				}
-			}
-			// Return list of hoppers connected to this building
-			return hoppers;
-		}
-
-		/// <summary>
 		/// Finds the hopper user in given cell
 		/// </summary>
 		/// <returns>Thing which wants a hopper in cell</returns>

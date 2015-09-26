@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -30,31 +30,30 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\Source-DLLs\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Community Core Library">
+      <HintPath>..\Source-DLLs\Community Core Library.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\Source-DLLs\Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\Source-DLLs\UnityEngine.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Community Core Library">
-      <HintPath>..\Source-DLLs\Community Core Library.dll</HintPath>
-      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompProperties\CompProperties_HopperUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Alerts\Alert_BuildingNeedsHopper.cs" />
     <Compile Include="Interfaces\IHopperUser.cs" />
     <Compile Include="PlaceWorkers\PlaceWorker_ConnectedToHopperAccepter.cs" />
     <Compile Include="StaticClasses\HopperHelper.cs" />
     <Compile Include="ThingComps\CompHopper.cs" />
+    <Compile Include="ThingComps\CompHopperUser.cs" />
     <Compile Include="WorkGivers\WorkGiver_FillHopper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -64,8 +63,5 @@
 	    copy "$(TargetPath)" "C:\Games\RimWorld A12\Mods\GenericHopper\Assemblies"
     </PostBuildEvent>
   </PropertyGroup>
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="StaticClasses\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
