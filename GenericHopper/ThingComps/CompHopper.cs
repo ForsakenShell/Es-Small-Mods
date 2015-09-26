@@ -70,10 +70,10 @@ namespace esm
 				// No user or no storage settings
 				return;
 			}
-			var iHopperUser = hopperUser as IHopperUser;
+			var compHopperUser = hopperUser.TryGetComp<CompHopperUser>();
 			if(
-				( iHopperUser == null )||
-				( iHopperUser.ResourceDefs.NullOrEmpty() )
+				( compHopperUser == null )||
+				( compHopperUser.ResourceDefs.NullOrEmpty() )
 			)
 			{
 				// Hopper user does not implement programmable IHopperUser
@@ -87,7 +87,7 @@ namespace esm
 			hopperSettings.Priority = StoragePriority.Important;
 
 			// Add all acceptable defs
-			foreach( var resourceDef in iHopperUser.ResourceDefs )
+			foreach( var resourceDef in compHopperUser.ResourceDefs )
 			{
 				hopperSettings.filter.SetAllow( resourceDef, true );
 			}
