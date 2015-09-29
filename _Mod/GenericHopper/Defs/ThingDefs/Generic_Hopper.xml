@@ -10,6 +10,7 @@
         <repairEffect>Repair</repairEffect>
         <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
         <filthLeaving>BuildingRubble</filthLeaving>
+        <minifiedDef>MinifiedFurniture</minifiedDef>
     </ThingDef>
 
     <ThingDef Name="HopperBase" ParentName="BuildingBase" Abstract="True">
@@ -57,9 +58,6 @@
         <designationCategory>Production</designationCategory>
         <staticSunShadowHeight>0.3</staticSunShadowHeight>
         <surfaceType>Item</surfaceType>
-        <placeWorkers>
-            <li>esm.PlaceWorker_ConnectedToHopperAccepter</li>
-        </placeWorkers>
         <constructEffect>ConstructMetal</constructEffect>
     </ThingDef>
 

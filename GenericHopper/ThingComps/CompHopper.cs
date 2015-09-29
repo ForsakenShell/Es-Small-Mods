@@ -64,6 +64,12 @@ namespace esm
 			Scribe_Values.LookValue( ref wasProgrammed, "wasProgrammed", false );
 		}
 
+		public override void				PostDeSpawn()
+		{
+			base.PostDeSpawn();
+			DeprogramHopper();
+		}
+
 		public void							DeprogramHopper()
 		{
 			if( !WasProgrammed )

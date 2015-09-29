@@ -77,9 +77,6 @@
         <designationCategory>Production</designationCategory>
         <staticSunShadowHeight>0.3</staticSunShadowHeight>
         <surfaceType>Item</surfaceType>
-        <placeWorkers>
-            <li>esm.PlaceWorker_ConnectedToHopperAccepter</li>
-        </placeWorkers>
         <constructEffect>ConstructMetal</constructEffect>
     </ThingDef>
 

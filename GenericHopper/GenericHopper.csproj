@@ -56,6 +56,7 @@
     <Compile Include="ThingComps\CompHopperUser.cs" />
     <Compile Include="WorkGivers\WorkGiver_FillHopper.cs" />
     <Compile Include="Buildings\Building_Hopper.cs" />
+    <Compile Include="Alerts\Alert_HopperNeedsBuilding.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

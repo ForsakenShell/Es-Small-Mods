@@ -77,7 +77,7 @@ namespace esm
 			)
 			{
 				// Does not contain xml resource filter
-				// (properly) implement IHopperUser
+				// or (properly) implement IHopperUser
 				return;
 			}
 
