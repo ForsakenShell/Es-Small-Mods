@@ -55,13 +55,18 @@
     <Compile Include="ThingComps\CompHopper.cs" />
     <Compile Include="ThingComps\CompHopperUser.cs" />
     <Compile Include="WorkGivers\WorkGiver_FillHopper.cs" />
+    <Compile Include="Buildings\Building_Hopper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
 	    copy "$(TargetPath)" "$(SolutionDir)_Mod\GenericHopper\Assemblies"
 	    copy "$(TargetPath)" "C:\Games\RimWorld A12\Mods\GenericHopper\Assemblies"
+	    copy "$(TargetPath)" "C:\Games\RimWorld A12\Mods\CCL Personal\Assemblies"
     </PostBuildEvent>
   </PropertyGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Buildings\" />
+  </ItemGroup>
 </Project>

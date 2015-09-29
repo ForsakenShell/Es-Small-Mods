@@ -25,7 +25,7 @@ namespace esm
 		public static bool				IsHopper( this ThingDef thingDef )
 		{
 			return
-				( thingDef.thingClass == typeof( Building_Storage ) )&&
+				( thingDef.thingClass == typeof( Building_Hopper ) )&&
 				( thingDef.HasComp( typeof( CompHopper ) ) );
 		}
 
@@ -60,9 +60,14 @@ namespace esm
 		/// <returns>Hopper with most resources</returns>
 		/// <param name="building">Building</param>
 		/// <param name="acceptableResources">Acceptable resources</param>
-		public static CompHopper		FindBestHopperForResources( this Building building, List< ThingDef > acceptableResources )
+		public static CompHopper		FindBestHopperForResources( this Building building, ThingFilter acceptableResources )
 		{
-			var hoppers = building.FindHoppers();
+			var compUser = building.TryGetComp<CompHopperUser>();
+			if( compUser == null )
+			{
+				return null;
+			}
+			var hoppers = compUser.FindHoppers();
 			if( hoppers.NullOrEmpty() )
 			{
 				return null;
@@ -72,17 +77,20 @@ namespace esm
 			foreach( var hopper in hoppers )
 			{
 				// Find best in hopper
-				var hopperResource = hopper.GetResource( acceptableResources );
-				if( hopperResource != null )
+				var hopperResources = hopper.GetAllResources( acceptableResources );
+				foreach( var resource in hopperResources )
 				{
-					if(
-						( bestHopper == null )||
-						( hopperResource.stackCount > bestResource.stackCount )
-					)
+					if( resource != null )
 					{
-						// First resource or this hopper holds more
-						bestHopper = hopper;
-						bestResource = hopperResource;
+						if(
+							( bestHopper == null )||
+							( resource.stackCount > bestResource.stackCount )
+						)
+						{
+							// First resource or this hopper holds more
+							bestHopper = hopper;
+							bestResource = resource;
+						}
 					}
 				}
 			}
@@ -109,7 +117,8 @@ namespace esm
 				if(
 					( thingDef != null )&&
 					( thingDef.building != null )&&
-					( thingDef.building.wantsHopperAdjacent )
+					( thingDef.building.wantsHopperAdjacent )&&
+					( thingDef.HasComp( typeof( CompHopperUser ) ) )
 				)
 				{
 					// This thing wants a hopper
@@ -130,11 +139,16 @@ namespace esm
 		/// <param name="resourceCount">Resource count.</param>
 		public static bool				RemoveResourceFromHoppers( this Building building, ThingDef resourceDef, int resourceCount )
 		{
+			var compUser = building.TryGetComp<CompHopperUser>();
+			if( compUser == null )
+			{
+				return false;
+			}
 			if( !building.EnoughResourceInHoppers( resourceDef, resourceCount ) )
 			{
 				return false;
 			}
-			var hoppers = building.FindHoppers();
+			var hoppers = compUser.FindHoppers();
 			if( hoppers.NullOrEmpty() )
 			{
 				return false;
@@ -142,21 +156,18 @@ namespace esm
 
 			foreach( var hopper in hoppers )
 			{
-				var resources = hopper.GetAllResources( resourceDef );
-				if( !resources.NullOrEmpty() )
+				var resource = hopper.GetResource( resourceDef );
+				if( resource!= null )
 				{
-					foreach( var resource in resources )
+					if( resource.stackCount >= resourceCount )
 					{
-						if( resource.stackCount >= resourceCount )
-						{
-							resource.SplitOff( resourceCount );
-							return true;
-						}
-						else
-						{
-							resourceCount -= resource.stackCount;
-							resource.SplitOff( resource.stackCount );
-						}
+						resource.SplitOff( resourceCount );
+						return true;
+					}
+					else
+					{
+						resourceCount -= resource.stackCount;
+						resource.SplitOff( resource.stackCount );
 					}
 				}
 			}
@@ -171,13 +182,18 @@ namespace esm
 		/// <param name="building">Building.</param>
 		/// <param name="acceptableResources">Acceptable resources.</param>
 		/// <param name="resourceCount">Resource count.</param>
-		public static bool				RemoveResourcesFromHoppers( this Building building, List< ThingDef > acceptableResources, int resourceCount )
+		public static bool				RemoveResourcesFromHoppers( this Building building, ThingFilter acceptableResources, int resourceCount )
 		{
+			var compUser = building.TryGetComp<CompHopperUser>();
+			if( compUser == null )
+			{
+				return false;
+			}
 			if( !building.EnoughResourcesInHoppers( acceptableResources, resourceCount ) )
 			{
 				return false;
 			}
-			var hoppers = building.FindHoppers();
+			var hoppers = compUser.FindHoppers();
 			if( hoppers.NullOrEmpty() )
 			{
 				return false;
@@ -226,7 +242,7 @@ namespace esm
 		/// <param name="building">Building.</param>
 		/// <param name="acceptableResources">Acceptable resources.</param>
 		/// <param name="resourceCount">Resource count.</param>
-		public static bool				EnoughResourcesInHoppers( this Building building, List< ThingDef > acceptableResources, int resourceCount )
+		public static bool				EnoughResourcesInHoppers( this Building building, ThingFilter acceptableResources, int resourceCount )
 		{
 			return ( building.CountResourcesInHoppers( acceptableResources ) >= resourceCount );
 		}
@@ -239,7 +255,12 @@ namespace esm
 		/// <param name="resourceDef">Resource def.</param>
 		public static int				CountResourceInHoppers( this Building building, ThingDef resourceDef )
 		{
-			var hoppers = building.FindHoppers();
+			var compUser = building.TryGetComp<CompHopperUser>();
+			if( compUser == null )
+			{
+				return 0;
+			}
+			var hoppers = compUser.FindHoppers();
 			if( hoppers.NullOrEmpty() )
 			{
 				return 0;
@@ -266,9 +287,14 @@ namespace esm
 		/// <returns>The quantity of the resources in hoppers.</returns>
 		/// <param name="building">Building.</param>
 		/// <param name="acceptableResources">Acceptable resources.</param>
-		public static int				CountResourcesInHoppers( this Building building, List< ThingDef > acceptableResources )
+		public static int				CountResourcesInHoppers( this Building building, ThingFilter acceptableResources )
 		{
-			var hoppers = building.FindHoppers();
+			var compUser = building.TryGetComp<CompHopperUser>();
+			if( compUser == null )
+			{
+				return 0;
+			}
+			var hoppers = compUser.FindHoppers();
 			if( hoppers.NullOrEmpty() )
 			{
 				return 0;

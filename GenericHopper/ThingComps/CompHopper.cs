@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 
 using RimWorld;
 using Verse;
@@ -19,11 +20,11 @@ namespace esm
 
 		private bool						wasProgrammed;
 
-		public Building_Storage				StorageBuilding
+		public Building_Hopper				Building
 		{
 			get
 			{
-				return parent as Building_Storage;
+				return parent as Building_Hopper;
 			}
 		}
 
@@ -36,6 +37,14 @@ namespace esm
 			set
 			{
 				wasProgrammed = value;
+			}
+		}
+
+		public List<ThingDef>				ResourceDefs
+		{
+			get
+			{
+				return Building.GetStoreSettings().filter.AllowedThingDefs.ToList();
 			}
 		}
 
@@ -54,14 +63,14 @@ namespace esm
 		{
 			if(
 				( WasProgrammed )||
-				( StorageBuilding == null )
+				( Building == null )
 			)
 			{
-				// Already programmed or not a valid storage building
+				// Already programmed or not a valid hopper
 				return;
 			}
 			var hopperUser = FindHopperUser();
-			var hopperSettings = StorageBuilding.GetStoreSettings();
+			var hopperSettings = Building.GetStoreSettings();
 			if(
 				( hopperUser == null )||
 				( hopperSettings == null )
@@ -71,26 +80,44 @@ namespace esm
 				return;
 			}
 			var compHopperUser = hopperUser.TryGetComp<CompHopperUser>();
+			var iHopperUser = hopperUser as IHopperUser;
 			if(
 				( compHopperUser == null )||
-				( compHopperUser.ResourceDefs.NullOrEmpty() )
+				(
+					( compHopperUser.Resources == null )&&
+					(
+						( iHopperUser == null )||
+						( iHopperUser.ResourceFilter == null )
+					)
+				)
 			)
 			{
-				// Hopper user does not implement programmable IHopperUser
+				// Hopper user does not contain xml resource
+				// filter or (properly) implement IHopperUser
 				return;
 			}
-
-			// Disable everything first
-			hopperSettings.filter.SetDisallowAll();
 
 			// Set priority
 			hopperSettings.Priority = StoragePriority.Important;
 
-			// Add all acceptable defs
-			foreach( var resourceDef in compHopperUser.ResourceDefs )
+			// Create a new filter
+			hopperSettings.filter = new ThingFilter();
+
+			// Set the filter from the hopper user
+			if( iHopperUser != null )
 			{
-				hopperSettings.filter.SetAllow( resourceDef, true );
+				// Copy a filter from a building implementing IHopperUser
+				hopperSettings.filter.CopyFrom( iHopperUser.ResourceFilter );
 			}
+			else
+			{
+				// Copy filters from xml and resolve the references
+				hopperSettings.filter.CopyFrom( compHopperUser.Resources );
+				hopperSettings.filter.ResolveReferences();
+			}
+
+			// Set the base settings to the default settings
+			Building.baseSettings.CopyFrom( hopperSettings );
 
 			// Set the programming flag
 			WasProgrammed = true;
@@ -101,7 +128,7 @@ namespace esm
 			return ( parent.Position + parent.Rotation.FacingCell ).FindHopperUser();
 		}
 
-		public Thing						GetResource( List< ThingDef > acceptableResources )
+		public Thing						GetResource( ThingFilter acceptableResources )
 		{
 			var things = GetAllResources( acceptableResources );
 			if( things.NullOrEmpty() )
@@ -121,10 +148,10 @@ namespace esm
 			return things.FirstOrDefault();
 		}
 
-		public List< Thing >				GetAllResources( List< ThingDef > acceptableResources )
+		public List< Thing >				GetAllResources( ThingFilter acceptableResources )
 		{
 			var things = parent.Position.GetThingList().Where( t => (
-				( acceptableResources.Contains( t.def ) )
+				( acceptableResources.Allows( t.def ) )
 			) ).ToList();
 			if( things.NullOrEmpty() )
 			{

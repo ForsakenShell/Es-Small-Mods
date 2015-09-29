@@ -14,14 +14,14 @@
     </ThingDef>
 
     <ThingDef Name="HopperBase" ParentName="BuildingBase" Abstract="True">
-        <thingClass>Building_Storage</thingClass>
+        <thingClass>esm.Building_Hopper</thingClass>
         <comps>
             <li>
                 <compClass>esm.CompHopper</compClass>
             </li>
         </comps>
     </ThingDef>
-    
+
     <ThingDef ParentName="HopperBase">
         <defName>RefrigeratedHopper</defName>
         <label>refrigerated hopper</label>
@@ -56,13 +56,9 @@
             </li>
         </comps>
         <building>
+            <preventDeterioration>true</preventDeterioration>
             <defaultStorageSettings>
                 <priority>Important</priority>
-                <filter>
-                    <exceptedThingDefs>
-                        <li>Human_Meat</li>
-                    </exceptedThingDefs>
-                </filter>
             </defaultStorageSettings>
         </building>
         <inspectorTabs>

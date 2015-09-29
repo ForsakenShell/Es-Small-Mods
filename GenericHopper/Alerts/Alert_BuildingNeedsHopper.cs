@@ -22,12 +22,14 @@ namespace esm
 				var buildings =
 					Find.ListerBuildings.allBuildingsColonist
 						.Where( b => (
-							( b.def.building.wantsHopperAdjacent )
+							( b.def.building.wantsHopperAdjacent )&&
+							( b.TryGetComp<CompHopperUser>() != null )
 						) ).ToList();
 
                 foreach( var building in buildings )
                 {
-					if( building.FindHoppers().NullOrEmpty() )
+					var userComp = building.GetComp<CompHopperUser>();
+					if( userComp.FindHoppers().NullOrEmpty() )
                     {
 						this.baseExplanation = string.Format( "You have a {0} with no hopper connected to it.\n\nTo work, {0} must draw from a connected hopper filled with the appropriate resources.\n\nBuild a hopper connected to the {0}.", building.def.label );
 						return AlertReport.CulpritIs( building );

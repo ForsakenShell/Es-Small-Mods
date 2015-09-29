@@ -17,7 +17,7 @@ namespace esm
 	public interface IHopperUser
 	{
 		// This property tells is the list of things to program the hopper with
-		List< ThingDef >				ResourceDefs
+		ThingFilter						ResourceFilter
 		{
 			get;
 		}
@@ -25,7 +25,7 @@ namespace esm
 		// This method finds and programs all attached hoppers
 		// This should be called once in SpawnSetup()
 		// Copy-pasta the method below
-		void							FindAndProgramHoppers();
+		//void							FindAndProgramHoppers();
 
 		/*
 		public void						FindAndProgramHoppers()

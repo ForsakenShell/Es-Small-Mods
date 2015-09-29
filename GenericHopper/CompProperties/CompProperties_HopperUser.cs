@@ -9,6 +9,6 @@ namespace esm
 {
     public class CompProperties_HopperUser : CompProperties
     {
-        public List<ThingDef> resourceDefs;
+        public ThingFilter resources;
     }
 }
