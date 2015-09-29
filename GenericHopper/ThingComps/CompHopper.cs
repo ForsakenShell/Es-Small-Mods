@@ -51,7 +51,12 @@ namespace esm
 		public override void				PostSpawnSetup()
 		{
 			base.PostSpawnSetup();
-			ProgramHopper();
+			var userSettings = Building.GetParentStoreSettings();
+			if( userSettings == null )
+			{
+				return;
+			}
+			ProgramHopper( userSettings );
 		}
 
 		public override void				PostExposeData()
@@ -59,65 +64,47 @@ namespace esm
 			Scribe_Values.LookValue( ref wasProgrammed, "wasProgrammed", false );
 		}
 
-		public void							ProgramHopper()
+		public void							DeprogramHopper()
+		{
+			if( !WasProgrammed )
+			{
+				return;
+			}
+			var hopperSettings = Building.GetStoreSettings();
+			if( hopperSettings == null )
+			{
+				// No storage settings
+				return;
+			}
+
+			// Clear the programming
+			hopperSettings.filter.SetDisallowAll();
+
+			// Reset the flag
+			WasProgrammed = false;
+		}
+
+		public void							ProgramHopper( StorageSettings HopperUserSettings )
 		{
 			if(
 				( WasProgrammed )||
-				( Building == null )
+				( Building == null )||
+				( HopperUserSettings == null )
 			)
 			{
 				// Already programmed or not a valid hopper
 				return;
 			}
-			var hopperUser = FindHopperUser();
+
 			var hopperSettings = Building.GetStoreSettings();
-			if(
-				( hopperUser == null )||
-				( hopperSettings == null )
-			)
+			if( hopperSettings == null )
 			{
-				// No user or no storage settings
-				return;
-			}
-			var compHopperUser = hopperUser.TryGetComp<CompHopperUser>();
-			var iHopperUser = hopperUser as IHopperUser;
-			if(
-				( compHopperUser == null )||
-				(
-					( compHopperUser.Resources == null )&&
-					(
-						( iHopperUser == null )||
-						( iHopperUser.ResourceFilter == null )
-					)
-				)
-			)
-			{
-				// Hopper user does not contain xml resource
-				// filter or (properly) implement IHopperUser
+				// No storage settings
 				return;
 			}
 
-			// Set priority
-			hopperSettings.Priority = StoragePriority.Important;
-
-			// Create a new filter
-			hopperSettings.filter = new ThingFilter();
-
-			// Set the filter from the hopper user
-			if( iHopperUser != null )
-			{
-				// Copy a filter from a building implementing IHopperUser
-				hopperSettings.filter.CopyFrom( iHopperUser.ResourceFilter );
-			}
-			else
-			{
-				// Copy filters from xml and resolve the references
-				hopperSettings.filter.CopyFrom( compHopperUser.Resources );
-				hopperSettings.filter.ResolveReferences();
-			}
-
-			// Set the base settings to the default settings
-			Building.baseSettings.CopyFrom( hopperSettings );
+			// Copy the settings from the controller
+			hopperSettings.CopyFrom( HopperUserSettings );
 
 			// Set the programming flag
 			WasProgrammed = true;
@@ -125,7 +112,7 @@ namespace esm
 
 		public Thing						FindHopperUser()
 		{
-			return ( parent.Position + parent.Rotation.FacingCell ).FindHopperUser();
+			return FindHopperUser( parent.Position + parent.Rotation.FacingCell );
 		}
 
 		public Thing						GetResource( ThingFilter acceptableResources )
@@ -178,6 +165,31 @@ namespace esm
 
 			// Return sorted by quantity list of things
 			return things;
+		}
+
+		public static Thing					FindHopperUser( IntVec3 cell )
+		{
+			if( !cell.InBounds() )
+			{
+				// Out of bounds
+				return null;
+			}
+			var thingList = cell.GetThingList();
+			foreach( var thing in thingList )
+			{
+				var thingDef = GenSpawn.BuiltDefOf( thing.def ) as ThingDef;
+				if(
+					( thingDef != null )&&
+					( thingDef.IsHopperUser() )
+				)
+				{
+					// This thing wants a hopper
+					return thing;
+				}
+			}
+
+			// Nothing found
+			return null;
 		}
 
 	}

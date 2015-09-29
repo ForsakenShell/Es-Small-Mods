@@ -22,8 +22,7 @@ namespace esm
 				var buildings =
 					Find.ListerBuildings.allBuildingsColonist
 						.Where( b => (
-							( b.def.building.wantsHopperAdjacent )&&
-							( b.TryGetComp<CompHopperUser>() != null )
+							( b.def.IsHopperUser() )
 						) ).ToList();
 
                 foreach( var building in buildings )

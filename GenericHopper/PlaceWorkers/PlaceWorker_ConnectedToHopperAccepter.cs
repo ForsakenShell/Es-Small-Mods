@@ -16,7 +16,7 @@ namespace esm
 
 		public override AcceptanceReport AllowsPlacing( BuildableDef checkingDef, IntVec3 loc, Rot4 rot )
 		{
-			if( ( loc + rot.FacingCell ).FindHopperUser() != null )
+			if( CompHopper.FindHopperUser( loc + rot.FacingCell ) != null )
 			{
 				return ( AcceptanceReport )true;
 			}
