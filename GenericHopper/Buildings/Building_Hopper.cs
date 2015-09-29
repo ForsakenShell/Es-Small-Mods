@@ -115,5 +115,18 @@ namespace esm
 			base.Destroy(mode);
 		}
 
+		public override IEnumerable<Gizmo>	GetGizmos()
+		{
+			foreach( var gizmo in base.GetGizmos() )
+			{
+				yield return gizmo;
+			}
+			var copyPasteGizmos = StorageSettingsClipboard.CopyPasteGizmosFor( settings );
+			foreach( var gizmo in copyPasteGizmos )
+			{
+				yield return gizmo;
+			}
+		}
+
 	}
 }
