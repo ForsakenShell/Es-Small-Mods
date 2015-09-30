@@ -12,6 +12,8 @@ namespace esm
     {
 		public StorageSettings				ResourceSettings;
 
+		private ThingFilter					xmlResources;
+
         private List<IntVec3>				cachedAdjCellsCardinal;
         private List<IntVec3>				AdjCellsCardinalInBounds
         {
@@ -27,27 +29,62 @@ namespace esm
 
         public ThingFilter					Resources
         {
-            get { return ((CompProperties_HopperUser)props).resources; }
+			get
+			{
+				if( xmlResources == null )
+				{
+					xmlResources = ((CompProperties_HopperUser)props).resources;
+					xmlResources.ResolveReferences();
+				}
+				return xmlResources;
+			}
         }
 
         public override void				PostSpawnSetup()
         {
             base.PostSpawnSetup();
+
 			if( ResourceSettings == null )
 			{
-				ResourceSettings = new StorageSettings();
-			}
-			if( Resources != null )
-			{
-				Resources.ResolveReferences();
-			}
-            FindAndProgramHoppers();
-        }
+				var iHopperUser = parent as IHopperUser;
+				if(
+					( Resources == null )&&
+					(
+						( iHopperUser == null )||
+						( iHopperUser.ResourceFilter == null )
+					)
+				)
+				{
+					// Does not contain xml resource filter
+					// or (properly) implement IHopperUser
+					Log.Message( parent.def.defName + " Improperly configured!" );
+					return;
+				}
 
-		public override void				PostExposeData()
-		{
-			base.PostExposeData();
-			Scribe_Deep.LookDeep<StorageSettings>(ref ResourceSettings, "baseSettings", null );
+				// Create storage settings
+				ResourceSettings = new StorageSettings();
+
+				// Set priority
+				ResourceSettings.Priority = StoragePriority.Important;
+
+				// Create a new filter
+				ResourceSettings.filter = new ThingFilter();
+
+				// Set the filter from the hopper user
+				if( iHopperUser != null )
+				{
+					// Copy a filter from a building implementing IHopperUser
+					ResourceSettings.filter.CopyFrom( iHopperUser.ResourceFilter );
+				}
+				else
+				{
+					// Copy filters from xml and resolve the references
+					ResourceSettings.filter.CopyFrom( Resources );
+					ResourceSettings.filter.ResolveReferences();
+				}
+			}
+        	
+			FindAndProgramHoppers();
 		}
 
 		public override void				PostDeSpawn()
@@ -67,39 +104,6 @@ namespace esm
 		
         public void							FindAndProgramHoppers()
         {
-			var iHopperUser = parent as IHopperUser;
-			if(
-				( Resources == null )&&
-				(
-					( iHopperUser == null )||
-					( iHopperUser.ResourceFilter == null )
-				)
-			)
-			{
-				// Does not contain xml resource filter
-				// or (properly) implement IHopperUser
-				return;
-			}
-
-			// Set priority
-			ResourceSettings.Priority = StoragePriority.Important;
-
-			// Create a new filter
-			ResourceSettings.filter = new ThingFilter();
-
-			// Set the filter from the hopper user
-			if( iHopperUser != null )
-			{
-				// Copy a filter from a building implementing IHopperUser
-				ResourceSettings.filter.CopyFrom( iHopperUser.ResourceFilter );
-			}
-			else
-			{
-				// Copy filters from xml and resolve the references
-				ResourceSettings.filter.CopyFrom( Resources );
-				ResourceSettings.filter.ResolveReferences();
-			}
-
 			// Now scan for hoppers and program each one
             var hoppers = FindHoppers();
             if (!hoppers.NullOrEmpty())
