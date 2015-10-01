@@ -43,6 +43,25 @@ namespace esm
 				( thingDef.HasComp( typeof( CompHopperUser ) ) );
 		}
 
+		public static void				BlockDefaultAcceptanceFilters( this ThingFilter filter, StorageSettings parentSettings = null )
+		{
+			var checkFilter = parentSettings != null ? parentSettings.filter : filter;
+			// Explicitly remove auto-added special filters unless they are explicitly added
+			foreach( var sf in DefDatabase<SpecialThingFilterDef>.AllDefsListForReading )
+			{
+				if(
+					( sf.allowedByDefault )&&
+					(
+						( checkFilter.specialFiltersToAllow.NullOrEmpty() )||
+						( !checkFilter.specialFiltersToAllow.Contains( sf.defName ) )
+					)
+				)
+				{
+					filter.SetAllow( sf, false );
+				}
+			}
+		}
+
 	}
 
 }

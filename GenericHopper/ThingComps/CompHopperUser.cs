@@ -71,24 +71,8 @@ namespace esm
 					// Disallow quality
 					resourceSettings.filter.allowedQualitiesConfigurable = false;
 
-					// Explicitly remove auto-added special filters unless they are explicitly added
-					foreach( var sf in DefDatabase<SpecialThingFilterDef>.AllDefsListForReading )
-					{
-						if(
-							( sf.allowedByDefault )&&
-							(
-								( resourceSettings.filter.specialFiltersToAllow.NullOrEmpty() )||
-								( !resourceSettings.filter.specialFiltersToAllow.Contains( sf.defName ) )
-							)
-						)
-						{
-							if( resourceSettings.filter.specialFiltersToDisallow.NullOrEmpty() )
-							{
-								resourceSettings.filter.specialFiltersToDisallow = new List<string>();
-							}
-							resourceSettings.filter.specialFiltersToDisallow.Add( sf.defName );
-						}
-					}
+					// Block default special filters
+					resourceSettings.filter.BlockDefaultAcceptanceFilters();
 
 					// Resolve the referencs
 					resourceSettings.filter.ResolveReferences();

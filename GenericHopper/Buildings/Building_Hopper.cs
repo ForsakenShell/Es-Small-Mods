@@ -106,8 +106,12 @@ namespace esm
 		{
 			base.ExposeData();
 			Scribe_Deep.LookDeep<StorageSettings>(ref settings, "settings", new Object[1]{ this } );
+
 			// Disallow quality
 			settings.filter.allowedQualitiesConfigurable = false;
+
+			// Block default special filters
+			settings.filter.BlockDefaultAcceptanceFilters( GetParentStoreSettings() );
 		}
 
 		public override void				Destroy(DestroyMode mode = DestroyMode.Vanish)
