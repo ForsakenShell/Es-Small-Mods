@@ -10,8 +10,7 @@ namespace esm
 {
     public class CompHopperUser : ThingComp
     {
-		public StorageSettings				ResourceSettings;
-
+		private StorageSettings				resourceSettings;
 		private ThingFilter					xmlResources;
 
         private List<IntVec3>				cachedAdjCellsCardinal;
@@ -26,6 +25,77 @@ namespace esm
                 return this.cachedAdjCellsCardinal;
             }
         }
+
+		public StorageSettings				ResourceSettings
+		{
+			get
+			{
+				if( resourceSettings == null )
+				{
+					var iHopperUser = parent as IHopperUser;
+					if(
+						( Resources == null )&&
+						(
+							( iHopperUser == null )||
+							( iHopperUser.ResourceFilter == null )
+						)
+					)
+					{
+						// Does not contain xml resource filter
+						// or (properly) implement IHopperUser
+						Log.Message( parent.def.defName + " Improperly configured!" );
+						return null;
+					}
+
+					// Create storage settings
+					resourceSettings = new StorageSettings();
+
+					// Set priority
+					resourceSettings.Priority = StoragePriority.Important;
+
+					// Create a new filter
+					resourceSettings.filter = new ThingFilter();
+
+					// Set the filter from the hopper user
+					if( iHopperUser != null )
+					{
+						// Copy a filter from a building implementing IHopperUser
+						resourceSettings.filter.CopyFrom( iHopperUser.ResourceFilter );
+					}
+					else
+					{
+						// Copy filters from xml
+						resourceSettings.filter.CopyFrom( Resources );
+					}
+				}
+
+				// Disallow quality
+				resourceSettings.filter.allowedQualitiesConfigurable = false;
+
+				// Explicitly remove auto-added special filters unless they are explicitly added
+				foreach( var sf in DefDatabase<SpecialThingFilterDef>.AllDefsListForReading )
+				{
+					if(
+						( sf.allowedByDefault )&&
+						(
+							( resourceSettings.filter.specialFiltersToAllow.NullOrEmpty() )||
+							( !resourceSettings.filter.specialFiltersToAllow.Contains( sf.defName ) )
+						)
+					)
+					{
+						if( resourceSettings.filter.specialFiltersToDisallow.NullOrEmpty() )
+						{
+							resourceSettings.filter.specialFiltersToDisallow = new List<string>();
+						}
+						resourceSettings.filter.specialFiltersToDisallow.Add( sf.defName );
+					}
+				}
+
+				// Resolve the referencs
+				resourceSettings.filter.ResolveReferences();
+				return resourceSettings;
+			}
+		}
 
         public ThingFilter					Resources
         {
@@ -44,47 +114,10 @@ namespace esm
         {
             base.PostSpawnSetup();
 
-			if( ResourceSettings == null )
+			if( ResourceSettings != null )
 			{
-				var iHopperUser = parent as IHopperUser;
-				if(
-					( Resources == null )&&
-					(
-						( iHopperUser == null )||
-						( iHopperUser.ResourceFilter == null )
-					)
-				)
-				{
-					// Does not contain xml resource filter
-					// or (properly) implement IHopperUser
-					Log.Message( parent.def.defName + " Improperly configured!" );
-					return;
-				}
-
-				// Create storage settings
-				ResourceSettings = new StorageSettings();
-
-				// Set priority
-				ResourceSettings.Priority = StoragePriority.Important;
-
-				// Create a new filter
-				ResourceSettings.filter = new ThingFilter();
-
-				// Set the filter from the hopper user
-				if( iHopperUser != null )
-				{
-					// Copy a filter from a building implementing IHopperUser
-					ResourceSettings.filter.CopyFrom( iHopperUser.ResourceFilter );
-				}
-				else
-				{
-					// Copy filters from xml and resolve the references
-					ResourceSettings.filter.CopyFrom( Resources );
-					ResourceSettings.filter.ResolveReferences();
-				}
+				FindAndProgramHoppers();
 			}
-        	
-			FindAndProgramHoppers();
 		}
 
 		public override void				PostDeSpawn()

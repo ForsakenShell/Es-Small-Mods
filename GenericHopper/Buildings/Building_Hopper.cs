@@ -106,6 +106,8 @@ namespace esm
 		{
 			base.ExposeData();
 			Scribe_Deep.LookDeep<StorageSettings>(ref settings, "settings", new Object[1]{ this } );
+			// Disallow quality
+			settings.filter.allowedQualitiesConfigurable = false;
 		}
 
 		public override void				Destroy(DestroyMode mode = DestroyMode.Vanish)
@@ -117,12 +119,12 @@ namespace esm
 
 		public override IEnumerable<Gizmo>	GetGizmos()
 		{
-			foreach( var gizmo in base.GetGizmos() )
+			var copyPasteGizmos = StorageSettingsClipboard.CopyPasteGizmosFor( settings );
+			foreach( var gizmo in copyPasteGizmos )
 			{
 				yield return gizmo;
 			}
-			var copyPasteGizmos = StorageSettingsClipboard.CopyPasteGizmosFor( settings );
-			foreach( var gizmo in copyPasteGizmos )
+			foreach( var gizmo in base.GetGizmos() )
 			{
 				yield return gizmo;
 			}
