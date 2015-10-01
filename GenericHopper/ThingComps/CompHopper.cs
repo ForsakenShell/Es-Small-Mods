@@ -108,8 +108,8 @@ namespace esm
 				// No storage settings
 				return;
 			}
-
-			// Copy the settings from the controller
+            
+            // Copy the settings from the controller
 			hopperSettings.CopyFrom( HopperUserSettings );
 
 			// Set the programming flag
