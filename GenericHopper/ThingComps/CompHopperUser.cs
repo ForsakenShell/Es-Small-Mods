@@ -88,7 +88,10 @@ namespace esm
 				if( xmlResources == null )
 				{
 					xmlResources = ((CompProperties_HopperUser)props).resources;
-					xmlResources.ResolveReferences();
+					if( xmlResources != null )
+					{
+						xmlResources.ResolveReferences();
+					}
 				}
 				return xmlResources;
 			}
