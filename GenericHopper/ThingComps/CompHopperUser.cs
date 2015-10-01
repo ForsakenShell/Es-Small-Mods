@@ -67,32 +67,32 @@ namespace esm
 						// Copy filters from xml
 						resourceSettings.filter.CopyFrom( Resources );
 					}
-				}
 
-				// Disallow quality
-				resourceSettings.filter.allowedQualitiesConfigurable = false;
+					// Disallow quality
+					resourceSettings.filter.allowedQualitiesConfigurable = false;
 
-				// Explicitly remove auto-added special filters unless they are explicitly added
-				foreach( var sf in DefDatabase<SpecialThingFilterDef>.AllDefsListForReading )
-				{
-					if(
-						( sf.allowedByDefault )&&
-						(
-							( resourceSettings.filter.specialFiltersToAllow.NullOrEmpty() )||
-							( !resourceSettings.filter.specialFiltersToAllow.Contains( sf.defName ) )
-						)
-					)
+					// Explicitly remove auto-added special filters unless they are explicitly added
+					foreach( var sf in DefDatabase<SpecialThingFilterDef>.AllDefsListForReading )
 					{
-						if( resourceSettings.filter.specialFiltersToDisallow.NullOrEmpty() )
+						if(
+							( sf.allowedByDefault )&&
+							(
+								( resourceSettings.filter.specialFiltersToAllow.NullOrEmpty() )||
+								( !resourceSettings.filter.specialFiltersToAllow.Contains( sf.defName ) )
+							)
+						)
 						{
-							resourceSettings.filter.specialFiltersToDisallow = new List<string>();
+							if( resourceSettings.filter.specialFiltersToDisallow.NullOrEmpty() )
+							{
+								resourceSettings.filter.specialFiltersToDisallow = new List<string>();
+							}
+							resourceSettings.filter.specialFiltersToDisallow.Add( sf.defName );
 						}
-						resourceSettings.filter.specialFiltersToDisallow.Add( sf.defName );
 					}
-				}
 
-				// Resolve the referencs
-				resourceSettings.filter.ResolveReferences();
+					// Resolve the referencs
+					resourceSettings.filter.ResolveReferences();
+				}
 				return resourceSettings;
 			}
 		}
