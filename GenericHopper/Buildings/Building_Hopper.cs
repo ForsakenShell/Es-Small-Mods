@@ -22,7 +22,7 @@ namespace esm
 		{
 			get
 			{
-				return this.GetComp<CompHopper>();
+				return GetComp<CompHopper>();
 			}
 		}
 
@@ -36,7 +36,7 @@ namespace esm
 
 		public SlotGroup					GetSlotGroup()
 		{
-			return this.slotGroup;
+			return slotGroup;
 		}
 
 		public virtual void					Notify_ReceivedThing(Thing newItem)
@@ -58,12 +58,12 @@ namespace esm
 
 		public List<IntVec3>				AllSlotCellsList()
 		{
-			return this.AllSlotCells().ToList();
+			return AllSlotCells().ToList();
 		}
 
 		public StorageSettings				GetStoreSettings()
 		{
-			return this.settings;
+			return settings;
 		}
 
 		public StorageSettings				GetParentStoreSettings()
@@ -83,23 +83,26 @@ namespace esm
 
 		public string						SlotYielderLabel()
 		{
-			return this.LabelCap;
+			return LabelCap;
 		}
 
 		public override void				PostMake()
 		{
 			base.PostMake();
-			this.settings = new StorageSettings((IStoreSettingsParent) this);
-			if (this.def.building.defaultStorageSettings == null)
-				return;
-			this.settings.CopyFrom(this.def.building.defaultStorageSettings);
+			settings = new StorageSettings((IStoreSettingsParent) this);
+			if( def.building.defaultStorageSettings != null )
+			{
+				settings.CopyFrom(def.building.defaultStorageSettings);
+			}
+			settings.filter.BlockDefaultAcceptanceFilters();
+			settings.filter.ResolveReferences();
 		}
 
 		public override void				SpawnSetup()
 		{
 			base.SpawnSetup();
-			this.slotGroup = new SlotGroup((ISlotGroupParent) this);
-			this.cachedOccupiedCells = this.OccupiedRect().Cells;
+			slotGroup = new SlotGroup((ISlotGroupParent) this);
+			cachedOccupiedCells = this.OccupiedRect().Cells;
 		}
 
 		public override void				ExposeData()
@@ -116,8 +119,8 @@ namespace esm
 
 		public override void				Destroy(DestroyMode mode = DestroyMode.Vanish)
 		{
-			if (this.slotGroup != null)
-				this.slotGroup.Notify_ParentDestroying();
+			if (slotGroup != null)
+				slotGroup.Notify_ParentDestroying();
 			base.Destroy(mode);
 		}
 

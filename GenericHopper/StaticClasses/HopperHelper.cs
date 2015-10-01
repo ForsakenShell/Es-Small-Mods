@@ -45,19 +45,38 @@ namespace esm
 
 		public static void				BlockDefaultAcceptanceFilters( this ThingFilter filter, StorageSettings parentSettings = null )
 		{
-			var checkFilter = parentSettings != null ? parentSettings.filter : filter;
 			// Explicitly remove auto-added special filters unless they are explicitly added
 			foreach( var sf in DefDatabase<SpecialThingFilterDef>.AllDefsListForReading )
 			{
-				if(
-					( sf.allowedByDefault )&&
-					(
-						( checkFilter.specialFiltersToAllow.NullOrEmpty() )||
-						( !checkFilter.specialFiltersToAllow.Contains( sf.defName ) )
-					)
-				)
+				if( sf.allowedByDefault )
 				{
-					filter.SetAllow( sf, false );
+					var blockIt = false;
+					if(
+						( filter.specialFiltersToAllow.NullOrEmpty() )||
+						( !filter.specialFiltersToAllow.Contains( sf.defName ) )
+					)
+					{
+						blockIt = true;
+					}
+					if(
+						( parentSettings != null )&&
+						(
+							( parentSettings.filter.specialFiltersToAllow.NullOrEmpty() )||
+							( !parentSettings.filter.specialFiltersToAllow.Contains( sf.defName ) )
+						)
+					)
+					{
+						blockIt = true;
+					}
+					if( blockIt )
+					{
+						if( filter.specialFiltersToDisallow.NullOrEmpty() )
+						{
+							filter.specialFiltersToDisallow = new List<string>();
+						}
+						filter.specialFiltersToDisallow.Add( sf.defName );
+						filter.SetAllow( sf, false );
+					}
 				}
 			}
 		}
