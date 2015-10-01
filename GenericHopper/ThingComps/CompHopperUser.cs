@@ -68,20 +68,16 @@ namespace esm
                     userResourceSettings.filter = new ThingFilter();
 
                     // Copy filters from the IHopperUser building
-                    if ( (iHopperUser != null) && (iHopperUser.ResourceFilter != null) )
+                    if ( iHopperUser != null )
                     {
                         iHopperUser.ResourceFilter.ResolveReferences();
                         userResourceSettings.filter.CopyFrom( iHopperUser.ResourceFilter );
                     }
                     // Or filters from xml comp. properties
-                    else if ( xmlResources != null )
+                    else
                     {
                         xmlResources.ResolveReferences();
                         userResourceSettings.filter.CopyFrom( xmlResources );
-                    }
-                    else
-                    {
-                        return null;
                     }
 
                     // Disallow quality
