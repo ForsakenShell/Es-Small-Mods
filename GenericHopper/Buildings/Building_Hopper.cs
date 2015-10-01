@@ -94,8 +94,6 @@ namespace esm
 			{
 				settings.CopyFrom(def.building.defaultStorageSettings);
 			}
-			settings.filter.BlockDefaultAcceptanceFilters();
-			settings.filter.ResolveReferences();
 		}
 
 		public override void				SpawnSetup()
