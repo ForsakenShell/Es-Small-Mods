@@ -64,18 +64,19 @@ namespace esm
 					}
 					else
 					{
-						// Copy filters from xml
+						// Copy a filter from xml flag
 						resourceSettings.filter.CopyFrom( Resources );
 					}
+
+					// Block default special filters
+					resourceSettings.filter.BlockDefaultAcceptanceFilters();
+                    
+                    // Resolve references again
+                    resourceSettings.filter.ResolveReferences();
 
 					// Disallow quality
 					resourceSettings.filter.allowedQualitiesConfigurable = false;
 
-					// Block default special filters
-					resourceSettings.filter.BlockDefaultAcceptanceFilters();
-
-					// Resolve the referencs
-					resourceSettings.filter.ResolveReferences();
 				}
 				return resourceSettings;
 			}
