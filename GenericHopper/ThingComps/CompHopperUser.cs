@@ -136,11 +136,11 @@ namespace esm
             }
         }
 
-        public List<CompHopper>				FindHoppers()
+        public List<CompHopper>             FindHoppers()
         {
             // Find hoppers for building
             var hoppers = new List<CompHopper>();
-            var occupiedCells = parent.OccupiedRect();
+            var occupiedCells = this.parent.OccupiedRect();
             foreach (var cell in AdjCellsCardinalInBounds)
             {
 				var hopper = FindHopper( cell );
@@ -157,7 +157,29 @@ namespace esm
             return hoppers;
         }
 
-		public CompHopper					FindHopper( IntVec3 cell )
+        public static List<CompHopper>		FindHoppers( IntVec3 thingCenter, Rot4 thingRot, IntVec2 thingSize )
+        {
+            // Find hoppers for building
+            var hoppers = new List<CompHopper>();
+            var occupiedCells = GenAdj.OccupiedRect(thingCenter, thingRot, thingSize);
+            foreach ( var cell in GenAdj.CellsAdjacentCardinal(thingCenter, thingRot, thingSize).
+                Where(c => c.InBounds()).ToList() )
+            {
+				var hopper = FindHopper( cell );
+                if (
+                    ( hopper != null ) &&
+                    ( occupiedCells.Cells.Contains( hopper.Building.Position + hopper.Building.Rotation.FacingCell ) )
+                )
+                {
+                    // Hopper is adjacent and rotated correctly
+                    hoppers.Add(hopper);
+                }
+            }
+            // Return list of hoppers connected to this building
+            return hoppers;
+        }
+
+		private static CompHopper			FindHopper( IntVec3 cell )
 		{
 			// Find hopper in cell
 			var thingList = cell.GetThingList();
