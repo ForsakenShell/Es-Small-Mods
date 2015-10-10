@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <DesignatorDef>
+        <defName>SmoothWall_Designator</defName>
+        <designatorClass>esm.Designator_SmoothWall</designatorClass>
+        <designationCategory>Structure</designationCategory>
+    </DesignatorDef>
+
+</Defs>
