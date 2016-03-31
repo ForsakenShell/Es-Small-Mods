@@ -6,7 +6,14 @@
 
         <ModName>ESM - Mountain Temp</ModName>
 
-        <version>0.12.0</version>
+        <version>0.12.7</version>
+
+        <ModConfigurationMenus>
+            <li>
+                <label>Mountain Temp</label>
+                <mcmClass>esm.MCM_MountainTemp</mcmClass>
+            </li>
+        </ModConfigurationMenus>
 
         <MapComponents>
             <li>esm.MountainTemp</li>

@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+using System.Reflection;
+
 using Verse;
+using UnityEngine;
 
 namespace esm
 {
@@ -17,8 +19,12 @@ namespace esm
 
     public class MountainTemp : MapComponent
     {
+        // GenTemperature
+        static MethodInfo CalculateOutdoorTemperatureAtWorldCoords;
+        static MethodInfo AverageTemperatureForMonth;
+
         // Constant underground temperature
-        public const float UNDERGROUND_TEMPERATURE = 0.0f;
+        //public const float UNDERGROUND_TEMPERATURE = 0.0f;
 
         // Constant delta for setting temp
         public const float TEMPERATURE_DELTA = 0.49f;
@@ -32,9 +38,82 @@ namespace esm
         // Ticks between updates
         public const int UPDATE_TICKS = 60;
 
+        public static float SeasonalAverage
+        {
+            get
+            {
+                var args = new object[]
+                {
+                    Find.TickManager.TicksAbs,
+                            Find.Map.WorldCoords,
+                            false
+                };
+                return (float) CalculateOutdoorTemperatureAtWorldCoords.Invoke( null, args );
+            }
+        }
+
+        private static float _annualAverage;
+        public static float AnnualAverage
+        {
+            get
+            {
+                if( _annualAverage < -10000.0f )
+                {
+                    _annualAverage = (
+                        ( (float) AverageTemperatureForMonth.Invoke( null, new object[]{ Month.Jan } ) ) +
+                        ( (float) AverageTemperatureForMonth.Invoke( null, new object[]{ Month.Feb } ) ) +
+                        ( (float) AverageTemperatureForMonth.Invoke( null, new object[]{ Month.Mar } ) ) +
+                        ( (float) AverageTemperatureForMonth.Invoke( null, new object[]{ Month.Apr } ) ) +
+                        ( (float) AverageTemperatureForMonth.Invoke( null, new object[]{ Month.May } ) ) +
+                        ( (float) AverageTemperatureForMonth.Invoke( null, new object[]{ Month.Jun } ) ) +
+                        ( (float) AverageTemperatureForMonth.Invoke( null, new object[]{ Month.Jul } ) ) +
+                        ( (float) AverageTemperatureForMonth.Invoke( null, new object[]{ Month.Aug } ) ) +
+                        ( (float) AverageTemperatureForMonth.Invoke( null, new object[]{ Month.Sept } ) ) +
+                        ( (float) AverageTemperatureForMonth.Invoke( null, new object[]{ Month.Oct } ) ) +
+                        ( (float) AverageTemperatureForMonth.Invoke( null, new object[]{ Month.Nov } ) ) +
+                        ( (float) AverageTemperatureForMonth.Invoke( null, new object[]{ Month.Dec } ) )
+                    ) / 12f;
+                }
+                return _annualAverage;
+            }
+        }
+
+        // Target underground temperature
+        public float TargetTemperature
+        {
+            get
+            {
+                switch( Config.TargetMode )
+                {
+                case TemperatureMode.Fixed:
+                    return Config.FixedTarget;
+
+                case TemperatureMode.Seasonal:
+                    return SeasonalAverage;
+
+                case TemperatureMode.Annual:
+                    return AnnualAverage;
+
+                default:
+                    throw new Exception( "MountainTemp :: Invalid temperature target mode" );
+                }
+            }
+        }
+
         // This will house all the rooms in the world which have
         // natural roofs
         List<NaturalRoom> NaturalRooms = new List<NaturalRoom>();
+
+        static MountainTemp()
+        {
+            CalculateOutdoorTemperatureAtWorldCoords = typeof( GenTemperature ).GetMethod( "CalculateOutdoorTemperatureAtWorldCoords", BindingFlags.Static | BindingFlags.NonPublic );
+            AverageTemperatureForMonth = typeof( GenTemperature ).GetMethod( "AverageTemperatureForMonth", BindingFlags.Static | BindingFlags.NonPublic );
+        }
+
+        public MountainTemp()
+        {
+            _annualAverage = float.MinValue;
+        }
 
         /// <summary>
         /// Fetchs the mountain rooms with thick roofs and no heating/cooling devices.
@@ -186,8 +265,8 @@ namespace esm
 				naturalRoom.naturalEqualizationFactor = thickFactor + thinFactor * 0.5f;
 
                 // Calculate new temp based on roof factors
-				float thickRate = thickFactor * UNDERGROUND_TEMPERATURE;
-				float thinRate = thinFactor * ( outdoorTemp - UNDERGROUND_TEMPERATURE ) * 0.25f;
+				float thickRate = thickFactor * TargetTemperature;
+				float thinRate = thinFactor * ( outdoorTemp - TargetTemperature ) * 0.25f;
 				//float roofedRate = roofedFactor * ( outdoorTemp - UNDERGROUND_TEMPERATURE ) * 0.5f;
 
 				// Assign the natural temp based on aggregate ratings
