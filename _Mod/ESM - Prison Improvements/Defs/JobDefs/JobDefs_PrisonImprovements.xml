@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <JobDef>
+        <defName>TransferPrisoner</defName>
+        <driverClass>PrisonImprovements.JobDriver_Warden_TransferPrisonerToCell</driverClass>
+        <reportString>Transferring TargetA.</reportString>
+    </JobDef> 
+
+    <JobDef>
+        <defName>EnslavePrisoner</defName>
+        <driverClass>PrisonImprovements.JobDriver_Warden_EnslavePrisoner</driverClass>
+        <reportString>Enslaving TargetA.</reportString>
+    </JobDef>
+
+    <JobDef>
+        <defName>FreeSlave</defName>
+        <driverClass>PrisonImprovements.JobDriver_Warden_FreeSlave</driverClass>
+        <reportString>Freeing TargetA.</reportString>
+    </JobDef>
+
+</Defs>

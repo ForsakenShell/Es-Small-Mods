@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <!-- Override to stop dragging prisoners back to their sleep bed -->
+    <WorkGiverDef>
+        <defName>TakePrisonerToBed</defName>
+        <label>take prisoners to bed</label>
+        <giverClass>PrisonImprovements.WorkGiver_Warden_TakeToBed</giverClass>
+        <workType>Warden</workType>
+        <verb>take to bed</verb>
+        <gerund>taking to bed</gerund>
+        <priorityInType>90</priorityInType>
+        <requiredCapacities>
+            <li>Manipulation</li>
+        </requiredCapacities>
+    </WorkGiverDef>
+
+    <!-- Make a prisoner a slave -->
+    <WorkGiverDef>
+        <defName>EnslavePrisoner</defName>
+        <label>enslave prisoner</label>
+        <giverClass>PrisonImprovements.WorkGiver_Warden_EnslavePrisoner</giverClass>
+        <workType>Warden</workType>
+        <verb>enslave prisoner</verb>
+        <gerund>enslaving prisoner</gerund>
+        <priorityInType>120</priorityInType>
+        <requiredCapacities>
+            <li>Manipulation</li>
+        </requiredCapacities>
+    </WorkGiverDef>
+
+    <!-- Free a slave -->
+    <WorkGiverDef>
+        <defName>FreeSlave</defName>
+        <label>free slave</label>
+        <giverClass>PrisonImprovements.WorkGiver_Warden_FreeSlave</giverClass>
+        <workType>Warden</workType>
+        <verb>free slave</verb>
+        <gerund>freeing slave</gerund>
+        <priorityInType>105</priorityInType>
+        <requiredCapacities>
+            <li>Manipulation</li>
+        </requiredCapacities>
+    </WorkGiverDef>
+
+</Defs>

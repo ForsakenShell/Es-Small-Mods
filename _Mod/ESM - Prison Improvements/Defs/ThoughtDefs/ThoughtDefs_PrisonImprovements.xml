@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <ThoughtDef>
+        <defName>Enslaved</defName>
+        <workerClass>PrisonImprovements.ThoughtWorker_Enslaved</workerClass>
+        <stages>
+            <li>
+                <label>enslaved</label>
+                <description>This is terrible!  I've been enslaved.  While imprisoned, at least I could maintain the hope of being ransomed.</description>
+                <baseMoodEffect>-10</baseMoodEffect>
+            </li>
+        </stages>
+        <requiredTraits>
+            <li>Enslaved</li>
+        </requiredTraits>
+    </ThoughtDef>
+
+    <ThoughtDef>
+        <defName>FreedSlave</defName>
+        <stages>
+            <li>
+                <label>freed</label>
+                <description>I've been freed from slavery!</description>
+                <baseMoodEffect>10</baseMoodEffect>
+            </li>
+        </stages>
+        <durationDays>1</durationDays>
+        <nullifyingTraits>
+            <li>Enslaved</li>
+        </nullifyingTraits>
+    </ThoughtDef>
+
+</Defs>

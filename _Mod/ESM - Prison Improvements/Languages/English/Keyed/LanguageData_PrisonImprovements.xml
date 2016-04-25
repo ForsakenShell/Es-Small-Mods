@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+    <!-- Alert_SlaveCollars -->
+    <PI_NeedCollars_Label>Need slave collars</PI_NeedCollars_Label>
+    <PI_NeedCollars_Explaination>One or more prisoners are marked for enslavement, but you have no available slave collars. Make some from leather at a crafting spot or smithing workbench.</PI_NeedCollars_Explaination>
+
+    <!-- Building_PrisonMarker -->
+    <PI_Default_Camera_Name>Camera {0}</PI_Default_Camera_Name>
+
+    <!-- MCM_PrisonImprovements -->
+    <PI_MCM_Label>Prison Improvements</PI_MCM_Label>
+    <PI_MCM_Description>These settings won't take effect until you restart RimWorld.</PI_MCM_Description>
+    <PI_MCM_BoughtAsColonists>Bought slaves become colonists</PI_MCM_BoughtAsColonists>
+
+    <!-- ITab_Pawn_Prisoner -->
+    <PI_Enslave>Enslave</PI_Enslave>
+    <PI_TransferPrisoner>Transfer prisoner</PI_TransferPrisoner>
+    <PI_CancelTransfer>Cancel Transfer</PI_CancelTransfer>
+    <PI_TransferPrisonerTo>Transfer to:</PI_TransferPrisonerTo>
+    <PI_InstallCamera>Install a named security camera first</PI_InstallCamera>
+
+    <!-- ITab_Pawn_Slave -->
+    <PI_Pawn_Slave_Label>Slave</PI_Pawn_Slave_Label>
+    <PI_Pawn_Slave_Faction>Faction: {0}</PI_Pawn_Slave_Faction>
+    <PI_Pawn_Slave_PawnKind>Role: {0}</PI_Pawn_Slave_PawnKind>
+    <PI_FreeSlave>Free Slave</PI_FreeSlave>
+
+    <!-- ITab_PrisonMarker -->
+    <PI_PrisonMarker_Label>Name</PI_PrisonMarker_Label>
+    <PI_Camera_Name>Name:</PI_Camera_Name>
+
+    <!-- PlaceWorker_PrisonMarker -->
+    <PI_MustBeInRoom>Security Camera must be placed in a walled room.</PI_MustBeInRoom>
+    <PI_NoColonistBeds>Security Camera can't be placed in a room with colonist beds.</PI_NoColonistBeds>
+
+</LanguageData>

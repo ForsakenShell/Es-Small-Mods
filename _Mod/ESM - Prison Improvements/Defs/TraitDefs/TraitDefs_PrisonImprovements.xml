@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <TraitDef>
+        <defName>Enslaved</defName>
+        <commonality>0.001</commonality>
+        <degreeDatas>
+            <li>
+                <label>enslaved</label>
+                <description>NAME has been enslaved and can only perform menial tasks.</description>
+                <statOffsets>
+                    <MentalBreakThreshold>-20</MentalBreakThreshold>
+                </statOffsets>
+            </li>
+        </degreeDatas>
+        <disabledWorkTypes>
+            <li>Doctor</li>
+            <li>Warden</li>
+            <li>Research</li>
+        </disabledWorkTypes>
+    </TraitDef>
+
+</Defs>
