@@ -32,9 +32,13 @@ namespace PrisonImprovements
 				resultingAp = (Apparel) null;
 				return false;
 			}
-			if( ap is Apparel_SlaveCollar )
+            if(
+                ( ap is Apparel_SlaveCollar )&&
+                ( !ap.wearer.health.Dead )
+            )
 			{
-				// Can't take off slave collars
+				// Can only take off slave collars of the dead
+                Verse.Log.Message( obj.pawn.LabelCap + " tried to remove slave collar but they aren't dead." );
 				resultingAp = (Apparel) null;
 				return false;
 			}

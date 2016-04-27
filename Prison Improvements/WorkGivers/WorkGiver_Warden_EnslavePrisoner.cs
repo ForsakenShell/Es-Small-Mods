@@ -36,7 +36,15 @@ namespace PrisonImprovements
 				return (Job) null;
 			}
 			var collar = collars.Find( thing => !thing.IsForbidden( Faction.OfColony ) );
-			if( collar == null )
+			if(
+                ( collar == null )||
+                ( !warden.CanReserveAndReach(
+                    collar,
+                    PathEndMode.ClosestTouch,
+                    warden.NormalMaxDanger(),
+                    1 )
+                )
+            )
 			{
 				return (Job) null;
 			}
