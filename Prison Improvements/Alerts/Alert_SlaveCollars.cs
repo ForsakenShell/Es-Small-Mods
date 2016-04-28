@@ -33,7 +33,7 @@ namespace PrisonImprovements
 				var prisoners = Find.MapPawns.PrisonersOfColony;
 				if( prisoners.Count() > 0 )
 				{
-					var collars = Find.ListerThings.ThingsMatching( ThingRequest.ForDef( Data.SlaveCollarThingDef ) );
+                    var collars = Data.AllSlaveCollarsOfColony();
 					if( !collars.NullOrEmpty() )
 					{
 						foreach( var collar in collars )

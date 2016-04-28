@@ -26,11 +26,7 @@ namespace PrisonImprovements
                 }
                 if( thing is Building_PrisonMarker )
                 {
-                    var compPower = thing.TryGetComp<CompPowerTrader>();
-                    if(
-                        ( compPower == null )||
-                        ( compPower.PowerOn )
-                    )
+                    if( ( (Building_PrisonMarker)thing ).IsActive )
                     {
                         num1++;
                     }

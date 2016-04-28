@@ -78,6 +78,7 @@
     <Compile Include="ModConfigurationMenus\MCM_PrisonImprovements.cs" />
     <Compile Include="RoomRoleWorkers\RoomRoleWorker_PrisonCommons.cs" />
     <Compile Include="RoomRoleWorkers\RoomRoleWorker_PrisonYard.cs" />
+    <Compile Include="JobGivers\JobGiver_WanderPrison.cs" />
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>

@@ -8,15 +8,10 @@
             <li>
                 <label>enslaved</label>
                 <description>NAME has been enslaved and can only perform menial tasks.</description>
-                <statOffsets>
-                    <MentalBreakThreshold>-20</MentalBreakThreshold>
-                </statOffsets>
             </li>
         </degreeDatas>
         <disabledWorkTypes>
-            <li>Doctor</li>
             <li>Warden</li>
-            <li>Research</li>
         </disabledWorkTypes>
     </TraitDef>
 

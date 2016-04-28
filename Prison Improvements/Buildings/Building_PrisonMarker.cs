@@ -14,11 +14,25 @@ namespace PrisonImprovements
         private static int markerIndex = 1;
         public string markerName = "";
 
+        private CompPowerTrader compPower;
+
+        public virtual bool IsActive
+        {
+            get
+            {
+                return (
+                    ( compPower == null )||
+                    ( compPower.PowerOn )
+                );
+            }
+        }
+
         public override void SpawnSetup()
         {
             base.SpawnSetup();
             markerName = "PI_Default_Camera_Name".Translate( markerIndex );
             markerIndex++;
+            compPower = this.TryGetComp<CompPowerTrader>();
         }
 
         public override void ExposeData()
@@ -35,6 +49,17 @@ namespace PrisonImprovements
             {
                 return;
             }
+            UpdateRoomState();
+        }
+
+        public override void TickRare()
+        {
+            base.TickRare();
+            UpdateRoomState();
+        }
+
+        public void UpdateRoomState()
+        {
             var room = this.GetRoom();
             if(
                 ( room == null )||
@@ -46,18 +71,13 @@ namespace PrisonImprovements
             }
             else
             {
-                var compPower = this.TryGetComp<CompPowerTrader>();
-                if(
-                    ( compPower != null )&&
-                    ( !compPower.PowerOn )&&
-                    ( !room.ContainedBeds.Any( bed => bed.ForPrisoners ) )
-                )
+                if( IsActive )
                 {
-                    room.isPrisonCell = false;
+                    room.isPrisonCell = true;
                 }
                 else
                 {
-                    room.isPrisonCell = true;
+                    room.isPrisonCell = false;
                 }
             }
         }

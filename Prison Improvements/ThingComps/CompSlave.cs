@@ -8,7 +8,7 @@ namespace PrisonImprovements
     {
 
         // For wardens to haul to a marker
-        public Building_PrisonMarker    haulTarget = null;
+        public Thing                    haulTarget = null;
 
         // For wardens to free slaves
         public Faction                  originalFaction = null;
@@ -61,7 +61,7 @@ namespace PrisonImprovements
             base.PostExposeData();
             Scribe_Values.LookValue<bool>( ref this.freeSlave, "freeSlave", false, false );
             Scribe_Values.LookValue<bool>( ref this.wasSlave, "wasSlave", false, false );
-            Scribe_References.LookReference<Building_PrisonMarker>( ref this.haulTarget, "haulTarget" );
+            Scribe_References.LookReference<Thing>( ref this.haulTarget, "haulTarget" );
             Scribe_References.LookReference<Faction>( ref this.originalFaction, "originalFaction" );
             Scribe_Defs.LookDef<PawnKindDef>( ref this.originalPawnKind, "originalPawnKind" );
         }

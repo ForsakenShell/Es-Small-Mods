@@ -15,27 +15,34 @@ namespace PrisonImprovements
     public class JobDriver_Warden_TransferPrisonerToCell : JobDriver_HaulToCell
     {
         
-        private const TargetIndex HaulableInd = TargetIndex.A;
-        private const TargetIndex StoreCellInd = TargetIndex.B;
+        private const TargetIndex PrisonerInd = TargetIndex.A;
+        private const TargetIndex HaulToInd = TargetIndex.B;
 
         protected override IEnumerable<Toil> MakeNewToils()
         {
-            this.FailOnDestroyedNullOrForbidden( HaulableInd );
-            this.FailOnBurningImmobile( StoreCellInd );
-            if( !pawn.CurJob.GetTarget( HaulableInd ).Thing.IsForbidden( pawn ) )
+            this.FailOnDestroyedNullOrForbidden( PrisonerInd );
+            this.FailOnBurningImmobile( HaulToInd );
+            if( !pawn.CurJob.GetTarget( PrisonerInd ).Thing.IsForbidden( pawn ) )
             {
-                this.FailOnForbidden( HaulableInd );
+                this.FailOnForbidden( PrisonerInd );
             }
-            yield return Toils_Reserve.Reserve( StoreCellInd, 1 );
-            yield return Toils_Reserve.Reserve( HaulableInd, 1 );
-            var toilGoto = Toils_Goto.GotoThing( HaulableInd, PathEndMode.ClosestTouch )
+            this.AddEndCondition( () =>
+            {
+                // Cancel out if the prisoner enters the target room on their own
+                var prisonerRoom = pawn.jobs.curJob.GetTarget( PrisonerInd ).Thing.Position.GetRoom();
+                var targetRoom = pawn.jobs.curJob.GetTarget( HaulToInd ).Cell.GetRoom();
+                return prisonerRoom == targetRoom ? JobCondition.Succeeded : JobCondition.Ongoing;
+            } );
+            yield return Toils_Reserve.Reserve( HaulToInd, 1 );
+            yield return Toils_Reserve.Reserve( PrisonerInd, 1 );
+            var toilGoto = Toils_Goto.GotoThing( PrisonerInd, PathEndMode.ClosestTouch )
                                      .FailOn( () =>
             {
                 Job job = pawn.jobs.curJob;
                 if( job.haulMode == HaulMode.ToCellStorage )
                 {
-                    Thing prisoner = job.GetTarget( HaulableInd ).Thing;
-                    if( !pawn.jobs.curJob.GetTarget( StoreCellInd ).Cell.IsValidStorageFor( prisoner ) )
+                    Thing prisoner = job.GetTarget( PrisonerInd ).Thing;
+                    if( !pawn.jobs.curJob.GetTarget( HaulToInd ).Cell.IsValidStorageFor( prisoner ) )
                     {
                         return true;
                     }
@@ -43,13 +50,13 @@ namespace PrisonImprovements
                 return false;
             } );
             yield return toilGoto;
-            yield return Toils_Haul.StartCarryThing( HaulableInd );
-            var carryToCell = Toils_Haul.CarryHauledThingToCell( StoreCellInd );
+            yield return Toils_Haul.StartCarryThing( PrisonerInd );
+            var carryToCell = Toils_Haul.CarryHauledThingToCell( HaulToInd );
             yield return carryToCell;
-            yield return Toils_Haul.PlaceHauledThingInCell( StoreCellInd, carryToCell, true );
-            yield return Toils_Prisoner.NoLongerNeedsHauling( HaulableInd );
-            yield return Toils_Reserve.Release( StoreCellInd );
-            yield return Toils_Reserve.Release( HaulableInd );
+            yield return Toils_Haul.PlaceHauledThingInCell( HaulToInd, carryToCell, true );
+            yield return Toils_Prisoner.NoLongerNeedsHauling( PrisonerInd );
+            yield return Toils_Reserve.Release( HaulToInd );
+            yield return Toils_Reserve.Release( PrisonerInd );
         }
 
     }

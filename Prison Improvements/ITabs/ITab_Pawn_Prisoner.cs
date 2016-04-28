@@ -12,7 +12,7 @@ namespace PrisonImprovements
 	public class ITab_Pawn_Prisoner : RimWorld.ITab_Pawn_Prisoner
 	{
 
-		private List<KeyValuePair<string, Building_PrisonMarker>> cached;
+		private List<KeyValuePair<string, Thing>> cached;
 
 		protected override void FillTab()
 		{
@@ -69,7 +69,14 @@ namespace PrisonImprovements
 						if( Widgets.TextButton( rect5, "PI_TransferPrisoner".Translate() ) )
 						{
 							var list = this.GenOptions();
-							if( list.Count == 0 )
+							if(
+                                ( list.Count == 0 )||
+                                (
+                                    ( list.Count == 1 )&&
+                                    ( list[ 0 ].label == "PI_Prison_Cell".Translate() )&&
+                                    ( this.SelPawn.GetRoom() == this.SelPawn.ownership.OwnedBed.GetRoom() )
+                                )
+                            )
 							{
 								list.Add( new FloatMenuOption( "PI_InstallCamera".Translate(), (Action) null ) );
 							}
@@ -88,35 +95,47 @@ namespace PrisonImprovements
 						}
 
 						listingStandard.DoGap( 4f );
-						var rect6 = listingStandard.GetRect( 30f );
-						GUI.Label( rect6, "PI_TransferPrisonerTo".Translate() );
 
 						var rect7 = listingStandard.GetRect( 30f );
 						var style = new GUIStyle( Text.CurTextFieldStyle );
 						style.alignment = TextAnchor.MiddleCenter;
 
-						GUI.Label( rect7, compSlave.haulTarget.markerName, style );
+                        string label = string.Empty;
+                        if( compSlave.haulTarget is Building_PrisonMarker )
+                        {
+                            label = ( (Building_PrisonMarker) compSlave.haulTarget ).markerName;
+                        }
+                        else if( compSlave.haulTarget is Building_Bed )
+                        {
+                            label = "PI_Prison_Cell".Translate();
+                        }
+						GUI.Label( rect7, label, style );
 					}
 				}
 			}
 			listingStandard.End();
 		}
 
-		private List<KeyValuePair<string, Building_PrisonMarker>> GetPrisonMarkers()
+        private List<KeyValuePair<string, Thing>> GetHaulToTargets()
 		{
 			if( this.cached != null )
 			{
 				return this.cached;
 			}
-			var list = new List<KeyValuePair<string, Building_PrisonMarker>>();
+			var list = new List<KeyValuePair<string, Thing>>();
+            if( this.SelPawn.ownership.OwnedBed != null )
+            {
+                list.Add( new KeyValuePair<string, Thing>( "PI_Prison_Cell".Translate(), this.SelPawn.ownership.OwnedBed ) );
+            }
 			foreach( var marker in Find.ListerBuildings.AllBuildingsColonistOfClass<Building_PrisonMarker>() )
 			{
 				if(
-					( marker.markerName != null ) &&
-					( marker.markerName.Trim().Length > 0 )
+					( marker.markerName != null )&&
+					( marker.markerName.Trim().Length > 0 )&&
+                    ( marker.IsActive )
 				)
 				{
-					list.Add( new KeyValuePair<string, Building_PrisonMarker>( marker.markerName, marker ) );
+					list.Add( new KeyValuePair<string, Thing>( marker.markerName, marker ) );
 				}
 			}
 			this.cached = list;
@@ -126,7 +145,7 @@ namespace PrisonImprovements
 		private List<FloatMenuOption> GenOptions()
 		{
 			var list = new List<FloatMenuOption>();
-			foreach( var keyValuePair in this.GetPrisonMarkers() )
+			foreach( var keyValuePair in this.GetHaulToTargets() )
 			{
 				var action = new Action( () =>
 				{

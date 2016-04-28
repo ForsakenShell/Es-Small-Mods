@@ -1,8 +1,10 @@
-﻿using RimWorld;
-using System;
+﻿using System;
 using System.Collections.Generic;
+
+using RimWorld;
 using Verse;
 using Verse.AI;
+using UnityEngine;
 
 namespace PrisonImprovements
 {
@@ -20,13 +22,14 @@ namespace PrisonImprovements
 			var prisoner = t as Pawn;
 			var compSlave = prisoner.GetComp<CompSlave>();
 			if(
-				( compSlave != null ) &&
-				( compSlave.ShouldBeTransfered ) &&
+				( compSlave != null )&&
+				( compSlave.ShouldBeTransfered )&&
 				( warden.CanReserve( prisoner, 1 ) )
 			)
 			{
 				//Log.Message( string.Format( "Prisoner {0} should be transfered and {1} wants to escort", prisoner.Name, warden.Name ) );
-				var job = new Job( Data.TransferPrisonerJobDef, prisoner, compSlave.haulTarget.Position );
+                var haulToLoc = compSlave.haulTarget.GetRoom().Cells.RandomElement();
+				var job = new Job( Data.TransferPrisonerJobDef, prisoner, haulToLoc );
 				job.maxNumToCarry = 1;
 				return job;
 			}

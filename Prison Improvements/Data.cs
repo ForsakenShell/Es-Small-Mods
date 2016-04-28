@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+
 using RimWorld;
 using Verse;
 
@@ -15,7 +18,8 @@ namespace PrisonImprovements
 
         public static PawnKindDef SlavePawnKindDef      = DefDatabase<PawnKindDef>.GetNamed( "Slave", true );
 
-        public static ThingDef SlaveCollarThingDef      = DefDatabase<ThingDef>.GetNamed( "SlaveCollar", true );
+        // If we don't use a specific def, we can add more collar types
+        //public static ThingDef SlaveCollarThingDef      = DefDatabase<ThingDef>.GetNamed( "SlaveCollar", true );
 
         public static ThoughtDef EnslavedThoughtDef     = DefDatabase<ThoughtDef>.GetNamed( "Enslaved", true );
         public static ThoughtDef FreedThoughtDef        = DefDatabase<ThoughtDef>.GetNamed( "FreedSlave", true );
@@ -57,7 +61,7 @@ namespace PrisonImprovements
                 SlavePawnKindDef.apparelAllowHeadwearChance = 100;
             }
             SlavePawnKindDef.ResolveReferences();
-            SlaveCollarThingDef.ResolveReferences();
+            //SlaveCollarThingDef.ResolveReferences();
         }
 
 		public static Apparel_SlaveCollar WornCollar( this Pawn pawn )
@@ -110,6 +114,14 @@ namespace PrisonImprovements
 			}
 			pawn.workSettings.Notify_GainedTrait();
 		}
+
+        public static List<Thing> AllSlaveCollarsOfColony()
+        {
+            return Find.ListerThings.AllThings.Where( thing => (
+                ( thing is Apparel_SlaveCollar )&&
+                ( thing.Faction == Faction.OfColony )
+            ) ).ToList();
+        }
 
         #endregion
 

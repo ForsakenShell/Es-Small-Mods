@@ -1,6 +1,8 @@
 ﻿using RimWorld;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
 using Verse;
 using Verse.AI;
 
@@ -30,21 +32,21 @@ namespace PrisonImprovements
 			{
 				return (Job) null;
 			}
-			var collars = Find.ListerThings.ThingsMatching( ThingRequest.ForDef( Data.SlaveCollarThingDef ) );
+            var collars = Data.AllSlaveCollarsOfColony();
 			if( collars == null )
 			{
 				return (Job) null;
 			}
-			var collar = collars.Find( thing => !thing.IsForbidden( Faction.OfColony ) );
-			if(
-                ( collar == null )||
-                ( !warden.CanReserveAndReach(
-                    collar,
-                    PathEndMode.ClosestTouch,
-                    warden.NormalMaxDanger(),
-                    1 )
+			var collar = collars.Find( thing => (
+                ( !thing.IsForbidden( Faction.OfColony ) )&&
+                ( warden.CanReserveAndReach(
+                     thing,
+                     PathEndMode.ClosestTouch,
+                     warden.NormalMaxDanger(),
+                     1 )
                 )
-            )
+            ) );
+			if( collar == null )
 			{
 				return (Job) null;
 			}

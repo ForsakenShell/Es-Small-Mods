@@ -14,8 +14,8 @@ namespace PrisonImprovements
         public override bool PawnCanOpen( Pawn p )
         {
             if( // Only allow prisoners to pass if all neighbouring rooms are prison cells
-                ( p.IsPrisonerOfColony )//&&
-                //( this.Position.GetRegion().NonPortalNeighbors.All( region => region.Room.isPrisonCell ) )
+                ( p.IsPrisonerOfColony )&&
+                ( this.Position.GetRegion().NonPortalNeighbors.All( region => region.Room.isPrisonCell ) )
             )
             {
                 return true;
