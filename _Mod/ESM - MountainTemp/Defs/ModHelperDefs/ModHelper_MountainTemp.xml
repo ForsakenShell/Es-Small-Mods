@@ -6,7 +6,7 @@
 
         <ModName>ESM - Mountain Temp</ModName>
 
-        <version>0.12.7</version>
+        <minCCLVersion>0.13.3</minCCLVersion>
 
         <ModConfigurationMenus>
             <li>

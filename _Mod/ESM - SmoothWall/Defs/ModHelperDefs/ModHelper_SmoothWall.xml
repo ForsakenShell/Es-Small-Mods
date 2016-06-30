@@ -6,7 +6,7 @@
 
         <ModName>ESM - Smooth Wall</ModName>
 
-        <version>0.12.3</version>
+        <minCCLVersion>0.13.3</minCCLVersion>
 
         <Designators>
             <li>
