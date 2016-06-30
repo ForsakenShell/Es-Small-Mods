@@ -3,6 +3,6 @@
     <name>ESM - Do Not Disturb</name>
     <author>1000101</author>
     <url>TBA</url>
-    <targetVersion>Community Core Library v0.12.0</targetVersion>
+    <targetVersion>Alpha 13, CCL 0.13.3</targetVersion>
     <description>Pawns will forbid the doors into their personal rooms if they want absolute privacy.  This includes when they are resting in their bed or performing certain joy activities where they want to be alone.\n\nThey will not forbid their doors if another pawn is in the room, they are starving, joy deprived, incapacitated or in need of a doctors care.</description>
 </ModMetaData>

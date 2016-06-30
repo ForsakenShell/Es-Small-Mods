@@ -3,6 +3,6 @@
     <name>ESM - Mountain Temp</name>
     <author>1000101</author>
     <url>TBA</url>
-    <targetVersion>Community Core Library v0.12.7</targetVersion>
+    <targetVersion>Alpha 13, CCL 0.13.3</targetVersion>
     <description>Below the perma-frost layer, the ground is a fairly stable temperature.  This mod affects mountain cores, if a room has a partly or completely natural roof it will naturally move towards a stable temperature.</description>
 </ModMetaData>

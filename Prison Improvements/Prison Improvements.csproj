@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -49,9 +49,7 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Alerts\Alert_SlaveCollars.cs" />
@@ -81,10 +79,7 @@
     <Compile Include="JobGivers\JobGiver_WanderPrison.cs" />
   </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-	    copy "$(TargetPath)" "$(SolutionDir)_Mod\ESM - Prison Improvements\Assemblies"
-	    copy "$(TargetPath)" "C:\Games\RimWorld A13\Mods\ESM - Prison Improvements\Assemblies"
-    </PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)..\_Mod\ESM - Prison Improvements\Assemblies"</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <MonoDevelop>

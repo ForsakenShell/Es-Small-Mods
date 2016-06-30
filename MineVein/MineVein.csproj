@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -54,14 +54,10 @@
     <Compile Include="MineVein.cs" />
     <Compile Include="SpecialInjectors\SpecialInjector_MineVein.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Designators\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-	    copy "$(TargetPath)" "$(SolutionDir)_Mod\ESM - MineVein\Assemblies"
-	    copy "$(TargetPath)" "C:\Games\RimWorld A12\Mods\ESM - MineVein\Assemblies"
-    </PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)..\_Mod\ESM - MineVein\Assemblies"
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

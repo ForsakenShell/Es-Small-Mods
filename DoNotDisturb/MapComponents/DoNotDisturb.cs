@@ -29,7 +29,7 @@ namespace esm
 				return;
 			}
 
-			var pawns = Find.ListerPawns.FreeColonists.ToList();
+			var pawns = Find.MapPawns.FreeColonists.ToList();
 			if( pawns.NullOrEmpty() )
 			{
 				return;
@@ -45,7 +45,7 @@ namespace esm
 				var room = pawn.GetRoom();
 				if(
 					( room == null )||
-					( room.Owner != pawn )
+					( room.Owners.Contains<Pawn>(pawn) )
 				)
 				{
 					// Not in their own private room
@@ -54,7 +54,7 @@ namespace esm
 
 				// Find any other pawns in the same room
 				if(
-					( Find.ListerPawns.AllPawns.Any( p => (
+					( Find.MapPawns.AllPawns.Any( p => (
 						( p != pawn )&&
 						( p.GetRoom() == room )
 					) ) )
@@ -65,7 +65,7 @@ namespace esm
 				}
 				else if(
 					( pawn.CurrentBed() != null )&&
-					( !pawn.health.ShouldBeTreatedNow )&&
+					( !HealthUtility.PawnShouldGetImmediateTending(pawn)) &&
 					( pawn.needs.food.CurCategory < HungerCategory.UrgentlyHungry )&&
 					( pawn.needs.joy.CurCategory > JoyCategory.Low )
 				)

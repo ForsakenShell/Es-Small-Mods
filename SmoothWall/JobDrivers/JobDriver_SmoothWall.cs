@@ -27,10 +27,10 @@ namespace esm
 				var stonecuttingSpeed = pawn.GetStatValue( StatDef.Named( "StonecuttingSpeed" ), true );
 				var sculptingSpeed = pawn.GetStatValue( StatDef.Named( "SculptingSpeed" ), true );
 				var averageSpeed = ( smoothingSpeed + stonecuttingSpeed + sculptingSpeed ) / 3f;
-				if( Find.ResearchManager.IsFinished( ResearchProjectDef.Named( "PneumaticPicks" ) ) )
+				/*if( Find.ResearchManager.IsFinished( ResearchProjectDef.Named( "PneumaticPicks" ) ) )
 				{
 					averageSpeed *= 1.2f;
-				}
+				}*/
 				return (int)( (float)TicksPerStrike / averageSpeed );
 			}
 		}
