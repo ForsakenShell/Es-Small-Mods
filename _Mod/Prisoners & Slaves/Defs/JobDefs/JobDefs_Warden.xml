@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <!-- New jobs -->
+    <JobDef>
+        <defName>EnslavePrisoner</defName>
+        <driverClass>PrisonersAndSlaves.JobDriver_Warden_EnslavePrisoner</driverClass>
+        <reportString>Enslaving TargetA.</reportString>
+    </JobDef>
+
+    <JobDef>
+        <defName>FreeSlave</defName>
+        <driverClass>PrisonersAndSlaves.JobDriver_Warden_FreeSlave</driverClass>
+        <reportString>Freeing TargetA.</reportString>
+    </JobDef>
+
+    <JobDef>
+        <defName>MonitorSecurityStation</defName>
+        <driverClass>PrisonersAndSlaves.JobDriver_Warden_MonitorSecurityStation</driverClass>
+        <reportString>Monitoring security cameras at TargetA.</reportString>
+    </JobDef>
+
+    <JobDef>
+        <defName>RestrainPawn</defName>
+        <driverClass>PrisonersAndSlaves.JobDriver_Warden_RestrainPawn</driverClass>
+        <reportString>Restraining TargetA.</reportString>
+    </JobDef>
+
+    <JobDef>
+        <defName>TransferPrisoner</defName>
+        <driverClass>PrisonersAndSlaves.JobDriver_Warden_TransferPrisonerToCell</driverClass>
+        <reportString>Escorting TargetA.</reportString>
+    </JobDef> 
+
+    <JobDef>
+        <defName>UnrestrainPawn</defName>
+        <driverClass>PrisonersAndSlaves.JobDriver_Warden_UnrestrainPawn</driverClass>
+        <reportString>Removing restraints from TargetA.</reportString>
+    </JobDef>
+
+</Defs>

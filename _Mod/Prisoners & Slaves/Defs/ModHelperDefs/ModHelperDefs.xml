@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <CommunityCoreLibrary.ModHelperDef>
+        <defName>ESMPrisonersAndSlaves</defName>
+
+        <ModName>Prisoners &amp; Slaves</ModName>
+
+        <minCCLVersion>0.14.0</minCCLVersion>
+
+        <ModConfigurationMenus>
+            <li>
+                <label>Prisoners &amp; Slaves</label>
+                <saveKey>PrisonersAndSlaves</saveKey>
+                <mcmClass>PrisonersAndSlaves.MCM_PrisonersAndSlaves</mcmClass>
+            </li>
+        </ModConfigurationMenus>
+
+        <SpecialInjectors>
+            <li>PrisonersAndSlaves.MainInjector</li>
+        </SpecialInjectors>
+
+        <PostLoadInjectors>
+            <li>PrisonersAndSlaves.PostLoadInjector</li>
+        </PostLoadInjectors>
+
+        <MapComponents>
+            <li>PrisonersAndSlaves.Monitor</li>
+        </MapComponents>
+
+    </CommunityCoreLibrary.ModHelperDef>
+
+</Defs>

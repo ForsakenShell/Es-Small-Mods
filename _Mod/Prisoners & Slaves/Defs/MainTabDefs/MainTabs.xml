@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <MainTabDef>
+        <defName>Slaves</defName>
+        <label>slaves</label>
+        <description>Choose which slave does what kinds of work, and in what priority order.</description>
+        <windowClass>PrisonersAndSlaves.MainTabWindow_Slaves</windowClass>
+        <concept>WorkTab</concept>
+        <tutorHighlightTag>ButtonWorkTab</tutorHighlightTag>
+        <order>45</order>
+        <defaultToggleKey/>
+    </MainTabDef>
+
+</Defs>

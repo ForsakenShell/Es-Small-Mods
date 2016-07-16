@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <!-- New jobs -->
+    <JobDef>
+        <defName>DoorLockToggle</defName>
+        <driverClass>PrisonersAndSlaves.JobDriver_Flicker_DoorLockToggle</driverClass>
+        <reportString>[Un]locking TargetA.</reportString>
+    </JobDef>
+
+</Defs>

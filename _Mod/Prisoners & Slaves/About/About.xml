@@ -1,0 +1,22 @@
+<ModMetaData>
+    <name>Prisoners &amp; Slaves</name>
+    <author>1000101</author>
+    <url>tbd</url>
+    <targetVersion>0.14.1232</targetVersion>
+    <description>
+REQUIRES: Community Core Library v0.14.0 or later!
+
+This mod overhauls wardens, prisoners and slaves.
+
+New game mechanics include...
+...Slaves!  Turn those prisoners into slaves.  Don't worry about what they can and can't do, they are slaves, make them do anything you like (except warden)!
+...Room Markers - Use a simple sign or a security camera to mark a room as allowed for prisoners and/or slaves.  Be careful about allowing your slaves outside, they may run if they think they can get away.
+...Restricted Doors - Doors have restriction options now.  You can set them all individually; ownership overrides any other restriction settings however, locking doors trumps all.  Some pawns can ignore restrictions (See the MCM for details).
+...Security Stations &amp; Remote Monitoring - Wardens can keep an eye on your prisoners, slaves, as well as anything and anyone hostile to you at security stations through security cameras.
+...Restraints - Slap handcuffs on your prisoners to restrict their ability to manipulate things, put shackles on slaves to slow them down and make them less likely to run off.
+
+Be sure to make a prison yard to keep your prisoners from going bonkers.  Slaves need free time to unwind too - at least it's fairly easy to keep them happy though, maybe give them a TV room.
+
+This mod is based on the 'Prison Improvements' mod by Wastelander.
+    </description>
+</ModMetaData>

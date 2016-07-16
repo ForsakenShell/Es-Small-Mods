@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <ThingDef Name="BuildingBase" Abstract="True">
+        <category>Building</category>
+        <thingClass>Building</thingClass>
+        <soundImpactDefault>BulletImpactMetal</soundImpactDefault>
+        <selectable>true</selectable>
+        <drawerType>MapMeshAndRealTime</drawerType>
+        <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+        <repairEffect>Repair</repairEffect>
+        <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
+        <filthLeaving>BuildingRubble</filthLeaving>
+    </ThingDef>
+
+    <ThingDef ParentName="BuildingBase" Name="RestrictedDoorBase" Abstract="True">
+        <thingClass>PrisonersAndSlaves.Building_RestrictedDoor</thingClass>
+        <blueprintClass>Blueprint_Door</blueprintClass>
+        <category>Building</category>
+        <blueprintGraphicData>
+            <texPath>Things/Building/Door/Door_Blueprint</texPath>
+        </blueprintGraphicData>
+        <altitudeLayer>DoorMoveable</altitudeLayer>
+        <fillPercent>1</fillPercent>
+        <useHitPoints>true</useHitPoints>
+        <stuffCategories>
+            <li>Metallic</li>
+            <li>Woody</li>
+            <li>Stony</li>
+        </stuffCategories>
+        <statBases>
+            <MaxHitPoints>250</MaxHitPoints>
+            <Flammability>1.0</Flammability>
+        </statBases>
+        <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
+        <selectable>true</selectable>
+        <tickerType>Normal</tickerType>
+        <rotatable>false</rotatable>
+        <soundImpactDefault>BulletImpactMetal</soundImpactDefault>
+        <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+        <designationCategory>Structure</designationCategory>
+        <holdsRoof>true</holdsRoof>
+        <staticSunShadowHeight>1.0</staticSunShadowHeight>
+        <blockLight>true</blockLight>
+        <drawerType>RealtimeOnly</drawerType>
+        <building>
+            <soundDoorOpenPowered>DoorOpenPowered</soundDoorOpenPowered>
+            <soundDoorClosePowered>DoorClosePowered</soundDoorClosePowered>
+            <soundDoorOpenManual>DoorOpenManual</soundDoorOpenManual>
+            <soundDoorCloseManual>DoorCloseManual</soundDoorCloseManual>
+            <ignoreNeedsPower>true</ignoreNeedsPower>
+            <canPlaceOverWall>true</canPlaceOverWall>
+        </building>
+        <comps>
+            <li Class="CompProperties_Forbiddable"/>
+        </comps>
+        <inspectorTabs>
+            <li>PrisonersAndSlaves.ITab_Restricted</li>
+        </inspectorTabs>
+        <DrawGUIOverlay>True</DrawGUIOverlay>
+    </ThingDef>
+
+    <ThingDef ParentName="RestrictedDoorBase">
+        <defName>CellDoor</defName>
+        <label>cell door</label>
+        <description>Door which prisoners as well as colonists can open. Divides rooms.</description>
+        <statBases>
+            <WorkToMake>850</WorkToMake>
+        </statBases>
+        <graphicData>
+            <texPath>Things/Building/Door/CellDoor_Mover</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <damageData>
+                <rect>(0,0.1,1,0.8)</rect>
+            </damageData>
+        </graphicData>
+        <uiIconPath>Things/Building/Door/CellDoor_MenuIcon</uiIconPath>
+        <blockLight>false</blockLight>
+        <costStuffCount>25</costStuffCount>
+        <comps>
+            <li Class="PrisonersAndSlaves.CompProperties_RestrictedDoor">
+                <DefaultAllowForPrisoners>true</DefaultAllowForPrisoners>
+                <DefaultAllowForSlaves>true</DefaultAllowForSlaves>
+                <DefaultAllowForGuests>false</DefaultAllowForGuests>
+            </li>
+            <li Class="PrisonersAndSlaves.CompProperties_Ownable" />
+            <li Class="PrisonersAndSlaves.CompProperties_Lockable" />
+        </comps>
+    </ThingDef>
+
+</Defs>

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <!-- Toggle door lock -->
+    <WorkGiverDef>
+        <defName>DoorLockToggle</defName>
+        <label>[un]lock doors</label>
+        <giverClass>PrisonersAndSlaves.WorkGiver_Flicker_DoorLockToggle</giverClass>
+        <workType>Flicker</workType>
+        <verb>[un]lock door</verb>
+        <gerund>[un]locking door</gerund>
+        <priorityInType>1000</priorityInType>
+    </WorkGiverDef>
+
+</Defs>

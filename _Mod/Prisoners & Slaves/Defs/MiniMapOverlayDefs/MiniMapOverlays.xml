@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <!-- Pawn overlay overrides -->
+    
+    <!-- Non-Colonists Pawns -->
+    <CommunityCoreLibrary.MiniMap.MiniMapOverlayDef>
+        <defName>MiniMapOverlay_NonColonistPawns</defName>
+        <overlayClass>PrisonersAndSlaves.MiniMapOverlay_NonColonistPawns</overlayClass>
+        <label>non-colonists</label>
+        <drawOffset>90</drawOffset>
+        <hiddenByDefault>true</hiddenByDefault>
+        <updateInterval>5</updateInterval>
+    </CommunityCoreLibrary.MiniMap.MiniMapOverlayDef>
+
+    <!-- Wildlife -->
+    <CommunityCoreLibrary.MiniMap.MiniMapOverlayDef>
+        <defName>MiniMapOverlay_Wildlife</defName>
+        <overlayClass>PrisonersAndSlaves.MiniMapOverlay_Wildlife</overlayClass>
+        <label>wildlife</label>
+        <drawOffset>80</drawOffset>
+        <hiddenByDefault>true</hiddenByDefault>
+        <updateInterval>5</updateInterval>
+    </CommunityCoreLibrary.MiniMap.MiniMapOverlayDef>
+
+    <!-- Security camera overlay -->
+    <CommunityCoreLibrary.MiniMap.MiniMapOverlayDef>
+        <defName>MiniMapOverlay_SecurityCameras</defName>
+        <overlayClass>PrisonersAndSlaves.MiniMapOverlay_SecurityCameras</overlayClass>
+        <label>security cameras</label>
+        <updateInterval>100</updateInterval>
+        <drawOffset>10</drawOffset>
+        <miniMapDef>MiniMap_Utilities</miniMapDef>
+    </CommunityCoreLibrary.MiniMap.MiniMapOverlayDef>
+
+</Defs>

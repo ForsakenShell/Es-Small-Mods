@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ThoughtDefs>
+
+    <!-- Override Imprisoned though so that slaves don't have imprisoned and enslaved thoughts -->
+    <ThoughtDef>
+        <defName>Imprisoned</defName>
+        <workerClass>PrisonersAndSlaves.ThoughtWorker_Imprisoned</workerClass>
+        <stages>
+            <li>
+                <label>imprisoned</label>
+                <description>I hate being locked up.</description>
+                <baseMoodEffect>-5</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <!-- Base for Empathic specific thoughts -->
+    <ThoughtDef Name="EmpathicBase" Abstract="True">
+        <durationDays>7.5</durationDays>
+        <stackLimit>5</stackLimit>
+        <requiredTraits>
+            <li>Empathic</li>
+        </requiredTraits>
+    </ThoughtDef>
+
+    <!-- Base for Psychopath specific thoughts -->
+    <ThoughtDef Name="PsychopathBase" Abstract="True">
+        <durationDays>7.5</durationDays>
+        <stackLimit>5</stackLimit>
+        <requiredTraits>
+            <li>Psychopath</li>
+        </requiredTraits>
+    </ThoughtDef>
+
+    <!-- Empathic specific thoughts -->
+    <ThoughtDef ParentName="EmpathicBase">
+        <defName>KnowPrisonerSold</defName>
+        <stages>
+            <li>
+                <label>a prisoner was sold</label>
+                <description>This colony sold a prisoner into slavery. That's a worrying thought.</description>
+                <baseMoodEffect>-8</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef ParentName="EmpathicBase">
+        <defName>KnowGuestExecuted</defName>
+        <stages>
+            <li>
+                <label>someone put to death</label>
+                <!-- generic humane -->
+                <description>A prisoner or guest was put to death.</description>
+                <baseMoodEffect>-3</baseMoodEffect>
+            </li>
+            <li>
+                <label>someone was executed</label>
+                <!-- generic brutal -->
+                <description>A prisoner or guest was killed in cold blood. This colony seems more evil by the day.</description>
+                <baseMoodEffect>-5</baseMoodEffect>
+            </li>
+            <li>
+                <label>organ harvested and killed</label>
+                <!-- died because of organ harvesting -->
+                <description>A prisoner or guest died because the colony took body parts from him. It's horrible.</description>
+                <baseMoodEffect>-6</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef ParentName="EmpathicBase">
+        <defName>KnowColonistExecuted</defName>
+        <stages>
+            <li>
+                <label>colonist put to death</label>
+                <!-- generic humane -->
+                <description>A colonist was put to death.</description>
+                <baseMoodEffect>-3</baseMoodEffect>
+            </li>
+            <li>
+                <label>colonist was executed</label>
+                <!-- generic brutal -->
+                <description>A colonist was killed in cold blood. This colony seems more evil by the day.</description>
+                <baseMoodEffect>-5</baseMoodEffect>
+            </li>
+            <li>
+                <label>colonist's organ harvested, killed</label>
+                <!-- died because of organ harvesting -->
+                <description>A colonist died because someone took body parts from him. It's horrible.</description>
+                <baseMoodEffect>-6</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef ParentName="EmpathicBase">
+        <defName>KnowGuestOrganHarvested</defName>
+        <stackedEffectMultiplier>0.75</stackedEffectMultiplier>
+        <stages>
+            <li>
+                <label>someone's organ harvested</label>
+                <description>The colony took body parts from a guest or prisoner. It's horrible, breaking someone down for parts when they have no choice.</description>
+                <baseMoodEffect>-5</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef ParentName="EmpathicBase">
+        <defName>KnowColonistOrganHarvested</defName>
+        <stackedEffectMultiplier>0.75</stackedEffectMultiplier>
+        <stages>
+            <li>
+                <label>colonist's organ harvested</label>
+                <description>Someone took body parts from a colonist. It's horrible, breaking someone down for parts when they have no choice.</description>
+                <baseMoodEffect>-5</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <!-- Psychopath specific thoughts -->
+    <ThoughtDef ParentName="PsychopathBase">
+        <defName>KnowPrisonerSoldPsychopath</defName>
+        <stages>
+            <li>
+                <label>a prisoner was sold</label>
+                <description>This colony sold a prisoner into slavery.  This is the sort of place I could get used to.</description>
+                <baseMoodEffect>8</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef ParentName="PsychopathBase">
+        <defName>KnowGuestExecutedPsychopath</defName>
+        <stages>
+            <li>
+                <label>someone put to death</label>
+                <!-- generic humane -->
+                <description>A prisoner or guest was put to death.</description>
+                <baseMoodEffect>3</baseMoodEffect>
+            </li>
+            <li>
+                <label>someone was executed</label>
+                <!-- generic brutal -->
+                <description>A prisoner or guest was killed in cold blood. This colony seems more evil by the day.</description>
+                <baseMoodEffect>5</baseMoodEffect>
+            </li>
+            <li>
+                <label>organ harvested and killed</label>
+                <!-- died because of organ harvesting -->
+                <description>A prisoner or guest died because the colony took body parts from him. It's fantastic.</description>
+                <baseMoodEffect>6</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef ParentName="PsychopathBase">
+        <defName>KnowColonistExecutedPsychopath</defName>
+        <stages>
+            <li>
+                <label>colonist put to death</label>
+                <!-- generic humane -->
+                <description>A colonist was put to death.</description>
+                <baseMoodEffect>3</baseMoodEffect>
+            </li>
+            <li>
+                <label>colonist was executed</label>
+                <!-- generic brutal -->
+                <description>A colonist was killed in cold blood. This colony seems more evil by the day.</description>
+                <baseMoodEffect>5</baseMoodEffect>
+            </li>
+            <li>
+                <label>colonist's organ harvested, killed</label>
+                <!-- died because of organ harvesting -->
+                <description>A colonist died because someone took body parts from him. It's fantastic.</description>
+                <baseMoodEffect>6</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef ParentName="PsychopathBase">
+        <defName>KnowGuestOrganHarvestedPsychopath</defName>
+        <stackedEffectMultiplier>0.75</stackedEffectMultiplier>
+        <stages>
+            <li>
+                <label>someone's organ harvested</label>
+                <description>The colony took body parts from a guest or prisoner. It's terrific, breaking someone down for parts when they have no choice.</description>
+                <baseMoodEffect>5</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef ParentName="PsychopathBase">
+        <defName>KnowColonistOrganHarvestedPsychopath</defName>
+        <stackedEffectMultiplier>0.75</stackedEffectMultiplier>
+        <stages>
+            <li>
+                <label>colonist's organ harvested</label>
+                <description>Someone took body parts from a colonist. It's terrific, breaking someone down for parts when they have no choice.</description>
+                <baseMoodEffect>5</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+</ThoughtDefs>

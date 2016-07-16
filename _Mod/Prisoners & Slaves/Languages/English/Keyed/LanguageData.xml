@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+    <!-- Alert_SlaveCollars -->
+    <PaS_NeedCollars_Label>Need slave collars</PaS_NeedCollars_Label>
+    <PaS_NeedCollars_Explaination>One or more prisoners are marked for enslavement, but you have no available slave collars. Make some from steel at a crafting spot or smithing workbench.</PaS_NeedCollars_Explaination>
+
+    <!-- Alert_Restraints -->
+    <PaS_NeedRestraints_Label>Need restraints</PaS_NeedRestraints_Label>
+    <PaS_NeedRestraints_Explaination>One or more prisoners or slaves are to be restrained, but you have no available restraints. Make some from steel at a crafting spot or smithing workbench.</PaS_NeedRestraints_Explaination>
+
+    <!-- Building_RoomMarker -->
+    <PaS_Default_Camera_Name>Camera {0}</PaS_Default_Camera_Name>
+    <PaS_Default_Marker_Name>Sign {0}</PaS_Default_Marker_Name>
+
+    <!-- CompRestrictedDoor -->
+    <PaS_Owned_Label>Owned</PaS_Owned_Label>
+    <PaS_DoorLock_Inspect>Lock state: {0}</PaS_DoorLock_Inspect>
+    <PaS_DoorLock_Locked>locked</PaS_DoorLock_Locked>
+    <PaS_DoorLock_Unlocked>unlocked</PaS_DoorLock_Unlocked>
+    <PaS_DoorLock_Picked>picked</PaS_DoorLock_Picked>
+    <PaS_DoorLock_Toggle>Toggle locked</PaS_DoorLock_Toggle>
+    <PaS_DoorLock_Toggle_Desc>Lock or unlock a door. Locked doors will not open for anyone except wardens, doctors, and drafted colonists.</PaS_DoorLock_Toggle_Desc>
+    <Pas_DoorLock_Auto_Lockdown>Automatic lockdown: {0}</Pas_DoorLock_Auto_Lockdown>
+
+    <!-- MCM_PrisonImprovements -->
+    <PaS_MCM_Label>Prison Improvements</PaS_MCM_Label>
+    <PaS_MCM_Description>Change the prefered settings for Prison Improvements.  Settings which affect new slaves won't effect existing slave traders.</PaS_MCM_Description>
+    <PaS_MCM_BoughtAsColonists>Bought slaves become colonists</PaS_MCM_BoughtAsColonists>
+    <PaS_MCM_DefaultAllowGuests>Allow guests through doors by default</PaS_MCM_DefaultAllowGuests>
+    <PaS_MCM_LockedDoors>Locked doors:</PaS_MCM_LockedDoors>
+    <PaS_MCM_LockedDoorsAllowDrafted>Allow drafted colonists</PaS_MCM_LockedDoorsAllowDrafted>
+    <PaS_MCM_LockedDoorsAllowWardens>Allow wardens</PaS_MCM_LockedDoorsAllowWardens>
+    <PaS_MCM_LockedDoorsAllowDoctors>Allow doctors</PaS_MCM_LockedDoorsAllowDoctors>
+
+    <!-- MiniMap MCM -->
+    <PaS_MCM_Overlay_CameraColor>Camera color</PaS_MCM_Overlay_CameraColor>
+    <PaS_MCM_Overlay_CameraColor_Tip>Color of security camera overlay.</PaS_MCM_Overlay_CameraColor_Tip>
+    <PaS_MCM_Overlay_PrisonerColor>Prisoner color</PaS_MCM_Overlay_PrisonerColor>
+    <PaS_MCM_Overlay_PrisonerColor_Tip>Color of 'radar blip' for prisoners.</PaS_MCM_Overlay_PrisonerColor_Tip>
+    <PaS_MCM_Overlay_PrisonerRadius>Prisoner size</PaS_MCM_Overlay_PrisonerRadius>
+    <PaS_MCM_Overlay_PrisonerRadius_Tip>Size of 'radar blip' for prisoners.</PaS_MCM_Overlay_PrisonerRadius_Tip>
+    <PaS_MCM_Overlay_SlaveColor>Slave color</PaS_MCM_Overlay_SlaveColor>
+    <PaS_MCM_Overlay_SlaveColor_Tip>Color of 'radar blip' for slaves.</PaS_MCM_Overlay_SlaveColor_Tip>
+    <PaS_MCM_Overlay_SlaveRadius>Slave size</PaS_MCM_Overlay_SlaveRadius>
+    <PaS_MCM_Overlay_SlaveRadius_Tip>Size of 'radar blip' for slaves.</PaS_MCM_Overlay_SlaveRadius_Tip>
+
+    <!-- PrisonerInteractionMode Extensions -->
+    <PaS_Enslave>Enslave</PaS_Enslave>
+    <PaS_FreeSlave>Free Slave</PaS_FreeSlave>
+    
+    <!-- Restraints -->
+    <PaS_Restrain_Cuff>Cuff</PaS_Restrain_Cuff>
+    <PaS_Restrained_Cuffed>Handcuffed</PaS_Restrained_Cuffed>
+    <PaS_Restrain_Shackle>Shackle</PaS_Restrain_Shackle>
+    <PaS_Restrained_Shackled>Shackled</PaS_Restrained_Shackled>
+
+    <!-- ITab_Pawn_Prisoner (Prisoner) -->
+    <PaS_TransferPrisoner>Transfer prisoner</PaS_TransferPrisoner>
+    <PaS_CancelTransfer>Cancel Transfer</PaS_CancelTransfer>
+    <PaS_InstallMarker>Install a named room marker first</PaS_InstallMarker>
+    <PaS_Prison_Cell>Prison cell</PaS_Prison_Cell>
+
+    <!-- ITab_Pawn_Prisoner (Slave) -->
+    <PaS_Pawn_Slave_Label>Slave</PaS_Pawn_Slave_Label>
+    <PaS_Pawn_Slave_Faction>Faction: {0}</PaS_Pawn_Slave_Faction>
+    <PaS_Pawn_Slave_PawnKind>Role: {0}</PaS_Pawn_Slave_PawnKind>
+
+    <!-- ITab_RestrictedDoor -->
+    <PaS_Restriction_Label>Restrictions</PaS_Restriction_Label>
+    <PaS_Allow_Prisoners>Allow Prisoners</PaS_Allow_Prisoners>
+    <PaS_Allow_Slaves>Allow Slaves</PaS_Allow_Slaves>
+    <PaS_Allow_Guests>Allow Guests</PaS_Allow_Guests>
+    <PaS_Only_Owners>Restrict to Owners</PaS_Only_Owners>
+    <PaS_Assign_Ownership>Assign Owners</PaS_Assign_Ownership>
+    <PaS_Reset_Ownership>Reset Owners</PaS_Reset_Ownership>
+    <PaS_Back_Arrow>Back</PaS_Back_Arrow>
+
+    <!-- ITab_RoomMarker -->
+    <PaS_Marker_Name>Name:</PaS_Marker_Name>
+
+    <!-- PlaceWorker_PrisonMarker -->
+    <PaS_MustBeInRoom>Security Camera must be placed in a walled room.</PaS_MustBeInRoom>
+    <PaS_NoColonistBeds>Security Camera can't be placed in a room with colonist beds.</PaS_NoColonistBeds>
+
+    <!-- MainTabWindow_Slaves -->
+    <PaS_Slave_WorkAssignments>Work Assignments</PaS_Slave_WorkAssignments>
+    <PaS_Slave_Restrictions>Restrictions</PaS_Slave_Restrictions>
+    <PaS_Slave_MedicalCare>Medical Care</PaS_Slave_MedicalCare>
+
+    <!-- Common -->
+    <PaS_Security_Label>Security</PaS_Security_Label>
+
+</LanguageData>

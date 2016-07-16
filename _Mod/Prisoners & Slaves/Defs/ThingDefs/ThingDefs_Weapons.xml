@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <ThingDef Name="BaseMeleeWeapon" Abstract="True">
+        <category>Item</category>
+        <thingClass>ThingWithComps</thingClass>
+        <equipmentType>Primary</equipmentType>
+        <pathCost>10</pathCost>
+        <useHitPoints>True</useHitPoints>
+        <selectable>True</selectable>
+        <graphicData>
+            <onGroundRandomRotateAngle>35</onGroundRandomRotateAngle>
+        </graphicData>
+        <drawGUIOverlay>true</drawGUIOverlay>
+        <statBases>
+            <MaxHitPoints>100</MaxHitPoints>
+            <Flammability>1.0</Flammability>
+            <DeteriorationRate>1</DeteriorationRate>
+            <SellPriceFactor>0.5</SellPriceFactor>
+        </statBases>
+        <altitudeLayer>Item</altitudeLayer>
+        <alwaysHaulable>True</alwaysHaulable>
+        <tickerType>Never</tickerType>
+        <techLevel>Industrial</techLevel>
+        <weaponTags>
+            <li>Melee</li>
+        </weaponTags>
+        <thingCategories>
+            <li>WeaponsMelee</li>
+        </thingCategories>
+        <comps>
+            <li Class="CompProperties_Forbiddable"/>
+            <li>
+                <compClass>CompEquippable</compClass>
+            </li>
+            <li>
+                <compClass>CompQuality</compClass>
+            </li>
+            <li Class="CompProperties_Art">
+                <nameMaker>ArtName_WeaponMelee</nameMaker>
+                <descriptionMaker>ArtDescription_WeaponMelee</descriptionMaker>
+                <minQualityForArtistic>Excellent</minQualityForArtistic>
+            </li>
+        </comps>
+        <recipeMaker>
+            <workSpeedStat>SmithingSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Smith</soundWorking>
+            <recipeUsers>
+                <li>ElectricSmithy</li>
+                <li>FueledSmithy</li>
+            </recipeUsers>
+            <unfinishedThingDef>UnfinishedWeapon</unfinishedThingDef>
+        </recipeMaker>
+        <inspectorTabs>
+            <li>ITab_Art</li>
+        </inspectorTabs>
+    </ThingDef>
+
+    <ThingDef Name="BaseMeleeWeapon_Blunt" ParentName="BaseMeleeWeapon" Abstract="True">
+        <recipeMaker>
+            <defaultIngredientFilter>
+                <categories>
+                    <li>Root</li>
+                </categories>
+                <exceptedThingDefs>
+                    <li>Silver</li>
+                    <li>Gold</li>
+                </exceptedThingDefs>
+            </defaultIngredientFilter>
+        </recipeMaker>
+    </ThingDef>
+
+    <ThingDef ParentName="BaseMeleeWeapon_Blunt">
+        <defName>MeleeWeapon_SideHandleBaton</defName>
+        <label>side handle baton</label>
+        <description>A simple club used by security forces to subdue suspects.</description>
+        <graphicData>
+            <texPath>Things/Weapons/SideHandleBaton</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <statBases>
+            <WorkToMake>5000</WorkToMake>
+            <MeleeWeapon_DamageAmount>1</MeleeWeapon_DamageAmount>
+            <MeleeWeapon_Cooldown>1</MeleeWeapon_Cooldown>
+        </statBases>
+        <equippedAngleOffset>-65</equippedAngleOffset>
+        <costStuffCount>25</costStuffCount>
+        <stuffCategories>
+            <li>Metallic</li>
+            <li>Woody</li>
+        </stuffCategories>
+        <verbs>
+            <li>
+                <verbClass>Verb_MeleeAttack</verbClass>
+                <hasStandardCommand>true</hasStandardCommand>
+                <meleeDamageDef>Stun</meleeDamageDef>
+            </li>
+        </verbs>
+    </ThingDef>
+
+</Defs>

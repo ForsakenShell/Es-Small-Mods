@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <ThingDef ParentName="BuildingBase" Name="MarkerBase" Abstract="True">
+        <ThingClass>PrisonersAndSlaves.Building_RoomMarker</ThingClass>
+        <altitudeLayer>FlyingItem</altitudeLayer>
+        <statBases>
+            <WorkToMake>0</WorkToMake>
+        </statBases>
+        <inspectorTabs>
+            <li>PrisonersAndSlaves.ITab_RoomMarker</li>
+        </inspectorTabs>
+        <DrawGUIOverlay>True</DrawGUIOverlay>
+        <tickerType>Normal</tickerType>
+        <DesignationCategory>Security</DesignationCategory>
+        <Passability>Standable</Passability>
+        <Size>(1,1)</Size>
+        <minifiedDef>MinifiedFurniture</minifiedDef>
+    </ThingDef>
+
+    <ThingDef ParentName="MarkerBase">
+        <defName>RoomMarker</defName>
+        <label>room marker</label>
+        <Description>Rooms with markers can be used to designate prisons areas and slave work areas.</Description>
+        <graphicData>
+            <texPath>Things/Building/RoomMarkerSign</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <uiIconPath>Things/Building/RoomMarkerSign</uiIconPath>
+        <useHitPoints>false</useHitPoints>
+        <rotatable>false</rotatable>
+    </ThingDef>
+
+    <ThingDef ParentName="MarkerBase">
+        <defName>SecurityCamera</defName>
+        <label>security camera</label>
+        <Description>Rooms with security cameras can be used to designate and monitor prisons areas and slave work areas.</Description>
+        <graphicData>
+            <texPath>Things/Building/Camera/Camera</texPath>
+            <graphicClass>Graphic_Multi</graphicClass>
+            <drawSize>(2.0, 2.0)</drawSize>
+        </graphicData>
+        <uiIconPath>Things/Building/Camera/Camera_MenuIcon</uiIconPath>
+        <statBases>
+            <WorkToMake>450</WorkToMake>
+            <MaxHitPoints>50</MaxHitPoints>
+        </statBases>
+        <costList>
+            <Steel>25</Steel>
+        </costList>
+        <useHitPoints>true</useHitPoints>
+        <rotatable>true</rotatable>
+        <comps>
+            <li Class="CompProperties_Power">
+                <compClass>CompPowerTrader</compClass>
+                <!-- Equivalent to a 24V 1A CCTV Camera -->
+                <basePowerConsumption>25</basePowerConsumption>
+                <startElectricalFires>false</startElectricalFires>
+                <shortCircuitInRain>false</shortCircuitInRain>
+            </li>
+            <li Class="CompProperties_Flickable"/>
+            <li Class="CommunityCoreLibrary.CompProperties_RestrictedPlacement">
+                <compClass>CommunityCoreLibrary.CompRestrictedPlacement</compClass>
+            </li>
+            <li Class="PrisonersAndSlaves.CompProperties_RemotelyObservable">
+                <observationAngle>100</observationAngle>
+                <observationRange>30.01</observationRange>
+            </li>
+        </comps>
+        <placeWorkers>
+            <li>CommunityCoreLibrary.PlaceWorker_WallAttachment</li>
+        </placeWorkers>
+    </ThingDef>
+
+</Defs>

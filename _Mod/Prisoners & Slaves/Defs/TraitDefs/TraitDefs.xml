@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <TraitDef>
+        <defName>Enslaved</defName>
+        <commonality>0.001</commonality>
+        <degreeDatas>
+            <li>
+                <label>enslaved</label>
+                <description>NAME has been enslaved and can perform any task assigned.</description>
+            </li>
+        </degreeDatas>
+        <disabledWorkTypes>
+            <li>Warden</li>
+        </disabledWorkTypes>
+    </TraitDef>
+
+    <TraitDef>
+        <defName>Empathic</defName>
+        <commonality>0.2</commonality>
+        <degreeDatas>
+            <li>
+                <label>empathic</label>
+                <description>NAME has strong empathy for others. The suffering of others greatly bothers HIM. HECAP is greatly disturbed if others are butchered, left unburied, imprisoned, or sold to slavery.</description>
+            </li>
+        </degreeDatas>
+        <conflictingTraits>
+            <li>Psychopath</li>
+        </conflictingTraits>
+    </TraitDef>
+
+    <!-- Vanilla override -->
+    <TraitDef>
+        <defName>Psychopath</defName>
+        <commonality>0.2</commonality>
+        <degreeDatas>
+            <li>
+                <label>psychopath</label>
+                <description>NAME has no empathy. The suffering of others doesn't bother HIM at all. HECAP doesn't mind if others are butchered, left unburied, imprisoned, or sold to slavery - unless it affects HIM. HECAP also feels no mood boost from socializing.</description>
+            </li>
+        </degreeDatas>
+        <conflictingTraits>
+            <li>Empathic</li>
+        </conflictingTraits>
+    </TraitDef>
+
+</Defs>

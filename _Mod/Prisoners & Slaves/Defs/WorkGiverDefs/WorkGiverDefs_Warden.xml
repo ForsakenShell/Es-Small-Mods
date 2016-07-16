@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <!-- Make a prisoner a slave -->
+    <WorkGiverDef>
+        <defName>EnslavePrisoner</defName>
+        <label>enslave prisoner</label>
+        <giverClass>PrisonersAndSlaves.WorkGiver_Warden_EnslavePrisoner</giverClass>
+        <workType>Warden</workType>
+        <verb>enslave prisoner</verb>
+        <gerund>enslaving prisoner</gerund>
+        <priorityInType>120</priorityInType>
+        <requiredCapacities>
+            <li>Manipulation</li>
+        </requiredCapacities>
+    </WorkGiverDef>
+
+    <!-- Restrain a pawn -->
+    <WorkGiverDef>
+        <defName>RestrainPawn</defName>
+        <label>restrain</label>
+        <giverClass>PrisonersAndSlaves.WorkGiver_Warden_RestrainPawn</giverClass>
+        <workType>Warden</workType>
+        <verb>restrain pawn</verb>
+        <gerund>restraining pawn</gerund>
+        <priorityInType>115</priorityInType>
+        <requiredCapacities>
+            <li>Manipulation</li>
+        </requiredCapacities>
+    </WorkGiverDef>
+
+    <!-- Free a slave -->
+    <WorkGiverDef>
+        <defName>FreeSlave</defName>
+        <label>free slave</label>
+        <giverClass>PrisonersAndSlaves.WorkGiver_Warden_FreeSlave</giverClass>
+        <workType>Warden</workType>
+        <verb>free slave</verb>
+        <gerund>freeing slave</gerund>
+        <priorityInType>105</priorityInType>
+        <requiredCapacities>
+            <li>Manipulation</li>
+        </requiredCapacities>
+    </WorkGiverDef>
+
+    <!-- Arrest law breakers -->
+    <WorkGiverDef>
+        <defName>ArrestLawBreakers</defName>
+        <label>arrest law breakers</label>
+        <giverClass>PrisonersAndSlaves.WorkGiver_Warden_ArrestLawBreaker</giverClass>
+        <workType>Warden</workType>
+        <verb>arrest</verb>
+        <gerund>arresting</gerund>
+        <priorityInType>95</priorityInType>
+        <requiredCapacities>
+            <li>Manipulation</li>
+        </requiredCapacities>
+    </WorkGiverDef>
+
+    <!-- Override to stop dragging prisoners back to their sleep bed -->
+    <WorkGiverDef>
+        <defName>TakePrisonerToBed</defName>
+        <label>take prisoners to bed</label>
+        <giverClass>PrisonersAndSlaves.WorkGiver_Warden_TakeToBed</giverClass>
+        <workType>Warden</workType>
+        <verb>take to bed</verb>
+        <gerund>taking to bed</gerund>
+        <priorityInType>90</priorityInType>
+        <requiredCapacities>
+            <li>Manipulation</li>
+        </requiredCapacities>
+    </WorkGiverDef>
+
+    <!-- Unrestrain pawn -->
+    <WorkGiverDef>
+        <defName>UnrestrainPawn</defName>
+        <label>unrestrain</label>
+        <giverClass>PrisonersAndSlaves.WorkGiver_Warden_UnrestrainPawn</giverClass>
+        <workType>Warden</workType>
+        <verb>remove restraints</verb>
+        <gerund>removing restraints</gerund>
+        <priorityInType>85</priorityInType>
+        <requiredCapacities>
+            <li>Manipulation</li>
+        </requiredCapacities>
+    </WorkGiverDef>
+
+    <!-- Monitor security stations -->
+    <WorkGiverDef>
+        <defName>MonitorSecurityStation</defName>
+        <label>monitor security cameras</label>
+        <giverClass>PrisonersAndSlaves.WorkGiver_Warden_MonitorSecurityStation</giverClass>
+        <workType>Warden</workType>
+        <verb>monitor security cameras</verb>
+        <gerund>monitoring security cameras</gerund>
+        <priorityInType>65</priorityInType>
+        <requiredCapacities>
+            <li>Sight</li>
+        </requiredCapacities>
+    </WorkGiverDef>
+
+</Defs>

@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <ThinkTreeDef>
+        <defName>PrisonersAndSlaves_PrisonerBehavior</defName>
+        <insertTag>Humanlike_PostDuty</insertTag>
+        <insertPriority>100</insertPriority>
+        <!-- Prisoners & Slaves -->
+        <thinkRoot Class="ThinkNode_ConditionalPrisoner">
+            <leaveJoinableLordIfIssuesJob>true</leaveJoinableLordIfIssuesJob>
+            <subNodes>
+                <li Class="PrisonersAndSlaves.JobGiver_Prisoner_Escape" />
+                <li Class="JobGiver_PatientGoToBed" />
+                <li Class="JobGiver_PrisonerGetDressed" />
+                <li Class="ThinkNode_PrioritySorter">
+                    <subNodes>
+                        <li Class="JobGiver_GetFood"/>
+                        <li Class="JobGiver_GetRest"/>
+                        <li Class="ThinkNode_Priority_GetJoy">
+                            <subNodes>
+                                <li Class="JobGiver_GetJoy"/>
+                            </subNodes>
+                        </li>
+                    </subNodes>
+                </li>
+                <li Class="ThinkNode_ConditionalReleased">
+                    <subNodes>
+                        <li Class="JobGiver_ExitMapBest">
+                            <defaultLocomotion>Walk</defaultLocomotion>
+                        </li>
+                    </subNodes>
+                </li>
+                <!-- Slave Work -->
+                <li Class="PrisonersAndSlaves.ThinkNode_ConditionalSlave">
+                    <subNodes>
+                        <li Class="JobGiver_Work"/>
+                        <li Class="PrisonersAndSlaves.ThinkNode_ConditionalInPrison">
+                            <invert>true</invert>
+                            <subNodes>
+                                <li Class="PrisonersAndSlaves.JobGiver_Prisoner_ReturnToPersonalQuarters"/>
+                            </subNodes>
+                        </li>
+                    </subNodes>
+                </li>
+                <!-- Both, Wander Prison -->
+                <li Class="PrisonersAndSlaves.JobGiver_Prisoner_WanderPrison">
+                    <maxDanger>Deadly</maxDanger>
+                </li>
+                <li Class="JobGiver_WanderCurrentRoom">
+                    <maxDanger>Deadly</maxDanger>
+                </li>
+                <li Class="JobGiver_IdleError" />
+            </subNodes>
+        </thinkRoot>
+    </ThinkTreeDef>
+
+</Defs>

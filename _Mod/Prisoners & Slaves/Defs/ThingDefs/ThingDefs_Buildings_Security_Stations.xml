@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <ThingDef ParentName="BuildingBase" Name="SecurityStationBase" Abstract="True">
+        <ThingClass>Building</ThingClass>
+        <altitudeLayer>Building</altitudeLayer>
+        <DesignationCategory>Security</DesignationCategory>
+        <passability>Impassable</passability>
+        <minifiedDef>MinifiedFurniture</minifiedDef>
+    </ThingDef>
+
+    <ThingDef ParentName="SecurityStationBase">
+        <defName>SecurityStationBasic</defName>
+        <label>basic security station</label>
+        <Description>Wardens will monitor security cameras at security stations.</Description>
+        <graphicData>
+            <texPath>Things/Building/SecurityStations/Tier1</texPath>
+            <graphicClass>Graphic_Multi</graphicClass>
+            <drawSize>(3.0, 3.0)</drawSize>
+            <damageData>
+                <cornerBL>Damage/Corner</cornerBL>
+                <cornerBR>Damage/Corner</cornerBR>
+            </damageData>
+        </graphicData>
+        <castEdgeShadows>true</castEdgeShadows>
+        <fillPercent>1</fillPercent>
+        <statBases>
+            <MaxHitPoints>250</MaxHitPoints>
+            <WorkToMake>2200</WorkToMake>
+            <Flammability>1.0</Flammability>
+        </statBases>
+        <size>(3,1)</size>
+        <costList>
+            <Steel>120</Steel>
+            <Component>2</Component>
+        </costList>
+        <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+        <hasInteractionCell>true</hasInteractionCell>
+        <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+        <comps>
+            <li Class="CompProperties_Power">
+                <compClass>CompPowerTrader</compClass>
+                <startElectricalFires>true</startElectricalFires>
+                <basePowerConsumption>200</basePowerConsumption>
+            </li>
+            <li Class="CompProperties_Glower">
+                <glowRadius>5</glowRadius>
+                <glowColor>(73,123,138,0)</glowColor>
+            </li>
+            <li Class="CompProperties_Flickable"/>
+            <li Class="CompProperties_Breakdownable"/>
+            <li Class="PrisonersAndSlaves.CompProperties_SecurityStation">
+                <MaxCamerasAtOnce>3</MaxCamerasAtOnce>
+            </li>
+        </comps>
+        <staticSunShadowHeight>0.5</staticSunShadowHeight>
+        <researchPrerequisites>
+            <li>MicroelectronicsBasics</li>
+        </researchPrerequisites>
+    </ThingDef>
+
+    <ThingDef ParentName="SecurityStationBase">
+        <defName>SecurityStationAdvanced</defName>
+        <label>advanced security station</label>
+        <Description>Wardens will monitor security cameras at security stations.</Description>
+        <graphicData>
+            <texPath>Things/Building/SecurityStations/Tier2</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(5.0, 2.0)</drawSize>
+            <damageData>
+                <cornerTL>Damage/Corner</cornerTL>
+                <cornerTR>Damage/Corner</cornerTR>
+                <cornerBL>Damage/Corner</cornerBL>
+                <cornerBR>Damage/Corner</cornerBR>
+            </damageData>
+        </graphicData>
+        <castEdgeShadows>true</castEdgeShadows>
+        <fillPercent>1</fillPercent>
+        <statBases>
+            <MaxHitPoints>250</MaxHitPoints>
+            <WorkToMake>2200</WorkToMake>
+            <Flammability>1.0</Flammability>
+        </statBases>
+        <size>(5,2)</size>
+        <costList>
+            <Steel>200</Steel>
+            <Plasteel>50</Plasteel>
+            <Component>4</Component>
+        </costList>
+        <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+        <hasInteractionCell>true</hasInteractionCell>
+        <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+        <comps>
+            <li Class="CompProperties_Power">
+                <compClass>CompPowerTrader</compClass>
+                <startElectricalFires>true</startElectricalFires>
+                <basePowerConsumption>800</basePowerConsumption>
+            </li>
+            <li Class="CompProperties_Glower">
+                <glowRadius>7</glowRadius>
+                <glowColor>(73,123,138,0)</glowColor>
+            </li>
+            <li Class="CompProperties_Flickable"/>
+            <li Class="CompProperties_Breakdownable"/>
+            <li Class="PrisonersAndSlaves.CompProperties_SecurityStation">
+                <MaxCamerasAtOnce>12</MaxCamerasAtOnce>
+            </li>
+        </comps>
+        <staticSunShadowHeight>0.5</staticSunShadowHeight>
+        <researchPrerequisites>
+            <li>MultiAnalyzer</li>
+        </researchPrerequisites>
+    </ThingDef>
+
+</Defs>

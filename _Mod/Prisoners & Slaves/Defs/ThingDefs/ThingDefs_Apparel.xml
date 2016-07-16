@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <ThingDef Name="ApparelBase" Abstract="True">
+        <thingClass>Apparel</thingClass>
+        <category>Item</category>
+        <selectable>True</selectable>
+        <pathCost>10</pathCost>
+        <useHitPoints>True</useHitPoints>
+        <graphicData>
+            <onGroundRandomRotateAngle>35</onGroundRandomRotateAngle>
+        </graphicData>
+        <drawGUIOverlay>true</drawGUIOverlay>
+        <statBases>
+            <MaxHitPoints>100</MaxHitPoints>
+            <Flammability>1.0</Flammability>
+            <DeteriorationRate>2</DeteriorationRate>
+            <SellPriceFactor>0.5</SellPriceFactor>
+        </statBases>
+        <altitudeLayer>Item</altitudeLayer>
+        <alwaysHaulable>True</alwaysHaulable>
+        <tickerType>Never</tickerType>
+        <comps>
+            <li Class="CompProperties_Forbiddable"/>
+            <li>
+                <compClass>CompColorable</compClass>
+            </li>
+            <li>
+                <compClass>CompQuality</compClass>
+            </li>
+        </comps>
+    </ThingDef>
+
+    <ThingDef Name="ApparelMakeableBase" ParentName="ApparelBase" Abstract="True">
+        <recipeMaker>
+            <workSpeedStat>SmithingSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Tailor</soundWorking>
+            <recipeUsers>
+                <li>CraftingSpot</li>
+                <li>ElectricSmithy</li>
+                <li>FueledSmithy</li>
+            </recipeUsers>
+            <unfinishedThingDef>UnfinishedApparel</unfinishedThingDef>
+        </recipeMaker>
+    </ThingDef>
+
+    <ThingDef ParentName="ApparelMakeableBase">
+        <defName>SlaveCollar</defName>
+        <label>slave collar</label>
+        <description>On the Rimworld, a shaved head and slave collar marks the wearer as property of a slaver clan.</description>
+        <graphicData>
+            <texPath>Things/Apparel/SlaveCollar</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <costList>
+            <Steel>20</Steel>
+        </costList>
+        <statBases>
+            <WorkToMake>5000</WorkToMake>
+        </statBases>
+        <equippedStatOffsets>
+            <MoveSpeed>-0.05</MoveSpeed>
+            <WorkSpeedGlobal>-0.10</WorkSpeedGlobal>
+            <SocialImpact>-0.15</SocialImpact>
+        </equippedStatOffsets>
+        <thingCategories>
+            <li>Headgear</li>
+        </thingCategories>
+        <apparel>
+            <bodyPartGroups>
+                <li>UpperHead</li>
+            </bodyPartGroups>
+            <worngraphicPath>Things/Apparel/SlaveCollar</worngraphicPath>
+            <layers>
+                <li>Overhead</li>
+            </layers>
+            <commonality>100</commonality>
+            <tags>
+                <li>Slave</li>
+            </tags>
+            <defaultOutfitTags>
+                <li>Slave</li>
+            </defaultOutfitTags>
+        </apparel>
+        <comps>
+            <li Class="PrisonersAndSlaves.CompProperties_Apparel">
+                <compClass>PrisonersAndSlaves.CompSlaveCollar</compClass>
+            </li>
+            <li Class="PrisonersAndSlaves.CompProperties_Lockable"/>
+        </comps>
+        <colorGenerator Class="ColorGenerator_Options">
+            <options>
+                <li>
+                    <weight>10</weight>
+                    <only>RGBA(0.33,0.33,0.33,1)</only>
+                </li>
+                <li>
+                    <weight>10</weight>
+                    <only>RGBA(0.65,0.65,0.65,1)</only>
+                </li>
+                <li>
+                    <weight>6</weight>
+                    <min>RGBA(0.3,0.3,0.3,1)</min>
+                    <max>RGBA(0.5,0.5,0.5,1)</max>
+                </li>
+                <li>
+                    <weight>10</weight>
+                    <only>RGBA(0.9,0.9,0.9,1)</only>
+                </li>
+            </options>
+        </colorGenerator>
+    </ThingDef>
+
+    <ThingDef ParentName="ApparelMakeableBase">
+        <defName>HandCuffs</defName>
+        <label>hand cuffs</label>
+        <description>Put these on someone if they become rowdy.  These will severely limit their ability to manipulate things and use weapons.</description>
+        <graphicData>
+            <texPath>Things/Apparel/HandCuffs</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <costList>
+            <Steel>10</Steel>
+        </costList>
+        <statBases>
+            <WorkToMake>2500</WorkToMake>
+        </statBases>
+        <thingCategories>
+            <li>Apparel</li>
+        </thingCategories>
+        <apparel>
+            <bodyPartGroups>
+                <li>Hands</li>
+            </bodyPartGroups>
+            <layers>
+                <li>Accessory</li>
+            </layers>
+        </apparel>
+        <comps>
+            <li Class="PrisonersAndSlaves.CompProperties_Apparel">
+                <compClass>PrisonersAndSlaves.CompRestraints</compClass>
+            </li>
+            <li Class="PrisonersAndSlaves.CompProperties_Lockable"/>
+        </comps>
+        <colorGenerator Class="ColorGenerator_Options">
+            <options>
+                <li>
+                    <weight>10</weight>
+                    <only>RGBA(0.33,0.33,0.33,1)</only>
+                </li>
+                <li>
+                    <weight>10</weight>
+                    <only>RGBA(0.65,0.65,0.65,1)</only>
+                </li>
+                <li>
+                    <weight>6</weight>
+                    <min>RGBA(0.3,0.3,0.3,1)</min>
+                    <max>RGBA(0.5,0.5,0.5,1)</max>
+                </li>
+                <li>
+                    <weight>10</weight>
+                    <only>RGBA(0.9,0.9,0.9,1)</only>
+                </li>
+            </options>
+        </colorGenerator>
+    </ThingDef>
+
+    <ThingDef ParentName="ApparelMakeableBase">
+        <defName>LegShackles</defName>
+        <label>leg shackles</label>
+        <description>Put these on prisoners or slaves and they will have severly limited movement.</description>
+        <graphicData>
+            <texPath>Things/Apparel/LegShackles</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <costList>
+            <Steel>20</Steel>
+        </costList>
+        <statBases>
+            <WorkToMake>5000</WorkToMake>
+        </statBases>
+        <thingCategories>
+            <li>Apparel</li>
+        </thingCategories>
+        <apparel>
+            <bodyPartGroups>
+                <li>Legs</li>
+            </bodyPartGroups>
+            <layers>
+                <li>Accessory</li>
+            </layers>
+        </apparel>
+        <comps>
+            <li Class="PrisonersAndSlaves.CompProperties_Apparel">
+                <compClass>PrisonersAndSlaves.CompRestraints</compClass>
+            </li>
+            <li Class="PrisonersAndSlaves.CompProperties_Lockable"/>
+        </comps>
+        <colorGenerator Class="ColorGenerator_Options">
+            <options>
+                <li>
+                    <weight>10</weight>
+                    <only>RGBA(0.33,0.33,0.33,1)</only>
+                </li>
+                <li>
+                    <weight>10</weight>
+                    <only>RGBA(0.65,0.65,0.65,1)</only>
+                </li>
+                <li>
+                    <weight>6</weight>
+                    <min>RGBA(0.3,0.3,0.3,1)</min>
+                    <max>RGBA(0.5,0.5,0.5,1)</max>
+                </li>
+                <li>
+                    <weight>10</weight>
+                    <only>RGBA(0.9,0.9,0.9,1)</only>
+                </li>
+            </options>
+        </colorGenerator>
+    </ThingDef>
+
+</Defs>
