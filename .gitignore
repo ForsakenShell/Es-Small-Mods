@@ -9,12 +9,16 @@
 *.userprefs
 *.sln.docstates
 Source-DLLs/*.dll
+*.zip
+*.7z
 
 _Mod/ESM - Template/
 AdvancedTrading/
 ColonistSelections/
+EPOE/
 FishIndustry/
 MD2*/
+Mending/
 ModPile/
 Release Zips/
 RTFusebox/
