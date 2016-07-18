@@ -6,6 +6,6 @@
         <texturePath>Designations/SmoothWall</texturePath>
         <targetType>Cell</targetType>
         <removeIfBuildingDespawned>true</removeIfBuildingDespawned>
-    </DesignationDef>mor
+    </DesignationDef>
 
 </Defs>
