@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
-    <ModHelperDef>
+    <CommunityCoreLibrary.ModHelperDef>
         <defName>MountainTemp</defName>
 
         <ModName>ESM - Mountain Temp</ModName>
 
-        <minCCLVersion>0.13.3</minCCLVersion>
+        <minCCLVersion>0.14.0</minCCLVersion>
 
         <ModConfigurationMenus>
             <li>
@@ -19,6 +19,6 @@
             <li>esm.MountainTemp</li>
         </MapComponents>
 
-    </ModHelperDef>
+    </CommunityCoreLibrary.ModHelperDef>
 
 </Defs>

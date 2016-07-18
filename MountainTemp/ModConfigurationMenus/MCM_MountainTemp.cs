@@ -216,7 +216,7 @@ namespace esm
 
             #region Seasonal Temp Radio
             radioBool = Config.TargetMode == TemperatureMode.Seasonal;
-            var tempStr = Game.Mode == GameMode.MapPlaying ? string.Format( "({0})", GenText.ToStringTemperature( MountainTemp.SeasonalAverage ) ) : "";
+            var tempStr = Current.ProgramState == ProgramState.MapPlaying ? string.Format( "({0})", GenText.ToStringTemperature( MountainTemp.SeasonalAverage ) ) : "";
             var seasonalRect = new Rect(
                 0,
                 tempRect.y + tempRect.height + entrySize,
@@ -235,7 +235,7 @@ namespace esm
 
             #region Annual Temp Radio
             radioBool = Config.TargetMode == TemperatureMode.Annual;
-            tempStr = Game.Mode == GameMode.MapPlaying ? string.Format( "({0})", GenText.ToStringTemperature( MountainTemp.AnnualAverage ) ) : "";
+            tempStr = Current.ProgramState == ProgramState.MapPlaying ? string.Format( "({0})", GenText.ToStringTemperature( MountainTemp.AnnualAverage ) ) : "";
             var annualRect = new Rect(
                 0,
                 seasonalRect.y + seasonalRect.height + innerPadding,
