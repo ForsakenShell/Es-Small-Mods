@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>esm</RootNamespace>
     <AssemblyName>SmoothWall</AssemblyName>
-    <ReleaseVersion>0.12.1</ReleaseVersion>
+    <ReleaseVersion>0.14.0</ReleaseVersion>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <SynchReleaseVersion>false</SynchReleaseVersion>
   </PropertyGroup>
@@ -58,15 +58,10 @@
     <Compile Include="SpecialInjectors\SpecialInjector_SmoothWall.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="WorkGivers\" />
-    <Folder Include="Buildings\" />
-    <Folder Include="SpecialInjectors\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <PostBuildEvent>
         copy "$(TargetPath)" "$(SolutionDir)_Mod\ESM - SmoothWall\Assemblies"
-        copy "$(TargetPath)" "$(SolutionDir)_Mod\ESM - SmoothWall - CR\Assemblies"
 	    copy "$(TargetPath)" "C:\Games\RimWorld A14\Mods\ESM - SmoothWall\Assemblies"
     </PostBuildEvent>
   </PropertyGroup>

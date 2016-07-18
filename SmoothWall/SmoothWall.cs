@@ -14,6 +14,7 @@ using CommunityCoreLibrary;
 namespace esm
 {
 
+    [StaticConstructorOnStartup]
 	public static class SmoothWall
 	{
 
@@ -24,11 +25,15 @@ namespace esm
 		public static readonly SoundDef				soundDef					= DefDatabase<SoundDef>.GetNamed( "Recipe_Sculpt", true );
 		public static readonly ThingDef				thingDef					= DefDatabase<ThingDef>.GetNamed( "SmoothWall", true );
 
-		public static readonly Texture2D			icon						= ContentFinder<Texture2D>.Get( "UI/Designators/SmoothWall", true );
+        public static readonly Texture2D			icon;
 
 		public static readonly string				label						= "SmoothWall_Label".Translate();
 		public static readonly string				description					= "SmoothWall_Description".Translate();
 
+        static SmoothWall()
+        {
+            icon = ContentFinder<Texture2D>.Get( "UI/Designators/SmoothWall", true );
+        }
 	}
 
 }

@@ -29,7 +29,7 @@ namespace esm
 				return;
 			}
 
-			var pawns = Find.ListerPawns.FreeColonists.ToList();
+			var pawns = Find.MapPawns.FreeColonists.ToList();
 			if( pawns.NullOrEmpty() )
 			{
 				return;
@@ -44,23 +44,30 @@ namespace esm
 
 				var room = pawn.GetRoom();
 				if(
+                    ( pawn.IsPrisonerOfColony )||
 					( room == null )||
-					( room.Owner != pawn )
+					( !room.Owners.Contains<Pawn>(pawn) )
 				)
 				{
-					// Not in their own private room
+					// Pawn is a prisoner or not in their own private room
 					continue;
 				}
 
 				// Find any other pawns in the same room
-                if( pawn.GetRoom().AllContainedThings.Any( t => t is Pawn ) )
+                if(
+                    ( room.AllContainedThings.Any( t => (
+                        ( t is Pawn )&&
+                        ( t != pawn )&&
+                        ( !room.Owners.Contains( (Pawn)t ) )
+                    ) ) )||
+                    ( room.Owners.Any( p => p.GetRoom() != room ) )
 				{
-					// Not alone in room
+					// Not alone in room or the other pawn isn't an owner or the other owners are not in the room
 					lockState = LockState.WantUnlock;
 				}
 				else if(
 					( pawn.CurrentBed() != null )&&
-					( !pawn.health.ShouldBeTreatedNow )&&
+					( !HealthUtility.PawnShouldGetImmediateTending(pawn)) &&
 					( pawn.needs.food.CurCategory < HungerCategory.UrgentlyHungry )&&
 					( pawn.needs.joy.CurCategory > JoyCategory.Low )
 				)

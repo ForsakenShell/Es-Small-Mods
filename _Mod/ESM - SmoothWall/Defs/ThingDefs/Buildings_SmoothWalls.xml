@@ -71,7 +71,6 @@
         <building>
             <isInert>true</isInert>
             <ignoreNeedsPower>true</ignoreNeedsPower>
-            <soundMined>CollapseRock</soundMined>
             <canBuildNonEdificesUnder>false</canBuildNonEdificesUnder>
         </building>
         <damageMultipliers>
