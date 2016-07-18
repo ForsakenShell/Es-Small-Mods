@@ -101,7 +101,7 @@ namespace PrisonersAndSlaves
             {
                 foreach( var door in allDoors )
                 {
-                    Log.Message( string.Format( "Door {0} is temporarily locked, lifting", door.ThingID ) );
+                    //Log.Message( string.Format( "Door {0} is temporarily locked, lifting", door.ThingID ) );
                     DoorLockToggle( door.TryGetComp<CompLockable>(), door.TryGetComp<CompPowerTrader>(), false );
                 }
             }
@@ -127,7 +127,7 @@ namespace PrisonersAndSlaves
                 )
             )
             {   // Auto-toggle auto-doors
-                Log.Message( string.Format( "Auto-toggling door lock on {0}", compLock.parent.ThingID ) );
+                //Log.Message( string.Format( "Auto-toggling door lock on {0}", compLock.parent.ThingID ) );
                 compLock.ChangeLockState( value );
             }
         }

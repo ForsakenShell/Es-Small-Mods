@@ -27,10 +27,12 @@ namespace esm
 				var stonecuttingSpeed = pawn.GetStatValue( StatDef.Named( "StonecuttingSpeed" ), true );
 				var sculptingSpeed = pawn.GetStatValue( StatDef.Named( "SculptingSpeed" ), true );
 				var averageSpeed = ( smoothingSpeed + stonecuttingSpeed + sculptingSpeed ) / 3f;
-				if( Find.ResearchManager.IsFinished( ResearchProjectDef.Named( "PneumaticPicks" ) ) )
+                /* Research project cut from core game
+                if( SmoothWall.ResearchPneumaticPicks.IsFinished )
 				{
 					averageSpeed *= 1.2f;
 				}
+				*/
 				return (int)( (float)TicksPerStrike / averageSpeed );
 			}
 		}
@@ -111,7 +113,7 @@ namespace esm
 						var wall = GenSpawn.Spawn( wallThing, TargetA.Cell );
 						if( wall != null )
 						{
-							wall.SetFaction( Faction.OfColony );
+                        wall.SetFaction( Faction.OfPlayer );
 						}
 					}
 				} ) );

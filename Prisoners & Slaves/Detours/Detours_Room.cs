@@ -76,12 +76,12 @@ namespace PrisonersAndSlaves
             room.lastChangeTick = Find.TickManager.TicksGame;
             room.TempTracker.RoomChanged();
 
-            //this.statsAndRoleDirty = true;
+            room.StatsAndRoleDirtySet( true );
             room.Notify_BedTypeChanged();
 
             FacilitiesUtility.NotifyFacilitiesAboutChangedLOSBlockers( room.Regions );
 
-            if( Current.ProgramState == ProgramState.MapPlaying )
+            if( Current.ProgramState != ProgramState.Entry )
             {
                 foreach( var door in room.Portals() )
                 {   // Inform doors that this room has changed

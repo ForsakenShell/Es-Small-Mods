@@ -13,7 +13,7 @@ namespace PrisonersAndSlaves
 
         static ITab_RoomMarker()
         {
-            ITab_RoomMarker.WinSize = new Vector2( 300f, 300f );
+            ITab_RoomMarker.WinSize = new Vector2( 300f, 150f );
         }
 
         public ITab_RoomMarker()

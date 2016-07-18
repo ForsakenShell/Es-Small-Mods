@@ -160,23 +160,7 @@ namespace PrisonersAndSlaves
             {
                 return;
             }
-            if( !AllowPrisoners )
-            {
-                var room = this.Position.GetRoom();
-                if(
-                    ( room != null )&&
-                    ( room.Owners.Count() > 0 )
-                )
-                {
-                    var markerOwners = GetOwnerNames();
-                    if( !markerOwners.Equals( "" ) )
-                    {
-                        drawLabel += "\n";
-                        drawLabel += markerOwners;
-                    }
-                }
-            }
-            GenWorldUI.DrawThingLabel( this, drawLabel, Color.white );
+            GenWorldUI.DrawThingLabel( this, drawLabel, GenWorldUI.DefaultThingLabelColor );
         }
 
         protected override void                 ReceiveCompSignal( string signal )
@@ -228,29 +212,6 @@ namespace PrisonersAndSlaves
             {
                 this.GetRoom().RoomChanged();
             }
-        }
-
-        public string                           GetOwnerNames()
-        {
-            var markerOwner = string.Empty;
-            var room = this.Position.GetRoom();
-            if(
-                ( room != null )&&
-                ( room.Owners.Count() > 0 )
-            )
-            {
-                markerOwner = "(";
-                for( int i = 0; i < room.Owners.Count(); ++i )
-                {
-                    if( i > 0 )
-                    {
-                        markerOwner += ", ";
-                    }
-                    markerOwner += room.Owners.ElementAt( i ).NameStringShort;
-                }
-                markerOwner += ")";
-            }
-            return markerOwner;
         }
 
     }

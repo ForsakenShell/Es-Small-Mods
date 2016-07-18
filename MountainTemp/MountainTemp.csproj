@@ -62,7 +62,7 @@
   <PropertyGroup>
     <PostBuildEvent>
 	    copy "$(TargetPath)" "$(SolutionDir)_Mod\ESM - MountainTemp\Assemblies"
-	    copy "$(TargetPath)" "C:\Games\RimWorld A12\Mods\ESM - MountainTemp\Assemblies"
+	    copy "$(TargetPath)" "C:\Games\RimWorld A13\Mods\ESM - MountainTemp\Assemblies"
     </PostBuildEvent>
   </PropertyGroup>
 </Project>

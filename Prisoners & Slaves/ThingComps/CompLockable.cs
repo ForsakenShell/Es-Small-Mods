@@ -101,7 +101,7 @@ namespace PrisonersAndSlaves
             {
                 return;
             }
-            Log.Message( string.Format( "{0}.ChangeLockState( {1} )", parent.ThingID, value ) );
+            //Log.Message( string.Format( "{0}.ChangeLockState( {1} )", parent.ThingID, value ) );
             locked = value;
             picked = false;
             changeStateAfterTick = Find.TickManager.TicksGame + LockAttemptTimeOut;
@@ -277,10 +277,12 @@ namespace PrisonersAndSlaves
             }
             if( p.IsPrisonerOfColony )
             {   // Locked to prisoners (and slaves)
+                //Log.Message( string.Format( "\tCompLockable: door {0} is locked and pawn {1} is a prisoner/slave", this.parent.ThingID, p.NameStringShort ) );
                 return false;
             }
             if( p.Faction != Faction.OfPlayer )
             {   // Locked to non-colonists
+                //Log.Message( string.Format( "\tCompLockable: door {0} is locked and pawn {1} is part of the colony", this.parent.ThingID, p.NameStringShort ) );
                 return false;
             }
             //Log.Message( string.Format( "{0}.Drafted = {1}", p.NameStringShort, p.Drafted ) );
@@ -289,6 +291,7 @@ namespace PrisonersAndSlaves
                 ( p.Drafted )
             )
             {   // Is it unlocked to drafted?
+                //Log.Message( string.Format( "\tCompLockable: door {0} is locked but pawn {1} is drafted", this.parent.ThingID, p.NameStringShort ) );
                 return true;
             }
             if( // Is it unlocked to wardens or doctors?
@@ -306,9 +309,11 @@ namespace PrisonersAndSlaves
                 )
             )
             {
+                //Log.Message( string.Format( "\tCompLockable: door {0} is locked but pawn {1} is a doctor/warden", this.parent.ThingID, p.NameStringShort ) );
                 return true;
             }
             // Locked to everyone else
+            //Log.Message( string.Format( "\tCompLockable: door {0} is locked to pawn {1}", this.parent.ThingID, p.NameStringShort ) );
             return false;
         }
 

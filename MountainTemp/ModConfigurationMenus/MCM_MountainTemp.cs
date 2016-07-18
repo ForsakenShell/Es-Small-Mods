@@ -20,13 +20,6 @@ namespace esm
         private const float             entrySize = 24f;
         private const float             innerPadding = 4f;
 
-        private static bool[]           modeVal;
-
-        static MCM_MountainTemp()
-        {
-            modeVal = new bool[3];
-        }
-
         #region Widgets
 
         private void                    DoRadio( Rect rect, ref bool value, string labelKey, string temp = "" )

@@ -24,7 +24,10 @@ namespace PrisonersAndSlaves
             this.FailOnBurningImmobile( DoorInd );
             yield return Toils_Reserve.Reserve( DoorInd, 1 );
             yield return Toils_Goto.GotoThing( DoorInd, PathEndMode.Touch );
-            yield return Toils_General.DoorLockToggle( DoorInd, pawn, compLock );
+            var doorToggleToil = Toils_General.DoorLockToggle( DoorInd );
+            var doorPreToil = Toils_General.PrepareDoorInteraction( DoorInd, doorToggleToil );
+            yield return doorPreToil;
+            yield return doorToggleToil;
             yield return Toils_Reserve.Release( DoorInd );
         }
 

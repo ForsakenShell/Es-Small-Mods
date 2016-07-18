@@ -46,6 +46,16 @@ namespace esm
 			}
 		}
 
+        public override AcceptanceReport CanDesignateThing( Thing t )
+        {
+            return CanDesignateCell( t.Position );
+        }
+
+        public override void DesignateThing( Thing t )
+        {
+            DesignateSingleCell( t.Position );
+        }
+
 		public override AcceptanceReport CanDesignateCell( IntVec3 c )
 		{
 			if( !c.InBounds() )

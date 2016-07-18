@@ -47,7 +47,7 @@ namespace esm
 
 		public override bool HasJobOnCell(Pawn pawn, IntVec3 c)
 		{
-			return ( pawn.Faction == Faction.OfColony )&&( Find.DesignationManager.DesignationAt( c, SmoothWall.designationDef ) != null )&&( pawn.CanReserveAndReach( c, PathEndMode.Touch, Danger.None ) );
+            return ( pawn.Faction == Faction.OfPlayer )&&( Find.DesignationManager.DesignationAt( c, SmoothWall.designationDef ) != null )&&( pawn.CanReserveAndReach( c, PathEndMode.Touch, Danger.None ) );
 		}
 
 		public override Job JobOnCell( Pawn pawn, IntVec3 cell )

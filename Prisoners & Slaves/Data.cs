@@ -278,7 +278,7 @@ namespace PrisonersAndSlaves
         public const float              MaxRangeMultiplierForChecks     = 1.5f;
         public const float              MinRangeMultiplierForChecks     = 0.5f;
 
-        public const float              DefaultColumnWidth = 200f;
+        public const float              DefaultColumnWidth              = 200f;
 
         #endregion
 

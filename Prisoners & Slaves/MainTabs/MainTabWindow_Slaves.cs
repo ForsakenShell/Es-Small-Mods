@@ -104,7 +104,7 @@ namespace PrisonersAndSlaves
         {
             get
             {
-                return new Vector2( 1010.0f, ( 24.0f + 16.0f + 65.0f + this.PawnsCount * 30.0f + TopAreaHeight ) );
+                return new Vector2( 1024.0f, ( 24.0f + 16.0f + 65.0f + this.PawnsCount * 30.0f + TopAreaHeight ) );
             }
         }
 
@@ -186,15 +186,15 @@ namespace PrisonersAndSlaves
             switch( prio )
             {
             case 1:
-            return Color.green;
+                return Color.green;
             case 2:
-            return new Color( 1f, 0.9f, 0.6f );
+                return new Color( 1f, 0.9f, 0.6f );
             case 3:
-            return new Color( 0.8f, 0.7f, 0.5f );
+                return new Color( 0.8f, 0.7f, 0.5f );
             case 4:
-            return new Color( 0.6f, 0.6f, 0.6f );
+                return new Color( 0.6f, 0.6f, 0.6f );
             default:
-            return Color.grey;
+                return Color.grey;
             }
         }
 
@@ -463,7 +463,7 @@ namespace PrisonersAndSlaves
 
                 rect.width = widthRestrainShackle;
                 Widgets.Label( rect, labelRestrainShackle );
-                rect.x += widthRestrainCuff + 6f;
+                rect.x += widthRestrainShackle + 6f;
 
                 rect.width = widthMedicalCare;
                 rect.x += ( MedicalCareUtility.CareSetterWidth - widthMedicalCare ) / 2f;
@@ -528,7 +528,7 @@ namespace PrisonersAndSlaves
         private void DrawPawnRow_Restrictions( Rect r, Pawn p )
         {
             var compPrisoner = p.TryGetComp<CompPrisoner>();
-            if( compPrisoner != null )
+            if( compPrisoner == null )
             {
                 Log.ErrorOnce( string.Format( "Pawn {0} is missing CompPrisoner!", p.NameStringShort ), ( p.thingIDNumber & 0xFFFF ) | 0x0BAD0000 );
                 return;
@@ -567,6 +567,12 @@ namespace PrisonersAndSlaves
                 var left2 = left1 + 6f;
                 var vector = new Vector2( 0f, 0f );
 
+                vector.x = left2 + ( widthGetsFood - 24f ) / 2f;
+                bool getsFood = p.guest.GetsFood;
+                Widgets.Checkbox( vector, ref getsFood );
+                p.guest.GetsFood = getsFood;
+                left2 += widthGetsFood + 6f;
+
                 vector.x = left2 + ( widthRestrainCuff - 24f ) / 2f;
                 Widgets.Checkbox( vector, ref compPrisoner.ShouldBeCuffed );
                 left2 += widthRestrainCuff + 6f;
@@ -574,12 +580,6 @@ namespace PrisonersAndSlaves
                 vector.x = left2 + ( widthRestrainShackle - 24f ) / 2f;
                 Widgets.Checkbox( vector, ref compPrisoner.ShouldBeShackled );
                 left2 += widthRestrainShackle + 6f;
-
-                vector.x = left2 + ( widthGetsFood - 24f ) / 2f;
-                bool getsFood = p.guest.GetsFood;
-                Widgets.Checkbox( vector, ref getsFood );
-                p.guest.GetsFood = getsFood;
-                left2 += widthGetsFood + 6f;
 
                 var rect3 = new Rect( left2, 0f, MedicalCareUtility.CareSetterWidth, 28f );
                 MedicalCareUtility.MedicalCareSetter( rect3, ref p.playerSettings.medCare );

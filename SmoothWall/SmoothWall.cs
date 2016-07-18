@@ -19,7 +19,8 @@ namespace esm
 
 		public static readonly DesignationDef		designationDef				= DefDatabase<DesignationDef>.GetNamed( "SmoothWall_Designation", true );
 		public static readonly JobDef				jobDef						= DefDatabase<JobDef>.GetNamed( "SmoothWall_Job", true );
-		public static readonly ResearchProjectDef	researchProjectDef			= DefDatabase<ResearchProjectDef>.GetNamed( "Stonecutting", true );
+        public static readonly ResearchProjectDef   ResearchStoneCutting        = DefDatabase<ResearchProjectDef>.GetNamed( "Stonecutting", true );
+        //public static readonly ResearchProjectDef   ResearchPneumaticPicks      = DefDatabase<ResearchProjectDef>.GetNamed( "PneumaticPicks", true );
 		public static readonly SoundDef				soundDef					= DefDatabase<SoundDef>.GetNamed( "Recipe_Sculpt", true );
 		public static readonly ThingDef				thingDef					= DefDatabase<ThingDef>.GetNamed( "SmoothWall", true );
 

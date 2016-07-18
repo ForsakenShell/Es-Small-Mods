@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
-    <ModHelperDef>
+    <CommunityCoreLibrary.ModHelperDef>
         <defName>SmoothWall</defName>
 
         <ModName>ESM - Smooth Wall</ModName>
 
-        <version>0.12.3</version>
+        <minCCLVersion>0.14.0</minCCLVersion>
 
         <Designators>
             <li>
@@ -20,6 +20,6 @@
             <li>esm.SpecialInjector_SmoothWall</li>
         </PostLoadInjectors>
 
-    </ModHelperDef>
+    </CommunityCoreLibrary.ModHelperDef>
 
 </Defs>

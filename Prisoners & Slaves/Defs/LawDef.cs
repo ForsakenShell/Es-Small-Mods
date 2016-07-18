@@ -9,6 +9,7 @@ namespace PrisonersAndSlaves
     public class LawDef : Def
     {
 
+        public int                  severity = 0;
         public float                daysToImprisonFor = -1;
         public bool                 arrestColonists = true;
         public bool                 arrestGuests = true;

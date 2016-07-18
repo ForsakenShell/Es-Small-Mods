@@ -161,8 +161,10 @@ namespace PrisonersAndSlaves
         {
             base.Tick();
             if(
-                ( _queueUpdate )&&
-                ( this.IsHashIntervalTick( Data.QueueUpdateTicks ) )
+                (
+                    ( _queueUpdate )&&
+                    ( this.IsHashIntervalTick( Data.QueueUpdateTicks ) )
+                )
             )
             {
                 UpdateDoorStatus();

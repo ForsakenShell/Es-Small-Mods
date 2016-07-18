@@ -65,8 +65,9 @@
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>
-	    copy "$(TargetPath)" "$(SolutionDir)_Mod\ESM - SmoothWall\Assemblies"
-	    copy "$(TargetPath)" "C:\Games\RimWorld A12\Mods\ESM - SmoothWall\Assemblies"
+        copy "$(TargetPath)" "$(SolutionDir)_Mod\ESM - SmoothWall\Assemblies"
+        copy "$(TargetPath)" "$(SolutionDir)_Mod\ESM - SmoothWall - CR\Assemblies"
+	    copy "$(TargetPath)" "C:\Games\RimWorld A14\Mods\ESM - SmoothWall\Assemblies"
     </PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -26,6 +26,11 @@ namespace PrisonersAndSlaves
         public bool                     freeSlave = false;
         public bool                     wasSlave = false;
 
+        // For wardens to release from prison (LawDef)
+        public LawDef                   lawBroken;
+        public bool                     wasArrested;
+        public int                      releaseAfterTick;
+
         #region Properties
 
         public bool ShouldBeTransfered
@@ -35,7 +40,7 @@ namespace PrisonersAndSlaves
                 // Does it have a haul target and is the prisoner not in the same room?
                 return(
                     ( haulTarget != null )&&
-                    ( this.parent.Position.GetRoom() != haulTarget.GetRoom() )
+                    ( parent.Position.GetRoom() != haulTarget.GetRoom() )
                 );
             }
         }
@@ -59,16 +64,21 @@ namespace PrisonersAndSlaves
             base.PostExposeData();
             Scribe_Values.LookValue( ref ShouldBeCuffed, "ShouldBeCuffed", false, false );
             Scribe_Values.LookValue( ref ShouldBeShackled, "ShouldBeShackled", false, false );
-            Scribe_Values.LookValue( ref this.freeSlave, "freeSlave", false, false );
-            Scribe_Values.LookValue( ref this.wasSlave, "wasSlave", false, false );
-            Scribe_References.LookReference( ref this.haulTarget, "haulTarget" );
-            Scribe_References.LookReference( ref this.originalFaction, "originalFaction" );
-            Scribe_Defs.LookDef( ref this.originalPawnKind, "originalPawnKind" );
+            Scribe_Values.LookValue( ref freeSlave, "freeSlave", false, false );
+            Scribe_Values.LookValue( ref wasSlave, "wasSlave", false, false );
+            Scribe_Values.LookValue( ref wasArrested, "wasArrested", false, false );
+            Scribe_Values.LookValue( ref releaseAfterTick, "releaseAfterTick", 0, false );
+
+            // Scribe references and lists last
+            Scribe_References.LookReference( ref haulTarget, "haulTarget" );
+            Scribe_References.LookReference( ref originalFaction, "originalFaction" );
+            Scribe_Defs.LookDef( ref originalPawnKind, "originalPawnKind" );
+            Scribe_Defs.LookDef( ref lawBroken, "lawBroken" );
         }
 
         public void CheckStatus()
         {
-            var prisoner = this.parent as Pawn;
+            var prisoner = parent as Pawn;
             if( prisoner == null )
             {
                 return;
@@ -77,7 +87,7 @@ namespace PrisonersAndSlaves
             var handCuffs = prisoner.WornRestraints( Data.BodyPartGroupDefOf.Hands );
             if( handCuffs != null )
             {   // Enforce cuffs
-                EnforceRestraints( prisoner, handCuffs );
+                ApplyApparelEffects( prisoner, handCuffs );
             }
             else
             {   // Make sure hediffs are removed
@@ -88,7 +98,7 @@ namespace PrisonersAndSlaves
             var legShackles = prisoner.WornRestraints( BodyPartGroupDefOf.Legs );
             if( legShackles != null )
             {   // Enforce shackles
-                EnforceRestraints( prisoner, legShackles );
+                ApplyApparelEffects( prisoner, legShackles );
             }
             else
             {   // Make sure hediffs are removed
@@ -99,11 +109,39 @@ namespace PrisonersAndSlaves
             var collar = prisoner.WornCollar();
             if( collar != null )
             {
-                EnforceCollar( prisoner, collar );
+                ApplyApparelEffects( prisoner, collar );
             }
         }
 
-        public void EnforceApparel( Pawn pawn, Apparel apparel )
+        public void ForceApparelOnPawn( Pawn pawn, Apparel apparel )
+        {
+            pawn.apparel.Wear( apparel, true );
+            // Try to lock the apparel
+            var compLock = apparel.TryGetComp<CompLockable>();
+            if( compLock != null )
+            {
+                compLock.ChangeLockState( true );
+            }
+            ApplyApparelEffects( pawn, apparel );
+        }
+
+        public void RemoveApparelFromPawn( Pawn pawn, Apparel apparel, IntVec3 dropCell )
+        {
+            // Try to unlock the apparel
+            var compLock = apparel.TryGetComp<CompLockable>();
+            if( compLock != null )
+            {
+                compLock.ChangeLockState( false );
+            }
+            Apparel result = null;
+            pawn.apparel.TryDrop( apparel, out result, dropCell, false );
+            if( apparel.IsRestraints() )
+            {
+                RemoveRestraintsEffects( pawn, apparel );
+            }
+        }
+
+        public void ApplyApparelEffects( Pawn pawn, Apparel apparel )
         {
             if(
                 ( pawn.outfits != null )&&
@@ -113,9 +151,17 @@ namespace PrisonersAndSlaves
                 pawn.outfits.forcedHandler.SetForced( apparel, true );
             }
             pawn.Drawer.renderer.graphics.ResolveApparelGraphics();
+            if( apparel.IsSlaveCollar() )
+            {
+                ApplyCollarEffects( pawn, apparel );
+            }
+            if( apparel.IsRestraints() )
+            {
+                ApplyRestraintsEffects( pawn, apparel );
+            }
         }
 
-        public void EnforceHediffDefOn( Pawn pawn, HediffDef hediffDef, BodyPartRecord bodyPartRecord )
+        public void ApplyHediffDefOn( Pawn pawn, HediffDef hediffDef, BodyPartRecord bodyPartRecord )
         {
             if(
                 ( pawn == null )||
@@ -132,27 +178,25 @@ namespace PrisonersAndSlaves
             pawn.health.AddHediff( hediffDef, bodyPartRecord );
         }
 
-        public void EnforceRestraints( Pawn pawn, Apparel restraints )
+        public void ApplyRestraintsEffects( Pawn pawn, Apparel restraints )
         {
-            EnforceApparel( pawn, restraints );
             foreach( var bodyPartGroup in restraints.def.apparel.bodyPartGroups )
             {
                 if( bodyPartGroup == Data.BodyPartGroupDefOf.Hands )
                 {
-                    EnforceHediffDefOn( pawn, Data.HediffDefOf.HandCuffed, pawn.health.hediffSet.GetBodyPartRecord( BodyPartDefOf.LeftHand ) );
-                    EnforceHediffDefOn( pawn, Data.HediffDefOf.HandCuffed, pawn.health.hediffSet.GetBodyPartRecord( BodyPartDefOf.RightHand ) );
+                    ApplyHediffDefOn( pawn, Data.HediffDefOf.HandCuffed, pawn.health.hediffSet.GetBodyPartRecord( BodyPartDefOf.LeftHand ) );
+                    ApplyHediffDefOn( pawn, Data.HediffDefOf.HandCuffed, pawn.health.hediffSet.GetBodyPartRecord( BodyPartDefOf.RightHand ) );
                 }
                 if( bodyPartGroup == BodyPartGroupDefOf.Legs )
                 {
-                    EnforceHediffDefOn( pawn, Data.HediffDefOf.LegShackled, pawn.health.hediffSet.GetBodyPartRecord( BodyPartDefOf.LeftLeg ) );
-                    EnforceHediffDefOn( pawn, Data.HediffDefOf.LegShackled, pawn.health.hediffSet.GetBodyPartRecord( BodyPartDefOf.RightLeg ) );
+                    ApplyHediffDefOn( pawn, Data.HediffDefOf.LegShackled, pawn.health.hediffSet.GetBodyPartRecord( BodyPartDefOf.LeftLeg ) );
+                    ApplyHediffDefOn( pawn, Data.HediffDefOf.LegShackled, pawn.health.hediffSet.GetBodyPartRecord( BodyPartDefOf.RightLeg ) );
                 }
             }
         }
 
-        public void EnforceCollar( Pawn pawn, Apparel collar )
+        public void ApplyCollarEffects( Pawn pawn, Apparel collar )
         {
-            EnforceApparel( pawn, collar );
             if( originalFaction == null )
             {
                 if( pawn.Faction == Faction.OfPlayer )
@@ -177,32 +221,10 @@ namespace PrisonersAndSlaves
             {
                 pawn.story.traits.GainTrait( new Trait( Data.TraitDefOf.Enslaved ) );
             }
-            if(
-                ( pawn.needs != null )&&
-                ( pawn.needs.mood != null )&&
-                ( pawn.needs.mood.thoughts != null )
-            )
-            {
-                pawn.needs.mood.thoughts.memories.TryGainMemoryThought( Data.ThoughtDefOf.Enslaved );
-            }
         }
 
-        public void RemoveApparel( Pawn pawn, Apparel apparel, IntVec3 dropCell )
+        public void RemoveRestraintsEffects( Pawn pawn, Apparel restraints )
         {
-            if( pawn.outfits != null )
-            {
-                pawn.outfits.forcedHandler.SetForced( apparel, false );
-            }
-            pawn.apparel.wornApparel().Remove( apparel );
-            apparel.wearer = null;
-            Thing resultingThing = null;
-            bool flag = GenThing.TryDropAndSetForbidden( (Thing) apparel, dropCell, ThingPlaceMode.Near, out resultingThing, false );
-            pawn.Drawer.renderer.graphics.ResolveApparelGraphics();
-        }
-
-        public void RemoveRestraints( Pawn pawn, Apparel restraints, IntVec3 dropCell )
-        {
-            RemoveApparel( pawn, restraints, dropCell );
             foreach( var bodyPartGroup in restraints.def.apparel.bodyPartGroups )
             {
                 if( bodyPartGroup == Data.BodyPartGroupDefOf.Hands )
@@ -216,11 +238,6 @@ namespace PrisonersAndSlaves
                     RemoveHediffDefOn( pawn, Data.HediffDefOf.LegShackled, pawn.health.hediffSet.GetBodyPartRecord( BodyPartDefOf.RightLeg ) );
                 }
             }
-        }
-
-        public void RemoveSlaveCollar( Pawn pawn, Apparel collar, IntVec3 dropCell )
-        {
-            RemoveApparel( pawn, collar, dropCell );
         }
 
         public void RemoveHediffDefOn( Pawn pawn, HediffDef hediffDef, BodyPartRecord bodyPartRecord )

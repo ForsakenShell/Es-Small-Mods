@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -8,7 +11,7 @@ namespace PrisonersAndSlaves
     public static class PaS_Widgets
     {
 
-        private static void DrawWorkBoxBackground( Rect rect, Pawn p, WorkTypeDef workDef )
+        public static void DrawWorkBoxBackground( Rect rect, Pawn p, WorkTypeDef workDef )
         {
             float num = p.skills.AverageOfRelevantSkillsFor( workDef );
             Texture2D texture2D1;
@@ -43,6 +46,38 @@ namespace PrisonersAndSlaves
                     GUI.DrawTexture( position, (Texture) WidgetsWork.PassionWorkboxMajorIcon );
             }
             GUI.color = Color.white;
+        }
+
+        public static void DrawOwnersForThing( Thing thing, List<Pawn> owners )
+        {
+            Color textColor = GenWorldUI.DefaultThingLabelColor;
+            if( owners.Count == 1 )
+            {
+                GenWorldUI.DrawThingLabel( thing, owners[ 0 ].LabelShort, textColor );
+            }
+            else
+            {
+                var limit = Math.Max( 4, owners.Count );
+                for( int index = 0; index < limit; ++index )
+                {
+                    GenWorldUI.DrawThingLabel( GetMultiOwnersLabelScreenPosFor( thing, index, owners ), owners[ index ].NameStringShort, textColor );
+                }
+            }
+        }
+
+        private static Vector2 GetMultiOwnersLabelScreenPosFor( Thing thing, int slotIndex, List<Pawn> owners )
+        {
+            var drawPos = GenWorldUI.LabelDrawPosFor( thing, -0.4f );
+            if( slotIndex > 0 )
+            {
+                for( int i = 0; i < slotIndex; i++ )
+                {
+                    var textSize = Text.CalcSize( owners[ i ].NameStringShort );
+                    drawPos.y -= 1f;
+                    drawPos.y -= textSize.y / 2f;
+                }
+            }
+            return drawPos;
         }
 
     }

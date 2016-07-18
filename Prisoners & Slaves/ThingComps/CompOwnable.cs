@@ -11,33 +11,31 @@ using UnityEngine;
 
 namespace PrisonersAndSlaves
 {
-    
+
     public class CompOwnable : CompRestricted
     {
 
         #region Instance Data
 
-        private bool                            _userOnlyOwners;
+        private bool _userOnlyOwners;
 
-        private bool                            _cachedOnlyOwners;
+        private bool _cachedOnlyOwners;
 
-        public string                           OwnersNamesShort;
-        public string                           OwnersNamesFull;
-        private List<string>                    roomOwners;
-        private List<string>                    userAddedOwners;
+        private List<string> roomOwners;
+        private List<string> userAddedOwners;
 
-        private bool                            drawOwnerSwap = false;
-        private Vector2                         vecCurrentOwners = new Vector2();
-        private Vector2                         vecPotentialOwners = new Vector2();
+        private bool drawOwnerSwap = false;
+        private Vector2 vecCurrentOwners = new Vector2();
+        private Vector2 vecPotentialOwners = new Vector2();
 
-        private List<Pawn>                      allPotentialOwners;
-        private List<Pawn>                      potentialOwners;
+        private List<Pawn> allPotentialOwners;
+        private List<Pawn> potentialOwners;
 
         #endregion
 
         #region Properties
 
-        public bool                             OnlyOwners
+        public bool OnlyOwners
         {
             get
             {
@@ -45,7 +43,7 @@ namespace PrisonersAndSlaves
             }
         }
 
-        public bool                             UserOnlyOwners
+        public bool UserOnlyOwners
         {
             get
             {
@@ -58,7 +56,7 @@ namespace PrisonersAndSlaves
             }
         }
 
-        public List<Pawn>                       Owners
+        public List<Pawn> Owners
         {
             get
             {
@@ -76,7 +74,7 @@ namespace PrisonersAndSlaves
             }
         }
 
-        public List<string>                     OwnersByThingID
+        public List<string> OwnersByThingID
         {
             get
             {
@@ -86,7 +84,7 @@ namespace PrisonersAndSlaves
             }
         }
 
-        public CompProperties_Ownable           Props
+        public CompProperties_Ownable Props
         {
             get
             {
@@ -112,16 +110,14 @@ namespace PrisonersAndSlaves
         public override void PostDrawGUIOverlay()
         {   // Called by Building_RestrictedDoor.DrawGUIOverlay()
             if(
-                ( !OnlyOwners )||
+                ( !OnlyOwners ) ||
+                ( Owners.NullOrEmpty() ) ||
                 ( Find.CameraDriver.CurrentZoom != CameraZoomRange.Closest )
             )
             {
                 return;
             }
-            if( !Owners.NullOrEmpty() )
-            {
-                GenWorldUI.DrawThingLabel( this.parent, OwnersNamesShort, Color.white );
-            }
+            PaS_Widgets.DrawOwnersForThing( this.parent, Owners );
         }
 
         public override void PostExposeData()
@@ -202,38 +198,57 @@ namespace PrisonersAndSlaves
 
         public override bool PawnCanOpen( Pawn p, bool isEscaping )
         {
+            if(
+                ( !OnlyOwners ) ||
+                ( Owners.Count() == 0 )
+            )
+            {
+                //Log.Message( string.Format( "\tCompOwnable: door {0} is not owned", this.parent.ThingID ) );
+                return true;
+            }
             if( isEscaping )
             {   // Escaping pawns don't care about restrictions
                 return true;
             }
-            if( // Not set for owners or no owners assigned
-                ( !OnlyOwners )||
-                ( Owners.Count() == 0 )
+            if(
+                ( p.Faction != null ) &&
+                ( !p.Faction.IsPlayer ) &&
+                ( p.Faction.HostileTo( Faction.OfPlayer ) )
             )
-            {   // Not restricted by ownership
+            {   // Hostile factions don't care about restrictions
+                //Log.Message( string.Format( "\tCompOwnable: door {0} is owned but pawn {1} doesn't care", this.parent.ThingID, p.NameStringShort ) );
                 return true;
             }
             if( p.Drafted )
             {   // Drafted pawns ignore restrictions
+                //Log.Message( string.Format( "\tCompOwnable: door {0} is owned but pawn {1} is drafted", this.parent.ThingID, p.NameStringShort ) );
                 return true;
             }
             if( // Always unrestricted to wardens and doctors
-                ( p.workSettings != null )&&
-                ( p.workSettings.EverWork )&&
+                ( p.workSettings != null ) &&
+                ( p.workSettings.EverWork ) &&
                 (
-                    ( p.workSettings.WorkIsActive( WorkTypeDefOf.Warden ) )||
+                    ( p.workSettings.WorkIsActive( WorkTypeDefOf.Warden ) ) ||
                     ( p.workSettings.WorkIsActive( WorkTypeDefOf.Doctor ) )
                 )
             )
             {
+                //Log.Message( string.Format( "\tCompOwnable: door {0} is owned but pawn {1} is a doctor/warden", this.parent.ThingID, p.NameStringShort ) );
                 return true;
             }
-            if( Owners.Contains( p ) )
-            {   // Pawn is an owner
-                return true;
+            if( p.RaceProps.Animal )
+            {   // Is it an animal?
+                if(
+                    ( p.playerSettings != null ) &&
+                    ( p.playerSettings.master != null )
+                )
+                {   // Is the animals master an owner?
+                    return Owners.Contains( p.playerSettings.master );
+                }
+                return false;
             }
-            // Pawn isn't an owner
-            return false;
+            // Check pawn ownership
+            return Owners.Contains( p );
         }
 
         #endregion
@@ -249,8 +264,6 @@ namespace PrisonersAndSlaves
         {
             roomOwners.Clear();
             _cachedOnlyOwners = false;
-            OwnersNamesShort = string.Empty;
-            OwnersNamesFull = string.Empty;
             if( clearUserAdded )
             {
                 userAddedOwners.Clear();
@@ -268,7 +281,7 @@ namespace PrisonersAndSlaves
                     foreach( var region in this.parent.Position.GetRegion().NonPortalNeighbors )
                     {
                         if(
-                            ( region.Room != thisRoom )&&
+                            ( region.Room != thisRoom ) &&
                             ( region.Room.Owners.Count() > 0 )
                         )
                         {
@@ -282,7 +295,7 @@ namespace PrisonersAndSlaves
                 else
                 {   // Look at contained room only
                     if(
-                        ( thisRoom != null )&&
+                        ( thisRoom != null ) &&
                         ( thisRoom.Owners.Count() > 0 )
                     )
                     {
@@ -294,7 +307,6 @@ namespace PrisonersAndSlaves
                 }
                 _cachedOnlyOwners = !roomOwners.NullOrEmpty();
             }
-            RebuildNameStrings();
             RecachePotentialOwners();
             return true;
         }
@@ -316,35 +328,6 @@ namespace PrisonersAndSlaves
             //Log.Message( dump );
         }
 
-        private void RebuildNameStrings()
-        {
-            var owners = Owners;
-            var ownersCount = owners.Count;
-            OwnersNamesShort = "";
-            OwnersNamesFull = "";
-            if( owners.Count > 2 )
-            {
-                OwnersNamesShort = Data.Strings.OwnableMoreThanTwoPawns.Translate();
-            }
-            for( int i = 0; i < ownersCount; ++i )
-            {
-                AddNameForIndex( i, ref OwnersNamesFull, owners[ i ].NameStringShort );
-                if( owners.Count <= 2 )
-                {
-                    AddNameForIndex( i, ref OwnersNamesShort, owners[ i ].NameStringShort );
-                }
-            }
-        }
-
-        private void AddNameForIndex( int i, ref string str, string addStr )
-        {
-            if( i > 0 )
-            {
-                str += ", ";
-            }
-            str += addStr;
-        }
-
         #endregion
 
         #region Priority and Rendering
@@ -357,7 +340,7 @@ namespace PrisonersAndSlaves
             }
         }
 
-        public override int             Priority
+        public override int Priority
         {
             get
             {
@@ -365,7 +348,7 @@ namespace PrisonersAndSlaves
             }
         }
 
-        public override bool            CompletelyEnforced
+        public override bool CompletelyEnforced
         {
             get
             {
@@ -373,7 +356,7 @@ namespace PrisonersAndSlaves
             }
         }
 
-        public override int             ColumnIndex
+        public override int ColumnIndex
         {
             get
             {
@@ -381,7 +364,7 @@ namespace PrisonersAndSlaves
             }
         }
 
-        public override int             ColumnWidth
+        public override int ColumnWidth
         {
             get
             {
@@ -393,7 +376,7 @@ namespace PrisonersAndSlaves
             }
         }
 
-        public override void            DrawColumns( Listing_Standard listing, float physicalHeight, bool overridden = false )
+        public override void DrawColumns( Listing_Standard listing, float physicalHeight, bool overridden = false )
         {
             #region Owner Settings
             var ownerToggleMainRect = listing.GetRect( 1 * GenUI.ListSpacing + GenUI.Pad * 2f );

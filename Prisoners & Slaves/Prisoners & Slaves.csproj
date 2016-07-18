@@ -82,7 +82,7 @@
     <Compile Include="RoomRoleWorkers\RoomRoleWorker_PrisonCommons.cs" />
     <Compile Include="RoomRoleWorkers\RoomRoleWorker_PrisonYard.cs" />
     <Compile Include="JobGivers\JobGiver_Prisoner_WanderPrison.cs" />
-    <Compile Include="MapComponents\Monitor_PrisonImprovements.cs" />
+    <Compile Include="MapComponents\Monitor.cs" />
     <Compile Include="Extensions\Pawn_Extensions.cs" />
     <Compile Include="CompProperties\CompProperties_RestrictedDoor.cs" />
     <Compile Include="ThingComps\CompRestrictedDoor.cs" />
@@ -137,11 +137,13 @@
     <Compile Include="Alerts\Alert_NeedRestraints.cs" />
     <Compile Include="WorkGivers\WorkGiver_Flicker_DoorLockToggle.cs" />
     <Compile Include="JobDrivers\JobDriver_Flicker_DoorLockToggle.cs" />
+    <Compile Include="JobDrivers\JobDriver_Warden_ArrestPawn.cs" />
+    <Compile Include="WorkGivers\WorkGiver_Warden_ReleasePrisoner.cs" />
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>
 	    copy "$(TargetPath)" "$(SolutionDir)_Mod\Prisoners &amp; Slaves\Assemblies"
-	    copy "$(TargetPath)" "C:\Games\RimWorld1230WinDev\Mods\Prisoners &amp; Slaves\Assemblies"
+	    copy "$(TargetPath)" "C:\Games\RimWorld A14\Mods\Prisoners &amp; Slaves\Assemblies"
     </PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>

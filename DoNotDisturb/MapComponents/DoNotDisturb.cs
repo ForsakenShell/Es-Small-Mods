@@ -53,12 +53,7 @@ namespace esm
 				}
 
 				// Find any other pawns in the same room
-				if(
-					( Find.ListerPawns.AllPawns.Any( p => (
-						( p != pawn )&&
-						( p.GetRoom() == room )
-					) ) )
-				)
+                if( pawn.GetRoom().AllContainedThings.Any( t => t is Pawn ) )
 				{
 					// Not alone in room
 					lockState = LockState.WantUnlock;

@@ -34,7 +34,7 @@ namespace esm
 		{
 			get
 			{
-				return SmoothWall.researchProjectDef.IsFinished;
+				return SmoothWall.ResearchStoneCutting.IsFinished;
 			}
 		}
 
@@ -80,7 +80,7 @@ namespace esm
 
 		public override AcceptanceReport CanDesignateThing( Thing t )
 		{
-			if( !SmoothWall.researchProjectDef.IsFinished )
+			if( !SmoothWall.ResearchStoneCutting.IsFinished )
 			{
 				return (AcceptanceReport) false;
 			}

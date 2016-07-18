@@ -28,7 +28,7 @@ namespace PrisonersAndSlaves
         {
             var pawn = tracker.Pawn();
             if(
-                ( PawnUtility.ShouldSendNotificationAbout( pawn ) ) ||
+                ( PawnUtility.ShouldSendNotificationAbout( pawn ) )||
                 ( PawnUtility.ShouldSendNotificationAbout( otherPawn ) )
             )
             {

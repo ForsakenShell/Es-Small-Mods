@@ -40,8 +40,8 @@ namespace PrisonersAndSlaves
                 for( int index = 0; index < list.Count; ++index )
                 {
                     Pawn pawn = list[ index ];
-                    pawn.SetFaction( Faction.OfPlayer, (Pawn) null );
-                    TradeSession.trader.GiveSoldThingToBuyer( (Thing) pawn, (Thing) pawn );
+                    TradeSession.trader.GiveSoldThingToBuyer( pawn, pawn );
+                    pawn.PreTraded( TradeAction.PlayerBuys, TradeSession.playerNegotiator, TradeSession.trader );
                 }
             }
         }

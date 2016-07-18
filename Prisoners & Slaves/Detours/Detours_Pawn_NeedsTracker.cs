@@ -40,7 +40,7 @@ namespace PrisonersAndSlaves
             if(
                 ( !nd.colonistAndPrisonersOnly )||
                 ( pawn.Faction != null )&&
-                ( pawn.Faction.def == FactionDefOf.PlayerColony )
+                ( pawn.Faction.IsPlayer )
             )
             {
                 return true;

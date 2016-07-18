@@ -78,6 +78,7 @@ namespace PrisonersAndSlaves
                 thingDef.comps.Add( new CompProperties_RestrictedDoor() );
                 thingDef.comps.Add( new CompProperties_Ownable() );
                 thingDef.comps.Add( new CompProperties_Lockable() );
+                thingDef.drawGUIOverlay = true;
             }
         }
 

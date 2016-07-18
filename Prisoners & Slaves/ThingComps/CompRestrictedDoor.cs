@@ -209,7 +209,7 @@ namespace PrisonersAndSlaves
                 return true;
             }
             if( this.parent.IsForbiddenToPass( p ) )
-            {
+            {   // Other factions don't care about forbidden doors
                 //Log.Message( string.Format( "\tCompRestrictedDoor: door {0}, pawn {1} IsForbiddenToPass", this.parent.ThingID, p.NameStringShort ) );
                 return false;
             }

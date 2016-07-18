@@ -8,7 +8,7 @@
     <RootNamespace>esm</RootNamespace>
     <AssemblyName>MineVein</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ReleaseVersion>0.12.1</ReleaseVersion>
+    <ReleaseVersion>0.14.0</ReleaseVersion>
     <SynchReleaseVersion>false</SynchReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -61,7 +61,7 @@
   <PropertyGroup>
     <PostBuildEvent>
 	    copy "$(TargetPath)" "$(SolutionDir)_Mod\ESM - MineVein\Assemblies"
-	    copy "$(TargetPath)" "C:\Games\RimWorld A12\Mods\ESM - MineVein\Assemblies"
+	    copy "$(TargetPath)" "C:\Games\RimWorld A14\Mods\ESM - MineVein\Assemblies"
     </PostBuildEvent>
   </PropertyGroup>
 </Project>
