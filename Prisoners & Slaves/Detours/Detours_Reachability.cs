@@ -19,55 +19,67 @@ namespace PrisonersAndSlaves
         internal static FieldInfo           _cache;
         internal static FieldInfo           _cacheDict;
 
-        internal static void                _ClearCache()
+        internal static Type                _dictType;
+        internal static PropertyInfo        _dictCount;
+        internal static MethodInfo          _dictClear;
+
+        internal static object              cache;
+        internal static object              cacheDict;
+
+        static _Reachability()
         {
+            _ReachabilityCache = CommunityCoreLibrary.Controller.Data.Assembly_CSharp.GetType( "Verse.ReachabilityCache" );
             if( _ReachabilityCache == null )
             {
-                _ReachabilityCache = CommunityCoreLibrary.Controller.Data.Assembly_CSharp.GetType( "Verse.ReachabilityCache" );
-                if( _ReachabilityCache == null )
-                {
-                    Log.ErrorOnce( "Unable to get \"Verse.ReachabilityCache\"", 0x0DEAD001 );
-                }
+                Log.ErrorOnce( "Unable to get \"Verse.ReachabilityCache\"", 0x0DEAD001 );
             }
+            _ReachabilityCache_CachedEntry = CommunityCoreLibrary.Controller.Data.Assembly_CSharp.GetType( "Verse.ReachabilityCache+CachedEntry" );
             if( _ReachabilityCache_CachedEntry == null )
             {
-                _ReachabilityCache_CachedEntry = CommunityCoreLibrary.Controller.Data.Assembly_CSharp.GetType( "Verse.ReachabilityCache+CachedEntry" );
-                if( _ReachabilityCache_CachedEntry == null )
-                {
-                    Log.ErrorOnce( "Unable to get \"Verse.ReachabilityCache.CachedEntry\"", 0x0DEAD006 );
-                }
+                Log.ErrorOnce( "Unable to get \"Verse.ReachabilityCache.CachedEntry\"", 0x0DEAD006 );
             }
+            _cache = typeof( Verse.Reachability ).GetField( "cache", BindingFlags.Static | BindingFlags.NonPublic );
             if( _cache == null )
             {
-                _cache = typeof( Verse.Reachability ).GetField( "cache", BindingFlags.Static | BindingFlags.NonPublic );
-                if( _cache == null )
-                {
-                    Log.ErrorOnce( "Unable to get \"Verse.Reachability.cache\"", 0x0DEAD002 );
-                }
+                Log.ErrorOnce( "Unable to get \"Verse.Reachability.cache\"", 0x0DEAD002 );
             }
+            _cacheDict = _ReachabilityCache.GetField( "cacheDict", BindingFlags.Instance | BindingFlags.NonPublic );
             if( _cacheDict == null )
             {
-                _cacheDict = _ReachabilityCache.GetField( "cacheDict", BindingFlags.Instance | BindingFlags.NonPublic );
-                if( _cacheDict == null )
-                {
-                    Log.ErrorOnce( "Unable to get \"Verse.ReachabilityCache.cacheDict\"", 0x0DEAD003 );
-                }
+                Log.ErrorOnce( "Unable to get \"Verse.ReachabilityCache.cacheDict\"", 0x0DEAD003 );
             }
-            var cache = _cache.GetValue( null );
+            cache = _cache.GetValue( null );
             if( cache == null )
             {
                 Log.ErrorOnce( "Unable to get static field value of \"Verse.Reachability.cache\"", 0x0DEAD004 );
             }
-            var cacheDict = (Dictionary<object, bool>)_cacheDict.GetValue( cache );
+            cacheDict = _cacheDict.GetValue( cache );
             if( cacheDict == null )
             {
                 Log.ErrorOnce( "Unable to get instance field value \"Verse.ReachabilityCache.cacheDict\"", 0x0DEAD005 );
             }
-            if( cacheDict.Count <= 0 )
+            _dictType = cacheDict.GetType();
+            _dictCount = _dictType.GetProperty( "Count" );
+            _dictClear = _dictType.GetMethod( "Clear" );
+        }
+
+        internal static int                 cacheDictCount()
+        {
+            return (int)_dictCount.GetValue( cacheDict, null );
+        }
+
+        internal static void                cacheDictClear()
+        {
+            _dictClear.Invoke( cacheDict, null );
+        }
+
+        internal static void                _ClearCache()
+        {
+            if( cacheDictCount() <= 0 )
             {
                 return;
             }
-            cacheDict.Clear();
+            cacheDictClear();
             if( Current.ProgramState != ProgramState.MapPlaying )
             {
                 return;
