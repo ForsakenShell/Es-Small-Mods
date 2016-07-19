@@ -29,6 +29,14 @@ namespace PrisonersAndSlaves
                     Log.ErrorOnce( "Unable to get \"Verse.ReachabilityCache\"", 0x0DEAD001 );
                 }
             }
+            if( _ReachabilityCache_CachedEntry == null )
+            {
+                _ReachabilityCache_CachedEntry = CommunityCoreLibrary.Controller.Data.Assembly_CSharp.GetType( "Verse.ReachabilityCache+CachedEntry" );
+                if( _ReachabilityCache_CachedEntry == null )
+                {
+                    Log.ErrorOnce( "Unable to get \"Verse.ReachabilityCache.CachedEntry\"", 0x0DEAD006 );
+                }
+            }
             if( _cache == null )
             {
                 _cache = typeof( Verse.Reachability ).GetField( "cache", BindingFlags.Static | BindingFlags.NonPublic );
