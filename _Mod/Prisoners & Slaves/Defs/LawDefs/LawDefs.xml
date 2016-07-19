@@ -7,7 +7,8 @@
         <defName>LawSocialFighting</defName>
         <label>social fighting</label>
         <description>Social fighting is a minor crime but still a crime.</description>
-        <daysToImprisonFor>0.25</daysToImprisonFor>
+        <severity>10</severity>
+        <daysToImprisonFor>2</daysToImprisonFor>
         <lawDriver>PrisonersAndSlaves.LawDriver_SocialFighting</lawDriver>
     </PrisonersAndSlaves.LawDef>
 
@@ -15,6 +16,7 @@
         <defName>LawPublicDrunkeness</defName>
         <label>public drunkeness</label>
         <description>Public intoxication isn't the worst thing that can happen.</description>
+        <severity>5</severity>
         <daysToImprisonFor>1</daysToImprisonFor>
         <takeHomeByDefault>true</takeHomeByDefault>
         <lawDriver>PrisonersAndSlaves.LawDriver_PublicDrunkeness</lawDriver>

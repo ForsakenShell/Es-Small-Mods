@@ -38,4 +38,21 @@
         <reportString>Removing restraints from TargetA.</reportString>
     </JobDef>
 
+    <!-- Override jobs -->
+    <JobDef>
+        <defName>Arrest</defName>
+        <driverClass>PrisonersAndSlaves.JobDriver_Warden_ArrestPawn</driverClass>
+        <reportString>Arresting TargetA.</reportString>
+        <alwaysShowWeapon>true</alwaysShowWeapon>
+        <makeTargetPrisoner>true</makeTargetPrisoner>
+        <casualInterruptible>false</casualInterruptible>
+    </JobDef>
+
+    <JobDef>
+        <defName>ReleasePrisoner</defName>
+        <driverClass>PrisonersAndSlaves.WorkGiver_Warden_ReleasePrisoner</driverClass>
+        <reportString>Releasing TargetA.</reportString>
+        <alwaysShowWeapon>true</alwaysShowWeapon>
+    </JobDef>
+
 </Defs>

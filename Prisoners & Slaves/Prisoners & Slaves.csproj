@@ -139,6 +139,7 @@
     <Compile Include="JobDrivers\JobDriver_Flicker_DoorLockToggle.cs" />
     <Compile Include="JobDrivers\JobDriver_Warden_ArrestPawn.cs" />
     <Compile Include="WorkGivers\WorkGiver_Warden_ReleasePrisoner.cs" />
+    <Compile Include="Detours\Detours_Reachability.cs" />
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>

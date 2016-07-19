@@ -73,11 +73,17 @@ namespace PrisonersAndSlaves
                 {
                     thingDef.comps = new List<CompProperties>();
                 }
-                thingDef.inspectorTabs.Add( typeof( ITab_Restricted ) );
-                thingDef.inspectorTabsResolved.Add( ITabManager.GetSharedInstance( typeof( ITab_Restricted ) ) );
+
+                if( !thingDef.inspectorTabs.Contains( typeof( ITab_Restricted ) ) )
+                {
+                    thingDef.inspectorTabs.Add( typeof( ITab_Restricted ) );
+                    thingDef.inspectorTabsResolved.Add( ITabManager.GetSharedInstance( typeof( ITab_Restricted ) ) );
+                }
+
                 thingDef.comps.Add( new CompProperties_RestrictedDoor() );
                 thingDef.comps.Add( new CompProperties_Ownable() );
                 thingDef.comps.Add( new CompProperties_Lockable() );
+
                 thingDef.drawGUIOverlay = true;
             }
         }
@@ -109,6 +115,16 @@ namespace PrisonersAndSlaves
             var PaS_Room_DrawFieldEdges =
                 typeof( _Room ).GetMethod( "_DrawFieldEdges", BindingFlags.Static | BindingFlags.NonPublic );
             if( !Detours.TryDetourFromTo( RW_Room_DrawFieldEdges, PaS_Room_DrawFieldEdges ) )
+            {
+                return false;
+            }
+
+            // Make reachability cache clearing tell Building_RestrictedDoor to clear its cache
+            var RW_Reachability_ClearCache =
+                typeof( Reachability ).GetMethod( "ClearCache", BindingFlags.Static | BindingFlags.Public );
+            var PaS_Reachability_ClearCache =
+                typeof( _Reachability ).GetMethod( "_ClearCache", BindingFlags.Static | BindingFlags.NonPublic );
+            if( !Detours.TryDetourFromTo( RW_Reachability_ClearCache, PaS_Reachability_ClearCache ) )
             {
                 return false;
             }
