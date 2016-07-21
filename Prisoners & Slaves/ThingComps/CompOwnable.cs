@@ -21,6 +21,8 @@ namespace PrisonersAndSlaves
 
         private bool _cachedOnlyOwners;
 
+        private bool _rebuildCache = true;
+
         private List<string> roomOwners;
         private List<string> userAddedOwners;
 
@@ -52,7 +54,8 @@ namespace PrisonersAndSlaves
             set
             {
                 _userOnlyOwners = value;
-                this.QueueUpdateOnParent();
+                //this.QueueUpdateOnParent();
+                Door.ClearCache();
             }
         }
 
@@ -157,7 +160,8 @@ namespace PrisonersAndSlaves
             {
                 userAddedOwners.Add( thingID );
             }
-            this.QueueUpdateOnParent();
+            //this.QueueUpdateOnParent();
+            Door.ClearCache();
             return true;
         }
 
@@ -188,7 +192,8 @@ namespace PrisonersAndSlaves
             {
                 userAddedOwners.Remove( thingID );
             }
-            this.QueueUpdateOnParent();
+            //this.QueueUpdateOnParent();
+            Door.ClearCache();
             return true;
         }
 
@@ -198,10 +203,15 @@ namespace PrisonersAndSlaves
 
         public override bool PawnCanOpen( Pawn p, bool isEscaping )
         {
-            if(
-                ( !OnlyOwners ) ||
-                ( Owners.Count() == 0 )
-            )
+            if( !OnlyOwners )
+            {   // Not restricted to owners
+                return true;
+            }
+            if( _rebuildCache )
+            {
+                RebuildOwners();
+            }
+            if( Owners.Count() == 0 )
             {
                 //Log.Message( string.Format( "\tCompOwnable: door {0} is not owned", this.parent.ThingID ) );
                 return true;
@@ -255,6 +265,11 @@ namespace PrisonersAndSlaves
 
         #region Update Auto-Detect flags
 
+        public override void ClearCache()
+        {
+            _rebuildCache = true;
+        }
+
         public override void UpdateCompStatus()
         {
             RebuildOwners();
@@ -262,22 +277,26 @@ namespace PrisonersAndSlaves
 
         public bool RebuildOwners( bool clearUserAdded = false )
         {
+            //Log.Message( string.Format( "Thing {0} RebuildOwners", this.parent.ThingID ) );
+            var thisRoom = this.parent.GetRoom();
+            if( thisRoom == null )
+            {
+                //Log.Message( string.Format( "Thing {0} has no room!", this.parent.ThingID ) );
+                return false;
+            }
+            _rebuildCache = false;
             roomOwners.Clear();
             _cachedOnlyOwners = false;
             if( clearUserAdded )
             {
                 userAddedOwners.Clear();
             }
-            var thisRoom = this.parent.GetRoom();
-            if( thisRoom == null )
-            {
-                return false;
-            }
             if( UserOnlyOwners )
             {
-                roomOwners.Clear();
+                //Log.Message( string.Format( "Thing {0} - UserOnlyOwners", this.parent.ThingID ) );
                 if( this.parent is Building_Door )
                 {   // Look at rooms this connects to
+                    //Log.Message( string.Format( "Thing {0} is a door", this.parent.ThingID ) );
                     foreach( var region in this.parent.Position.GetRegion().NonPortalNeighbors )
                     {
                         if(
@@ -291,9 +310,11 @@ namespace PrisonersAndSlaves
                             }
                         }
                     }
+                    //Log.Message( string.Format( "Door {0} has {1} owners", this.parent.ThingID, roomOwners.Count ) );
                 }
                 else
                 {   // Look at contained room only
+                    //Log.Message( string.Format( "Thing {0} is not a door", this.parent.ThingID ) );
                     if(
                         ( thisRoom != null ) &&
                         ( thisRoom.Owners.Count() > 0 )
@@ -313,6 +334,7 @@ namespace PrisonersAndSlaves
 
         private void RecachePotentialOwners()
         {
+            //Log.Message( string.Format( "Thing {0} RecachePotentialOwners", this.parent.ThingID ) );
             allPotentialOwners = Find.MapPawns.FreeColonists.ToList().ListFullCopy();
             potentialOwners = new List<Pawn>();
             //var dump = "allPotentialOwners:";

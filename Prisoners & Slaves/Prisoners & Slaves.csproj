@@ -8,7 +8,7 @@
     <RootNamespace>PrisonersAndSlaves</RootNamespace>
     <AssemblyName>Prisoners &amp; Slaves</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ReleaseVersion>0.13.0.0</ReleaseVersion>
+    <ReleaseVersion>0.14.0.0</ReleaseVersion>
     <SynchReleaseVersion>false</SynchReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -140,6 +140,13 @@
     <Compile Include="JobDrivers\JobDriver_Warden_ArrestPawn.cs" />
     <Compile Include="WorkGivers\WorkGiver_Warden_ReleasePrisoner.cs" />
     <Compile Include="Detours\Detours_Reachability.cs" />
+    <Compile Include="LawDrivers\LawDriver_MentalBreak.cs" />
+    <Compile Include="JobDrivers\JobDriver_Warden_ReleasePrisoner.cs" />
+    <Compile Include="Detours\Detours_WorkGiver_Warden.cs" />
+    <Compile Include="Detours\Detours_WardenFeedUtility.cs" />
+    <Compile Include="WorkGivers\WorkGiver_Warden_DeliverFood.cs" />
+    <Compile Include="JobDrivers\JobDriver_FoodDeliver.cs" />
+    <Compile Include="RoomRoleWorkers\RoomRoleWorker_SlaveWorkArea.cs" />
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>

@@ -102,6 +102,7 @@ namespace PrisonersAndSlaves
                 return;
             }
             //Log.Message( string.Format( "{0}.ChangeLockState( {1} )", parent.ThingID, value ) );
+            setLockState = value;
             locked = value;
             picked = false;
             changeStateAfterTick = Find.TickManager.TicksGame + LockAttemptTimeOut;
@@ -192,6 +193,10 @@ namespace PrisonersAndSlaves
             }
         }
 
+        public override void UpdateCompStatus()
+        {
+        }
+
         public override void PostExposeData()
         {
             base.PostExposeData();
@@ -264,6 +269,10 @@ namespace PrisonersAndSlaves
             }
         }
 
+        public override void ClearCache()
+        {
+        }
+
         #endregion
 
         #region Check if Locked to Pawn
@@ -275,8 +284,15 @@ namespace PrisonersAndSlaves
             {   // Not locked to anyone
                 return true;
             }
-            if( p.IsPrisonerOfColony )
-            {   // Locked to prisoners (and slaves)
+            var compPrisoner = p.TryGetComp<CompPrisoner>();
+            if(
+                ( p.IsPrisonerOfColony )||
+                (
+                    ( compPrisoner != null )&&
+                    ( compPrisoner.wasArrested )
+                )
+            )
+            {   // Locked to prisoners, slaves and colonists under house arrest
                 //Log.Message( string.Format( "\tCompLockable: door {0} is locked and pawn {1} is a prisoner/slave", this.parent.ThingID, p.NameStringShort ) );
                 return false;
             }

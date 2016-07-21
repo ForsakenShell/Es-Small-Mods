@@ -71,6 +71,8 @@
     <PaS_Allow_Prisoners>Allow Prisoners</PaS_Allow_Prisoners>
     <PaS_Allow_Slaves>Allow Slaves</PaS_Allow_Slaves>
     <PaS_Allow_Guests>Allow Guests</PaS_Allow_Guests>
+    <PaS_Allow_Colonists>Allow Colonists</PaS_Allow_Colonists>
+    <PaS_Allow_Animals>Allow Animals</PaS_Allow_Animals>
     <PaS_Only_Owners>Restrict to Owners</PaS_Only_Owners>
     <PaS_Assign_Ownership>Assign Owners</PaS_Assign_Ownership>
     <PaS_Reset_Ownership>Reset Owners</PaS_Reset_Ownership>

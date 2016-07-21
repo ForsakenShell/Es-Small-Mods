@@ -399,6 +399,7 @@ namespace PrisonersAndSlaves
 
         private void DrawPawnRow_WorkAssignments( Rect rect, Pawn p )
         {
+            p.workSettings.Disable( WorkTypeDefOf.Warden );
             var x = 175f;
             Text.Font = GameFont.Medium;
             for( int index = 0; index < VisibleWorkTypeDefsInPriorityOrder.Count; ++index )

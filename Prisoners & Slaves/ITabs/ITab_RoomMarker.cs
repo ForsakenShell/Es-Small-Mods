@@ -13,7 +13,7 @@ namespace PrisonersAndSlaves
 
         static ITab_RoomMarker()
         {
-            ITab_RoomMarker.WinSize = new Vector2( 300f, 150f );
+            ITab_RoomMarker.WinSize = new Vector2( 300f, 160f );
         }
 
         public ITab_RoomMarker()
@@ -42,7 +42,7 @@ namespace PrisonersAndSlaves
         {
             var marker = SelMarker;
             Text.Font = GameFont.Small;
-            var listing = new Listing_Standard( new Rect( 10f, 10f, this.size.x - 10f, this.size.y - 10f ).GetInnerRect() );
+            var listing = new Listing_Standard( new Rect( 10f, 10f, this.size.x - 20f, this.size.y - 20f ) );
             {
                 #region Marker Name
                 var nameRect = listing.GetRect( 30f );

@@ -52,6 +52,15 @@ namespace PrisonersAndSlaves
 
         }
 
+        internal static class RoomRoleDefOf
+        {
+
+            public static RoomRoleDef   PrisonCommons                   = DefDatabase<RoomRoleDef>.GetNamed( "PrisonCommons", true );
+            public static RoomRoleDef   PrisonYard                      = DefDatabase<RoomRoleDef>.GetNamed( "PrisonYard", true );
+            public static RoomRoleDef   SlaveWorkArea                   = DefDatabase<RoomRoleDef>.GetNamed( "SlaveWorkArea", true );
+
+        }
+
         internal static class ThoughtDefOf
         {
             
@@ -198,6 +207,8 @@ namespace PrisonersAndSlaves
             public const string AllowPrisoners                          = "PaS_Allow_Prisoners";
             public const string AllowSlaves                             = "PaS_Allow_Slaves";
             public const string AllowGuests                             = "PaS_Allow_Guests";
+            public const string AllowColonists                          = "PaS_Allow_Colonists";
+            public const string AllowAnimals                            = "PaS_Allow_Animals";
 
             public const string MedicalCare                             = "PaS_Slave_MedicalCare";
 
@@ -345,7 +356,8 @@ namespace PrisonersAndSlaves
                 var door = building as Building_RestrictedDoor;
                 if( door != null )
                 {
-                    door.QueueDoorStatusUpdate();
+                    //door.QueueDoorStatusUpdate();
+                    door.ClearCache();
                 }
             }
         }

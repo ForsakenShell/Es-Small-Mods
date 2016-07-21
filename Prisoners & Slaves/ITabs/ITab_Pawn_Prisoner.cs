@@ -37,16 +37,29 @@ namespace PrisonersAndSlaves
                     return true;
                 }
                 this.labelKey = Data.Strings.ITabPrisonerLabel;
-                return ( this.SelPawn.IsPrisonerOfColony );
+                var compPrisoner = this.SelPawn.TryGetComp<CompPrisoner>();
+                return(
+                    ( this.SelPawn.IsPrisonerOfColony )||
+                    (
+                        ( compPrisoner != null )&&
+                        ( compPrisoner.wasArrested )
+                    )
+                );
             }
         }
 
         protected override void FillTab()
         {
             var compPrisoner = this.SelPawn.TryGetComp<CompPrisoner>();
-            bool isSlave = (
-                ( this.SelPawn.IsSlaveOfColony() ) &&
-                ( compPrisoner != null )
+            if( compPrisoner == null )
+            {
+                throw new Exception( "ITab_Pawn_Prisoner on non-human!" );
+            }
+
+            bool isSlave = this.SelPawn.IsSlaveOfColony();
+            bool isColonist = (
+                ( !this.SelPawn.IsPrisonerOfColony )&&
+                ( compPrisoner.wasArrested )
             );
 
             ConceptDatabase.KnowledgeDemonstrated( ConceptDefOf.PrisonerTab, KnowledgeAmount.GuiFrame );
@@ -62,20 +75,28 @@ namespace PrisonersAndSlaves
                 {
                     var textFont = Text.Font;
                     Text.Font = GameFont.Tiny;
-                    var devRect = iTabListing.GetRect( 7f * 16f );
+                    var devRect = iTabListing.GetRect( ( isColonist ? 4f : isSlave ? 5f : 6f ) * 16f );
                     devRect.height = 20f;
                     Widgets.Label( devRect, "Debug Info:" );
                     devRect.y += 16f;
-                    Widgets.Label( devRect, string.Format( "MTB Prison break (days): {0}", (int) PrisonBreakUtility.InitiatePrisonBreakMtbDays( this.SelPawn ) ) );
-                    devRect.y += 16f;
-                    Widgets.Label( devRect, string.Format( "Odds of escape attempt: {0}", (int) ( 100f * this.SelPawn.EscapeProbability() ) ) );
-                    devRect.y += 16f;
-                    Widgets.Label( devRect, string.Format( "Mood: {0}", (int) ( 100f * this.SelPawn.needs.mood.CurLevel ) ) );
-                    devRect.y += 16f;
-                    Widgets.Label( devRect, string.Format( "Can be seen by colony: {0}", this.SelPawn.CanBeSeenByColony().ToString() ) );
-                    devRect.y += 16f;
-                    Widgets.Label( devRect, string.Format( "Thinks they can be seen: {0}", this.SelPawn.ThinksTheyCanBeSeenByColony().ToString() ) );
-                    devRect.y += 16f;
+                    if( !isColonist )
+                    {
+                        Widgets.Label( devRect, string.Format( "MTB Prison break (days): {0}", (int) PrisonBreakUtility.InitiatePrisonBreakMtbDays( this.SelPawn ) ) );
+                        devRect.y += 16f;
+                        Widgets.Label( devRect, string.Format( "Odds of escape attempt: {0}", (int) ( 100f * this.SelPawn.EscapeProbability() ) ) );
+                        devRect.y += 16f;
+                        Widgets.Label( devRect, string.Format( "Mood: {0}", (int) ( 100f * this.SelPawn.needs.mood.CurLevel ) ) );
+                        devRect.y += 16f;
+                        Widgets.Label( devRect, string.Format( "Sight (actual/thought): {0}/{1}", this.SelPawn.CanBeSeenByColony(), this.SelPawn.ThinksTheyCanBeSeenByColony() ) );
+                        devRect.y += 16f;
+                    }
+                    else
+                    {
+                        Widgets.Label( devRect, string.Format( "wasArrested/Release: {0}", compPrisoner.wasArrested) );
+                        devRect.y += 16f;
+                        Widgets.Label( devRect, string.Format( "Release/Current: {0}/{1}", compPrisoner.releaseAfterTick, Find.TickManager.TicksGame ) );
+                        devRect.y += 16f;
+                    }
 
                     #region Prisoner Recruitment Difficulty
                     if( !isSlave )
@@ -103,65 +124,69 @@ namespace PrisonersAndSlaves
                 #endregion
 
                 #region Prisoner/Slave Interaction Options
-                var interactionsRect = iTabListing.GetRect( innerBorder * 2f + 28f * ( isSlave ? 4 : 6 ) );
-                Widgets.DrawMenuSection( interactionsRect, true );
-                var interactionsInnerRect = interactionsRect.ContractedBy( innerBorder );
-                GUI.BeginGroup( interactionsInnerRect );
+                if( !isColonist )
                 {
-                    var optionRect = new Rect( 0.0f, 0.0f, interactionsInnerRect.width, 30f );
-
-                    #region Core Options
-                    foreach( PrisonerInteractionMode mode in Enum.GetValues( typeof( PrisonerInteractionMode ) ) )
+                    var interactionsRect = iTabListing.GetRect( innerBorder * 2f + 28f * ( isSlave ? 4 : 6 ) );
+                    Widgets.DrawMenuSection( interactionsRect, true );
+                    var interactionsInnerRect = interactionsRect.ContractedBy( innerBorder );
+                    GUI.BeginGroup( interactionsInnerRect );
                     {
-                        // Can't recruit slaves and they have their own release mechanism
-                        bool showThis = (
-                            ( !isSlave ) ||
-                            (
-                                ( mode != PrisonerInteractionMode.AttemptRecruit ) &&
-                                ( mode != PrisonerInteractionMode.Release )
-                            )
-                        );
-                        if( showThis )
+                        var optionRect = new Rect( 0.0f, 0.0f, interactionsInnerRect.width, 30f );
+
+                        #region Core Options
+                        foreach( PrisonerInteractionMode mode in Enum.GetValues( typeof( PrisonerInteractionMode ) ) )
                         {
-                            if( Widgets.RadioButtonLabeled( optionRect, mode.GetLabel(), this.SelPawn.guest.interactionMode == mode ) )
+                            // Can't recruit slaves and they have their own release mechanism
+                            bool showThis = (
+                                ( !isSlave ) ||
+                                (
+                                    ( mode != PrisonerInteractionMode.AttemptRecruit ) &&
+                                    ( mode != PrisonerInteractionMode.Release )
+                                )
+                            );
+                            if( showThis )
                             {
-                                this.SelPawn.guest.interactionMode = mode;
+                                if( Widgets.RadioButtonLabeled( optionRect, mode.GetLabel(), this.SelPawn.guest.interactionMode == mode ) )
+                                {
+                                    this.SelPawn.guest.interactionMode = mode;
+                                }
+                                optionRect.y += 28f;
+                            }
+                        }
+                        #endregion
+
+                        #region Prisoner Specific Options
+                        if( !isSlave )
+                        {
+                            // Enslave prisoner
+                            if( Widgets.RadioButtonLabeled( optionRect, Data.Strings.Enslave.Translate(), this.SelPawn.guest.interactionMode == Data.PIM.EnslavePrisoner ) )
+                            {
+                                this.SelPawn.guest.interactionMode = Data.PIM.EnslavePrisoner;
                             }
                             optionRect.y += 28f;
                         }
-                    }
-                    #endregion
+                        #endregion
 
-                    #region Prisoner Specific Options
-                    if( !isSlave )
-                    {
-                        // Enslave prisoner
-                        if( Widgets.RadioButtonLabeled( optionRect, Data.Strings.Enslave.Translate(), this.SelPawn.guest.interactionMode == Data.PIM.EnslavePrisoner ) )
+                        #region Slave Specific Options
+                        if( isSlave )
                         {
-                            this.SelPawn.guest.interactionMode = Data.PIM.EnslavePrisoner;
+                            // Free slave
+                            if( Widgets.RadioButtonLabeled( optionRect, Data.Strings.FreeSlave.Translate(), this.SelPawn.guest.interactionMode == Data.PIM.FreeSlave ) )
+                            {
+                                this.SelPawn.guest.interactionMode = Data.PIM.FreeSlave;
+                            }
+                            optionRect.y += 28f;
                         }
-                        optionRect.y += 28f;
-                    }
-                    #endregion
+                        #endregion
 
-                    #region Slave Specific Options
-                    if( isSlave )
-                    {
-                        // Free slave
-                        if( Widgets.RadioButtonLabeled( optionRect, Data.Strings.FreeSlave.Translate(), this.SelPawn.guest.interactionMode == Data.PIM.FreeSlave ) )
-                        {
-                            this.SelPawn.guest.interactionMode = Data.PIM.FreeSlave;
-                        }
-                        optionRect.y += 28f;
                     }
-                    #endregion
-
+                    GUI.EndGroup();
+                    iTabListing.Gap( innerBorder );
                 }
-                GUI.EndGroup();
-                iTabListing.Gap( innerBorder );
                 #endregion
 
-                if( compPrisoner != null )
+                #region Transer Pawn
+                if( !isColonist )
                 {
 
                     #region [Cancel] Transfer Button
@@ -249,17 +274,24 @@ namespace PrisonersAndSlaves
                     #endregion
 
                 }
+                #endregion
 
                 #region Food
-                var getsFood = this.SelPawn.guest.GetsFood;
-                iTabListing.CheckboxLabeled( Data.Strings.GetsFood.Translate(), ref getsFood, (string) null );
-                this.SelPawn.guest.GetsFood = getsFood;
+                if( !isColonist )
+                {
+                    var getsFood = this.SelPawn.guest.GetsFood;
+                    iTabListing.CheckboxLabeled( Data.Strings.GetsFood.Translate(), ref getsFood, (string) null );
+                    this.SelPawn.guest.GetsFood = getsFood;
+                }
                 #endregion
 
                 #region Medicine
-                var medicalCareRect = iTabListing.GetRect( 28f );
-                medicalCareRect.width = MedicalCareUtility.CareSetterWidth;
-                MedicalCareUtility.MedicalCareSetter( medicalCareRect, ref this.SelPawn.playerSettings.medCare );
+                if( !isColonist )
+                {
+                    var medicalCareRect = iTabListing.GetRect( 28f );
+                    medicalCareRect.width = MedicalCareUtility.CareSetterWidth;
+                    MedicalCareUtility.MedicalCareSetter( medicalCareRect, ref this.SelPawn.playerSettings.medCare );
+                }
                 #endregion
 
             }

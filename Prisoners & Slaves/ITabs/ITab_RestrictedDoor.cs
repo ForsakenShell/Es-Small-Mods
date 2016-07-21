@@ -14,7 +14,7 @@ namespace PrisonersAndSlaves
     public class ITab_Restricted : ITab
     {
 
-        private const float             defaultHeight = GenUI.Gap + 188f + GenUI.Gap;
+        private const float             defaultHeight = GenUI.Gap + 236f + GenUI.Gap;
         private const float             defaultWidth = GenUI.Gap + Data.DefaultColumnWidth + GenUI.Gap;
 
         private static readonly Vector2 WinSize;

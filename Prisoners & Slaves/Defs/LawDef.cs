@@ -16,6 +16,7 @@ namespace PrisonersAndSlaves
         public bool                 arrestSlaves = false;
         public bool                 allowLethalForceToSubdue = false;
         public bool                 takeHomeByDefault = false;
+        public bool                 takeToPrisonIfNoHome = true;
 
         public Type                 lawDriver;
 

@@ -22,7 +22,7 @@ namespace PrisonersAndSlaves
                 ( !RCellFinder.TryFindBestExitSpot( pawn, out spot, TraverseMode.ByPawn ) )
             )
             {
-                return (Job) null;
+                return null;
             }
             if( !pawn.guest.released )
             {

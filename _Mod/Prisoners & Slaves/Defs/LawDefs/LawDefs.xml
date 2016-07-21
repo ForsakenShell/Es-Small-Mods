@@ -22,4 +22,15 @@
         <lawDriver>PrisonersAndSlaves.LawDriver_PublicDrunkeness</lawDriver>
     </PrisonersAndSlaves.LawDef>
 
+    <PrisonersAndSlaves.LawDef>
+        <defName>LawMentalBreak</defName>
+        <label>mental break</label>
+        <description>Mental breaks aren't a crime, but let's take the poor sap home.</description>
+        <severity>1</severity>
+        <daysToImprisonFor>1</daysToImprisonFor>
+        <takeHomeByDefault>true</takeHomeByDefault>
+        <takeToPrisonIfNoHome>false</takeToPrisonIfNoHome>
+        <lawDriver>PrisonersAndSlaves.LawDriver_MentalBreak</lawDriver>
+    </PrisonersAndSlaves.LawDef>
+
 </Defs>

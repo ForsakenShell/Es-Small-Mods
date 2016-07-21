@@ -18,10 +18,14 @@ namespace PrisonersAndSlaves
         private bool                            _userAllowPrisoners;
         private bool                            _userAllowSlaves;
         private bool                            _userAllowGuests;
+        private bool                            _userAllowColonists;
+        private bool                            _userAllowAnimals;
 
         private bool                            _cacheAllowPrisoners;
         private bool                            _cacheAllowSlaves;
         private bool                            _cacheAllowGuests;
+        private bool                            _cacheAllowColonists;
+        private bool                            _cacheAllowAnimals;
 
         private Room                            doorRoom;
         private List<Room>                      cachedRooms;
@@ -54,6 +58,22 @@ namespace PrisonersAndSlaves
             }
         }
 
+        public bool                             AllowColonists
+        {
+            get
+            {
+                return _cacheAllowColonists;
+            }
+        }
+
+        public bool                             AllowAnimals
+        {
+            get
+            {
+                return _cacheAllowAnimals;
+            }
+        }
+
         public bool                             UserAllowPrisoners
         {
             get
@@ -63,7 +83,8 @@ namespace PrisonersAndSlaves
             set
             {
                 _userAllowPrisoners = value;
-                this.QueueUpdateOnParent();
+                //this.QueueUpdateOnParent();
+                Door.ClearCache();
             }
         }
 
@@ -76,7 +97,8 @@ namespace PrisonersAndSlaves
             set
             {
                 _userAllowSlaves = value;
-                this.QueueUpdateOnParent();
+                //this.QueueUpdateOnParent();
+                Door.ClearCache();
             }
         }
 
@@ -89,7 +111,36 @@ namespace PrisonersAndSlaves
             set
             {
                 _userAllowGuests = value;
-                this.QueueUpdateOnParent();
+                //this.QueueUpdateOnParent();
+                Door.ClearCache();
+            }
+        }
+
+        public bool                             UserAllowColonists
+        {
+            get
+            {
+                return _userAllowColonists;
+            }
+            set
+            {
+                _userAllowColonists = value;
+                //this.QueueUpdateOnParent();
+                Door.ClearCache();
+            }
+        }
+
+        public bool                             UserAllowAnimals
+        {
+            get
+            {
+                return _userAllowAnimals;
+            }
+            set
+            {
+                _userAllowAnimals = value;
+                //this.QueueUpdateOnParent();
+                Door.ClearCache();
             }
         }
 
@@ -145,7 +196,7 @@ namespace PrisonersAndSlaves
         public override void DrawColumns( Listing_Standard listing, float physicalHeight, bool overridden = false )
         {
             #region Restriction Settings
-            var restrictionsRect = listing.GetRect( 3 * ( GenUI.ListSpacing - GenUI.GapTiny ) + GenUI.Pad * 2f );
+            var restrictionsRect = listing.GetRect( 5 * ( GenUI.ListSpacing - GenUI.GapTiny ) + GenUI.Pad * 2f );
             Widgets.DrawMenuSection( restrictionsRect, true );
             var restrictedPosition = restrictionsRect.ContractedBy( GenUI.Pad );
             GUI.BeginGroup( restrictedPosition );
@@ -163,6 +214,14 @@ namespace PrisonersAndSlaves
                 localValue = UserAllowGuests;
                 ITab_Restricted.DoLabelCheckbox( ref restrictionRect, Data.Strings.AllowGuests, ref localValue, overridden );
                 UserAllowGuests = localValue;
+
+                localValue = UserAllowColonists;
+                ITab_Restricted.DoLabelCheckbox( ref restrictionRect, Data.Strings.AllowColonists, ref localValue, overridden );
+                UserAllowColonists = localValue;
+
+                localValue = UserAllowAnimals;
+                ITab_Restricted.DoLabelCheckbox( ref restrictionRect, Data.Strings.AllowAnimals, ref localValue, overridden );
+                UserAllowAnimals = localValue;
             }
             GUI.EndGroup();
             listing.Gap();
@@ -171,9 +230,11 @@ namespace PrisonersAndSlaves
 
         public override void PostCompMake()
         {
-            _userAllowPrisoners = Props.DefaultAllowForPrisoners;
-            _userAllowSlaves = Props.DefaultAllowForSlaves;
-            _userAllowGuests = Props.DefaultAllowForGuests;
+            _userAllowPrisoners = Props.DefaultAllowPrisoners;
+            _userAllowSlaves = Props.DefaultAllowSlaves;
+            _userAllowGuests = Props.DefaultAllowGuests;
+            _userAllowColonists = Props.DefaultAllowColonists;
+            _userAllowAnimals = Props.DefaultAllowAnimals;
         }
 
         public override void PostDrawExtraSelectionOverlays()
@@ -195,7 +256,8 @@ namespace PrisonersAndSlaves
             Scribe_Values.LookValue( ref _userAllowPrisoners, "allowPrisoners" );
             Scribe_Values.LookValue( ref _userAllowSlaves, "allowSlaves" );
             Scribe_Values.LookValue( ref _userAllowGuests, "allowGuests" );
-
+            Scribe_Values.LookValue( ref _userAllowColonists, "allowColonists" );
+            Scribe_Values.LookValue( ref _userAllowAnimals, "allowColonists" );
         }
 
         #endregion
@@ -204,6 +266,10 @@ namespace PrisonersAndSlaves
 
         public override bool PawnCanOpen( Pawn p, bool isEscaping )
         {
+            if( cachedRooms.Count == 0 )
+            {
+                UpdateCompStatus();
+            }
             if( isEscaping )
             {   // Escaping pawns don't care about restrictions
                 return true;
@@ -213,7 +279,26 @@ namespace PrisonersAndSlaves
                 //Log.Message( string.Format( "\tCompRestrictedDoor: door {0}, pawn {1} IsForbiddenToPass", this.parent.ThingID, p.NameStringShort ) );
                 return false;
             }
+            // Check animals
+            if(
+                ( p.RaceProps.Animal )&&
+                ( !AllowAnimals )
+            )
+            {
+                return false;
+            }
             // Check colonists
+            if(
+                ( p.IsColonist )&&
+                ( !AllowColonists )&&
+                ( !p.IsPrisonerOfColony )&&
+                ( !p.Drafted )&&
+                ( !p.workSettings.WorkIsActive( WorkTypeDefOf.Warden ) )&&
+                ( !p.workSettings.WorkIsActive( WorkTypeDefOf.Doctor ) )
+            )
+            {   // Colonists have been told not to use this door
+                return false;
+            }
             if(
                 (
                     ( p.IsColonist )||
@@ -320,6 +405,8 @@ namespace PrisonersAndSlaves
             str += flagString( "p", AllowPrisoners );
             str += flagString( "s", AllowSlaves );
             str += flagString( "g", AllowGuests );
+            str += flagString( "c", AllowColonists );
+            str += flagString( "a", AllowAnimals );
             return base.CompInspectStringExtra() + str;
         }
 #endif
@@ -327,6 +414,14 @@ namespace PrisonersAndSlaves
         #endregion
 
         #region Update Auto-Detect flags
+
+        public override void ClearCache()
+        {
+            if( cachedRooms.Count > 0 )
+            {
+                cachedRooms.Clear();
+            }
+        }
 
         public override void UpdateCompStatus()
         {
@@ -338,6 +433,8 @@ namespace PrisonersAndSlaves
             _cacheAllowPrisoners = false;
             _cacheAllowSlaves = false;
             _cacheAllowGuests = false;
+            _cacheAllowColonists = UserAllowColonists;
+            _cacheAllowAnimals = UserAllowAnimals;
             if( doorRoom == null )
             {
                 return;

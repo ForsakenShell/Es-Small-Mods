@@ -11,62 +11,67 @@ using UnityEngine;
 namespace PrisonersAndSlaves
 {
     
-    public class WorkGiver_Warden_ReleasePrisoner : WorkGiver_Scanner
+    public class WorkGiver_Warden_ReleasePrisoner : WorkGiver_Warden
     {
         
-        public override ThingRequest PotentialWorkThingRequest
-        {
-            get
-            {
-                return ThingRequest.ForGroup( ThingRequestGroup.Pawn );
-            }
-        }
-
         public override Job JobOnThing( Pawn pawn, Thing t )
         {
-            var otherPawn = t as Pawn;
-            if( otherPawn == null )
-            {   // Thing isn't a pawn
+            //Log.Message( string.Format( "WorkGiver_Warden_ReleasePrisoner( {0}, {1} )", pawn.LabelShort, t.ThingID ) );
+            if( !ShouldTakeCareOfPrisoner( pawn, t ) )
+            {   // Not a prisoner
                 return null;
             }
 
-            var compPrisoner = otherPawn.TryGetComp<CompPrisoner>();
+            var prisoner = t as Pawn;
+            var compPrisoner = prisoner.TryGetComp<CompPrisoner>();
             if( compPrisoner == null )
             {   // Pawn is missing comp
-                Log.ErrorOnce( string.Format( "{0} is missing CompPrisoner!", otherPawn.LabelShort ), ( 0x0BAD0000 | ( otherPawn.GetHashCode() & 0x0000FFFF ) ) );
+                //Log.Message( string.Format( "\t{0} is missing CompPrisoner!", prisoner.LabelShort ) );
                 return null;
             }
 
-            if( !ShouldTakeCareOfPrisoner( pawn, otherPawn, compPrisoner ) )
-            {   // Not a prisoner or not ready to be released
-                return (Job) null;
+            if(
+                (
+                    ( prisoner.IsPrisonerOfColony )&&
+                    ( prisoner.guest.interactionMode != PrisonerInteractionMode.Release )
+                )||
+                (
+                    ( compPrisoner.releaseAfterTick > 0 )&&
+                    ( Find.TickManager.TicksGame < compPrisoner.releaseAfterTick )
+                )
+            )
+            {
+                //Log.Message( string.Format( "\t{0} - IsPrisonerOfColony && interactionMode != Release OR TicksGame < releaseAfterTick", prisoner.LabelShort ) );
+                return null;
             }
 
             IntVec3 releaseCell = IntVec3.Invalid;
             if(
-                ( !otherPawn.IsColonist )&&
-                ( !RCellFinder.TryFindPrisonerReleaseCell( otherPawn, pawn, out releaseCell ) )
+                ( !prisoner.IsColonist )&&
+                ( !RCellFinder.TryFindPrisonerReleaseCell( prisoner, pawn, out releaseCell ) )
             )
             {   // Can't find a release spot for non-colonists
+                //Log.Message( string.Format( "\t{0} - !IsColonst && !TryFindPrisonerReleaseCell", prisoner.LabelShort ) );
                 return null;
             }
 
-            Log.Message( string.Format( "{0} wants to release {1}", pawn.NameStringShort, otherPawn.NameStringShort ) );
+            //Log.Message( string.Format( "{0} wants to release {1}", pawn.NameStringShort, prisoner.NameStringShort ) );
 
             List<Building_Door> doors = null;
 
             if(
                 ( compPrisoner.lawBroken.takeHomeByDefault )&&
-                ( otherPawn.IsColonist )
+                ( prisoner.IsColonist )
             )
             {   // Take the offender home (only if they are a colonist)
-                Log.Message( string.Format( "{0} wants to release {1} from home", pawn.NameStringShort, otherPawn.NameStringShort ) );
-                var bedFor = otherPawn.ownership.OwnedBed;
+                //Log.Message( string.Format( "{0} wants to release {1} from home", pawn.NameStringShort, prisoner.NameStringShort ) );
+                var bedFor = prisoner.ownership.OwnedBed;
                 doors = bedFor.GetRoom().Portals();
             }
-            var releaseJob = new Job( JobDefOf.ReleasePrisoner, otherPawn, null, releaseCell );
+            var releaseJob = new Job( JobDefOf.ReleasePrisoner, prisoner, null, releaseCell );
             if( !doors.NullOrEmpty() )
             {
+                Log.Message( "Queueing doors to unlock" );
                 releaseJob.targetQueueB = new List<TargetInfo>();
                 releaseJob.numToBringList = new List<int>();
                 foreach( var door in doors )
@@ -86,35 +91,6 @@ namespace PrisonersAndSlaves
             return releaseJob;
         }
 
-        protected bool ShouldTakeCareOfPrisoner( Pawn warden, Pawn prisoner, CompPrisoner comp )
-        {
-            if( prisoner == null )
-            {
-                return false;
-            }
-            if(
-                ( prisoner.InAggroMentalState )||
-                ( warden.IsForbidden( prisoner ) )||
-                ( !warden.CanReserveAndReach( prisoner, PathEndMode.OnCell, warden.NormalMaxDanger(), 1 ) )||
-                ( prisoner.Downed )||
-                ( !prisoner.Awake() )
-            )
-            {
-                return false;
-            }
-            if(
-                ( prisoner.IsPrisonerOfColony )&&
-                ( prisoner.guest.PrisonerIsSecure )&&
-                ( prisoner.holder == null )
-            )
-            {
-                return( prisoner.guest.interactionMode == PrisonerInteractionMode.Release );
-            }
-            return(
-                ( comp.wasArrested )&&
-                ( Find.TickManager.TicksGame > comp.releaseAfterTick )
-            );
-        }
     }
 
 }

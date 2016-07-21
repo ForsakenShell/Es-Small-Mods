@@ -2,6 +2,19 @@
 <Defs>
 
     <RoomRoleDef>
+        <defName>PrisonCommons</defName>
+        <label>prison commons</label>
+        <workerClass>PrisonersAndSlaves.RoomRoleWorker_PrisonCommons</workerClass>
+        <relatedStats>
+            <li>Beauty</li>
+            <li>Cleanliness</li>
+            <li>Wealth</li>
+            <li>Space</li>
+            <li>Impressiveness</li>
+        </relatedStats>
+    </RoomRoleDef>
+
+    <RoomRoleDef>
         <defName>PrisonYard</defName>
         <label>prison yard</label>
         <workerClass>PrisonersAndSlaves.RoomRoleWorker_PrisonYard</workerClass>
@@ -15,9 +28,9 @@
     </RoomRoleDef>
 
     <RoomRoleDef>
-        <defName>PrisonCommons</defName>
-        <label>prison commons</label>
-        <workerClass>PrisonersAndSlaves.RoomRoleWorker_PrisonCommons</workerClass>
+        <defName>SlaveWorkArea</defName>
+        <label>slave work area</label>
+        <workerClass>PrisonersAndSlaves.RoomRoleWorker_SlaveWorkArea</workerClass>
         <relatedStats>
             <li>Beauty</li>
             <li>Cleanliness</li>

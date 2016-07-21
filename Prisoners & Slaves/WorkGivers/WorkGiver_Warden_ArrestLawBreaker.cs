@@ -24,6 +24,7 @@ namespace PrisonersAndSlaves
 
         public override Job JobOnThing( Pawn pawn, Thing t )
         {
+            //Log.Message( string.Format( "WorkGiver_Warden_ArrestLawBreaker( {0}, {1} )", pawn.LabelShort, t.ThingID ) );
             if( Monitor.laws.NullOrEmpty() )
             {   // No laws to enforce
                 return null;
@@ -36,18 +37,20 @@ namespace PrisonersAndSlaves
 
             if( !pawn.CanReserveAndReach( otherPawn, PathEndMode.ClosestTouch, Danger.Deadly, 1 ) )
             {   // Can't get to other pawn
+                //Log.Message( string.Format( "\t{0} cannot reach and reserve {1}", pawn.LabelShort, t.ThingID ) );
                 return null;
             }
 
             var compPrisoner = otherPawn.TryGetComp<CompPrisoner>();
             if( compPrisoner == null )
             {   // Pawn is missing comp
-                Log.ErrorOnce( string.Format( "{0} is missing CompPrisoner!", otherPawn.LabelShort ), ( 0x0BAD0000 | ( otherPawn.GetHashCode() & 0x0000FFFF ) ) );
+                //Log.ErrorOnce( string.Format( "{0} is missing CompPrisoner!", otherPawn.LabelShort ), ( 0x0BAD0000 | ( otherPawn.GetHashCode() & 0x0000FFFF ) ) );
                 return null;
             }
 
             if( compPrisoner.wasArrested )
             {   // Pawn was already arrested
+                //Log.Message( string.Format( "\t{0} wasArrested already", pawn.LabelShort ) );
                 return null;
             }
 
@@ -78,13 +81,13 @@ namespace PrisonersAndSlaves
                 return null;
             }
 
-            Log.Message( string.Format( "{0} wants to arrest {1} for {2}", pawn.NameStringShort, otherPawn.NameStringShort, lawBroken.label ) );
+            //Log.Message( string.Format( "{0} wants to arrest {1} for {2}", pawn.NameStringShort, otherPawn.NameStringShort, lawBroken.label ) );
 
             compPrisoner.lawBroken = lawBroken;
 
             if( !otherPawn.CanBeArrested() )
             {   // Needs to be subdued first
-                Log.Message( string.Format( "{0} can't arrest {1}, refuses to be arrested", pawn.NameStringShort, otherPawn.NameStringShort ) );
+                //Log.Message( string.Format( "{0} can't arrest {1}, refuses to be arrested", pawn.NameStringShort, otherPawn.NameStringShort ) );
                 var attackVerb = pawn.TryGetAttackVerb();
                 bool nonLethal = (
                     ( attackVerb == null )||
@@ -95,10 +98,10 @@ namespace PrisonersAndSlaves
                     ( !nonLethal )
                 )
                 {
-                    Log.Message( string.Format( "{0} needs to subdue {1} but is using a weapon with lethal force which the law doesn't allow", pawn.NameStringShort, otherPawn.NameStringShort ) );
+                    //Log.Message( string.Format( "{0} needs to subdue {1} but is using a weapon with lethal force which the law doesn't allow", pawn.NameStringShort, otherPawn.NameStringShort ) );
                     return null;
                 }
-                Log.Message( string.Format( "{0} is subduing {1}", pawn.NameStringShort, otherPawn.NameStringShort ) );
+                //Log.Message( string.Format( "{0} is subduing {1}", pawn.NameStringShort, otherPawn.NameStringShort ) );
                 var subdueJob = new Job( JobDefOf.AttackStatic, otherPawn );
                 return subdueJob;
             }
@@ -111,35 +114,45 @@ namespace PrisonersAndSlaves
                 ( otherPawn.IsColonist )
             )
             {   // Take the offender home (only if they are a colonist)
-                Log.Message( string.Format( "{0} wants to take {1} home", pawn.NameStringShort, otherPawn.NameStringShort ) );
+                //Log.Message( string.Format( "{0} wants to take {1} home", pawn.NameStringShort, otherPawn.NameStringShort ) );
                 bedFor = otherPawn.ownership.OwnedBed;
                 doors = bedFor.GetRoom().Portals();
             }
 
-            if( bedFor == null )
+            if(
+                ( bedFor == null )&&
+                ( lawBroken.takeToPrisonIfNoHome )
+            )
             {   // Take the offender to prison
-                Log.Message( string.Format( "{0} wants to take {1} to prison", pawn.NameStringShort, otherPawn.NameStringShort ) );
+                //Log.Message( string.Format( "{0} wants to take {1} to prison", pawn.NameStringShort, otherPawn.NameStringShort ) );
                 bedFor = RestUtility.FindBedFor( otherPawn, pawn, true, false, false );
                 if( bedFor == null )
                 {   // No prison bed for law breaker
-                    Log.Message( string.Format( "No free prisoner bed to assign to {0}", otherPawn.NameStringShort ) );
+                    //Log.Message( string.Format( "No free prisoner bed to assign to {0}", otherPawn.NameStringShort ) );
                     return null;
                 }
             }
 
+            if( bedFor == null )
+            {   // No place to take them
+                //Log.Message( string.Format( "No free bed to assign to {0}", otherPawn.NameStringShort ) );
+                return null;
+            }
+
             if( !pawn.CanReserveAndReach( bedFor, PathEndMode.ClosestTouch, Danger.Deadly, 1 ) )
             {   // Can't get to the bed
+                //Log.Message( string.Format( "{0} cannot reach and reserve {1}", pawn.NameStringShort, bedFor.ThingID ) );
                 return null;
             }
 
 #if DEBUG
             if( !bedFor.ForPrisoners )
             {   // Take the offender home
-                Log.Message( string.Format( "{0} is taking {1} home at {2}", pawn.NameStringShort, otherPawn.NameStringShort, bedFor.Position ) );
+                //Log.Message( string.Format( "{0} is taking {1} home at {2}", pawn.NameStringShort, otherPawn.NameStringShort, bedFor.Position ) );
             }
             else
             {   // Arrest the offender
-                Log.Message( string.Format( "{0} is taking {1} to prison as {2}", pawn.NameStringShort, otherPawn.NameStringShort, bedFor.Position ) );
+                //Log.Message( string.Format( "{0} is taking {1} to prison at {2}", pawn.NameStringShort, otherPawn.NameStringShort, bedFor.Position ) );
             }
 #endif
 

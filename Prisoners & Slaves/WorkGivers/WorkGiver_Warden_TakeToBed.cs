@@ -14,6 +14,7 @@ namespace PrisonersAndSlaves
 
 		public override Job JobOnThing( Pawn pawn, Thing t )
 		{
+            //Log.Message( string.Format( "WorkGiver_Warden_TakeToBed( {0}, {1} )", pawn.LabelShort, t.ThingID ) );
 			if( !this.ShouldTakeCareOfPrisoner( pawn, t ) )
 			{
 				return null;
@@ -21,11 +22,27 @@ namespace PrisonersAndSlaves
 			var warden = pawn;
 			var prisoner = t as Pawn;
 			var compPrisoner = prisoner.GetComp<CompPrisoner>();
-			if(
-				( compPrisoner != null ) &&
-				( compPrisoner.ShouldBeTransfered ) &&
-				( warden.CanReserve( prisoner, 1 ) )
-			)
+            if(
+                ( prisoner.IsColonist )&&
+                ( compPrisoner.wasArrested )
+            )
+            {
+                if( prisoner.ownership.OwnedBed != null )
+                {  
+                    if( prisoner.GetRoom() == prisoner.ownership.OwnedBed.GetRoom() )
+                    {   // Colonist is already in their room
+                        //Log.Message( string.Format( "\t{0} is already in their room", prisoner.LabelShort ) );
+                        return null;
+                    }
+                    //Log.Message( string.Format( "\t{0} should haul {1} back to their room", pawn.LabelShort, prisoner.LabelShort ) );
+                    var haulToLoc = prisoner.ownership.OwnedBed.GetRoom().Cells.RandomElement();
+                    var job = new Job( Data.JobDefOf.TransferPrisoner, prisoner, haulToLoc );
+                    job.maxNumToCarry = 1;
+                    return job;
+                }
+                //Log.Message( string.Format( "\t{0} does not have a private bed", prisoner.LabelShort ) );
+            }
+			if( compPrisoner.ShouldBeTransfered )
 			{
 				//Log.Message( string.Format( "Prisoner {0} should be transfered and {1} wants to escort", prisoner.Name, warden.Name ) );
 				var haulToLoc = compPrisoner.haulTarget.GetRoom().Cells.RandomElement();
@@ -46,17 +63,16 @@ namespace PrisonersAndSlaves
                 return null;
             }
 			if(
-				( !prisoner.Downed ) &&
-				( !prisonerRoom.isPrisonCell ) &&
-				( warden.CanReserve( prisoner, 1 ) )
+				( !prisoner.Downed )&&
+				( !prisonerRoom.isPrisonCell )
 			)
 			{
 				//Log.Message( string.Format( "Prisoner {0} is not in a prison room and {1} wants to take back to bed", prisoner.Name, warden.Name ) );
                 bool bedNotInPrisonCell = ( prisoner.ownership.OwnedBed != null )&&( prisoner.ownership.OwnedBed.Position.GetRoom() != prisonerRoom );
                 bool foundFreeBedInPrisonCell = false;
 				if(
-					( !bedNotInPrisonCell ) &&
-					( prisonerRoom != null ) &&
+					( !bedNotInPrisonCell )&&
+					( prisonerRoom != null )&&
 					( !prisonerRoom.TouchesMapEdge )
 				)
 				{
@@ -111,8 +127,7 @@ namespace PrisonersAndSlaves
 			if(
 				( prisoner.Downed )&&
 				( prisoner.health.NeedsMedicalRest )&&
-				( !prisoner.InBed() )&&
-				( warden.CanReserve( prisoner, 1 ) )
+				( !prisoner.InBed() )
 			)
 			{
 				var bedFor = RestUtility.FindBedFor( prisoner, warden, true, true, false );

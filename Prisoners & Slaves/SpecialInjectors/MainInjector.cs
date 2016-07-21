@@ -194,8 +194,32 @@ namespace PrisonersAndSlaves
             // Change starting social fight so instigator is known
             var RW_Pawn_InteractionsTracker_StartSocialFight =
                 typeof( Pawn_InteractionsTracker ).GetMethod( "StartSocialFight", BindingFlags.Instance | BindingFlags.Public );
-            var RaS_Pawn_InteractionsTracker_StartSocialFight =
+            var PaS_Pawn_InteractionsTracker_StartSocialFight =
                 typeof( _Pawn_InteractionsTracker ).GetMethod( "_StartSocialFight", BindingFlags.Static | BindingFlags.NonPublic );
+            if( !Detours.TryDetourFromTo( RW_Pawn_InteractionsTracker_StartSocialFight, PaS_Pawn_InteractionsTracker_StartSocialFight ) )
+            {
+                return false;
+            }
+
+            // Change warden ShouldTakeCareOfPrisoner to be compPrisoner aware
+            var RW_WorkGiver_Warden_ShouldTakeCareOfPrisoner =
+                typeof( WorkGiver_Warden ).GetMethod( "ShouldTakeCareOfPrisoner", BindingFlags.Instance | BindingFlags.NonPublic );
+            var PaS_WorkGiver_Warden_ShouldTakeCareOfPrisoner =
+                typeof( _WorkGiver_Warden ).GetMethod( "_ShouldTakeCareOfPrisoner", BindingFlags.Instance | BindingFlags.NonPublic );
+            if( !Detours.TryDetourFromTo( RW_WorkGiver_Warden_ShouldTakeCareOfPrisoner, PaS_WorkGiver_Warden_ShouldTakeCareOfPrisoner ) )
+            {
+                return false;
+            }
+
+            // Change warden feed utility to be compPrisoner aware
+            var RW_WardenFeedUtility_ShouldBeFed =
+                typeof( WardenFeedUtility ).GetMethod( "ShouldBeFed", BindingFlags.Static | BindingFlags.Public );
+            var PaS_WardenFeedUtility_ShouldBeFed =
+                typeof( _WardenFeedUtility ).GetMethod( "_ShouldBeFed", BindingFlags.Static | BindingFlags.NonPublic );
+            if( !Detours.TryDetourFromTo( RW_WardenFeedUtility_ShouldBeFed, PaS_WardenFeedUtility_ShouldBeFed ) )
+            {
+                return false;
+            }
 
 			return true;
 		}

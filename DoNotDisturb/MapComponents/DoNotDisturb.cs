@@ -46,7 +46,7 @@ namespace esm
 				if(
                     ( pawn.IsPrisonerOfColony )||
 					( room == null )||
-					( !room.Owners.Contains<Pawn>(pawn) )
+					( !room.Owners.Contains( pawn ) )
 				)
 				{
 					// Pawn is a prisoner or not in their own private room
@@ -61,6 +61,7 @@ namespace esm
                         ( !room.Owners.Contains( (Pawn)t ) )
                     ) ) )||
                     ( room.Owners.Any( p => p.GetRoom() != room ) )
+                )
 				{
 					// Not alone in room or the other pawn isn't an owner or the other owners are not in the room
 					lockState = LockState.WantUnlock;

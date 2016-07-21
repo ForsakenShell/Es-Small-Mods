@@ -7,9 +7,11 @@ namespace PrisonersAndSlaves
     public class CompProperties_RestrictedDoor : CompProperties
     {
 
-        public bool DefaultAllowForPrisoners = false;
-        public bool DefaultAllowForSlaves = false;
-        public bool DefaultAllowForGuests = true;
+        public bool DefaultAllowPrisoners = false;
+        public bool DefaultAllowSlaves = false;
+        public bool DefaultAllowGuests = true;
+        public bool DefaultAllowColonists = true;
+        public bool DefaultAllowAnimals = true;
 
         public CompProperties_RestrictedDoor()
         {

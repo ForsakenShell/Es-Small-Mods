@@ -15,7 +15,7 @@ namespace PrisonersAndSlaves
 
         private Dictionary<Pawn,bool>           cachedRestrictionChecks;
 
-        private bool                            _queueUpdate;
+        //private bool                            _queueUpdate;
 
         private CompPower                       _compPower;
         public CompPower                        CompPower
@@ -69,6 +69,11 @@ namespace PrisonersAndSlaves
 
         public override bool                    PawnCanOpen( Pawn p )
         {
+            if( Current.ProgramState != ProgramState.MapPlaying )
+            {
+                Log.Message( string.Format( "Trying to check PawnCanOpen for {0} on {1} during {2}", p.LabelShort, this.ThingID, Current.ProgramState ) );
+                return false;
+            }
             var restrictedComps = this.ListRestricted;
             if( restrictedComps.NullOrEmpty() )
             {
@@ -151,6 +156,7 @@ namespace PrisonersAndSlaves
         }
         */
 
+        /*
         public override void                    SpawnSetup()
         {
             base.SpawnSetup();
@@ -170,6 +176,7 @@ namespace PrisonersAndSlaves
                 UpdateDoorStatus();
             }
         }
+        */
 
 #if DEBUG
         public override string GetInspectString()
@@ -189,6 +196,7 @@ namespace PrisonersAndSlaves
 
         #endregion
 
+        /*
         public void                             QueueDoorStatusUpdate( bool immediateUpdate = false )
         {
             if( immediateUpdate )
@@ -200,17 +208,36 @@ namespace PrisonersAndSlaves
                 _queueUpdate = true;
             }
         }
+        */
 
         private void                            UpdateDoorStatus()
         {
             // Flush short-term cache
-            _queueUpdate = false;
-            cachedRestrictionChecks.Clear();
             foreach( var comp in ListRestricted )
             {
                 comp.UpdateCompStatus();
             }
             //this.BroadcastCompSignal( Data.Signal.UpdateStatus );
+        }
+
+        public void                             ClearCache( bool updateAfterClear = false )
+        {
+            if( cachedRestrictionChecks.Count > 0 )
+            {
+                cachedRestrictionChecks.Clear();
+            }
+            var compList = ListRestricted;
+            if( !compList.NullOrEmpty() )
+            {
+                foreach( var comp in ListRestricted )
+                {
+                    comp.ClearCache();
+                }
+            }
+            if( updateAfterClear )
+            {
+                UpdateDoorStatus();
+            }
         }
 
     }

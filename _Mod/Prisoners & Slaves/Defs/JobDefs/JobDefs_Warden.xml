@@ -50,7 +50,7 @@
 
     <JobDef>
         <defName>ReleasePrisoner</defName>
-        <driverClass>PrisonersAndSlaves.WorkGiver_Warden_ReleasePrisoner</driverClass>
+        <driverClass>PrisonersAndSlaves.JobDriver_Warden_ReleasePrisoner</driverClass>
         <reportString>Releasing TargetA.</reportString>
         <alwaysShowWeapon>true</alwaysShowWeapon>
     </JobDef>

@@ -53,9 +53,9 @@ namespace esm
 			// Go to the target
 			Toil toilGoto = Toils_Goto.GotoCell( TargetIndex.A, PathEndMode.Touch );
 			// Fail going to the target if it becomes unreachable
-			ToilFailConditions.FailOn< Toil >( toilGoto, ( Func< bool > )(() =>
+            toilGoto.FailOn( ( Func< bool > )(() =>
 				{
-					if( Reachability.CanReach( pawn, (TargetInfo)TargetLocA, PathEndMode.Touch, pawn.NormalMaxDanger() ) )
+                    if( pawn.CanReach( (TargetInfo)TargetLocA, PathEndMode.Touch, pawn.NormalMaxDanger() ) )
 						return false;
 					return true;
 				}));
@@ -118,12 +118,12 @@ namespace esm
 					}
 				} ) );
 			// Some fun sounds while working
-			ToilEffects.WithSustainer( toilWork, ( Func< SoundDef > )(() =>
+            toilWork.WithSustainer( ( Func< SoundDef > )(() =>
 				{
 					return SmoothWall.soundDef;
 				} ) );
 			// Some fun effects while working
-			ToilEffects.WithEffect( toilWork, "Mine", TargetIndex.A );
+            toilWork.WithEffect( "Mine", TargetIndex.A );
 			yield return toilWork;
 			// And we're done.
 			yield break;

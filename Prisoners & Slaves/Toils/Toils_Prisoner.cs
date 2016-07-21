@@ -68,6 +68,12 @@ namespace PrisonersAndSlaves
                     {
                         throw new Exception( "Prisoner " + prisoner.Name + " is missing Pawn_ApparelTracker!" );
                     }
+                    // Make sure the prisoner has worksettings
+                    if( prisoner.workSettings == null )
+                    {
+                        prisoner.workSettings = new Pawn_WorkSettings( prisoner );
+                        prisoner.workSettings.Disable( WorkTypeDefOf.Warden );
+                    }
                     // Get the prisoners original faction and pawk kind
                     compPrisoner.originalFaction = prisoner.Faction;
                     compPrisoner.originalPawnKind = prisoner.kindDef;
@@ -301,7 +307,7 @@ namespace PrisonersAndSlaves
                 {
                     return;
                 }
-                Log.Message( "Toils_Prisoner.CheckArrestable returning JobCondition.Incompleteable!" );
+                //Log.Message( "Toils_Prisoner.CheckArrestable returning JobCondition.Incompleteable!" );
                 toil.actor.jobs.EndCurrentJob( JobCondition.Incompletable );
             };
             return toil;
@@ -351,7 +357,28 @@ namespace PrisonersAndSlaves
                 }
                 // Set that the pawn was arrested and how long it should be held for
                 compPrisoner.wasArrested = true;
-                compPrisoner.releaseAfterTick = Find.TickManager.TicksGame + (int)( compPrisoner.lawBroken.daysToImprisonFor * GenDate.TicksPerDay );
+                compPrisoner.releaseAfterTick = Find.TickManager.TicksGame + (int)( compPrisoner.lawBroken.daysToImprisonFor * (float)GenDate.TicksPerDay );
+            };
+            return toil;
+        }
+
+        public static Toil UnArrestPawn( TargetIndex PrisonerInd )
+        {
+            var toil = new Toil();
+            toil.defaultCompleteMode = ToilCompleteMode.Instant;
+            toil.initAction = () =>
+            {
+                var prisoner = toil.actor.CurJob.GetTarget( PrisonerInd ).Thing as Pawn;
+                var bed = prisoner.ownership.OwnedBed;
+                var compPrisoner = prisoner.TryGetComp<CompPrisoner>();
+                if( prisoner.IsPrisonerOfColony )
+                {
+                    GenGuest.PrisonerRelease( prisoner );
+                }
+                // Clear that the pawn was arrested and how long it should be held for
+                compPrisoner.wasArrested = false;
+                compPrisoner.releaseAfterTick = 0;
+                compPrisoner.lawBroken = null;
             };
             return toil;
         }

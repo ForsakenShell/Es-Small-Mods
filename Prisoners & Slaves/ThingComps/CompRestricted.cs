@@ -12,6 +12,7 @@ namespace PrisonersAndSlaves
         public abstract bool            CacheResults { get; }
         public abstract int             Priority { get; }
         public abstract bool            PawnCanOpen( Pawn p, bool isEscaping );
+        public abstract void            ClearCache();
 
         // Child classes may override these
 
@@ -60,9 +61,7 @@ namespace PrisonersAndSlaves
 
         #region Update Comp State
 
-        public virtual void             UpdateCompStatus()
-        {
-        }
+        public abstract void            UpdateCompStatus();
 
         public virtual void             PostCompMake()
         {
@@ -72,6 +71,7 @@ namespace PrisonersAndSlaves
 
         #region Helper Methods
 
+        /*
         public void                     QueueUpdateOnParent( bool immediateUpdate = false )
         {
             if( Door != null )
@@ -79,6 +79,7 @@ namespace PrisonersAndSlaves
                 Door.QueueDoorStatusUpdate( immediateUpdate );
             }
         }
+        */
 
         /*
         public override void            ReceiveCompSignal( string signal )

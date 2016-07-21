@@ -58,6 +58,7 @@
             <li>PrisonersAndSlaves.ITab_Restricted</li>
         </inspectorTabs>
         <DrawGUIOverlay>True</DrawGUIOverlay>
+        <regionBarrier>True</regionBarrier>
     </ThingDef>
 
     <ThingDef ParentName="RestrictedDoorBase">
@@ -79,9 +80,9 @@
         <costStuffCount>25</costStuffCount>
         <comps>
             <li Class="PrisonersAndSlaves.CompProperties_RestrictedDoor">
-                <DefaultAllowForPrisoners>true</DefaultAllowForPrisoners>
-                <DefaultAllowForSlaves>true</DefaultAllowForSlaves>
-                <DefaultAllowForGuests>false</DefaultAllowForGuests>
+                <DefaultAllowPrisoners>true</DefaultAllowPrisoners>
+                <DefaultAllowSlaves>true</DefaultAllowSlaves>
+                <DefaultAllowGuests>false</DefaultAllowGuests>
             </li>
             <li Class="PrisonersAndSlaves.CompProperties_Ownable" />
             <li Class="PrisonersAndSlaves.CompProperties_Lockable" />

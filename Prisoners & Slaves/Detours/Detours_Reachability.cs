@@ -75,18 +75,18 @@ namespace PrisonersAndSlaves
 
         internal static void                _ClearCache()
         {
+            if( Current.ProgramState == ProgramState.Entry )
+            {
+                return;
+            }
             if( cacheDictCount() <= 0 )
             {
                 return;
             }
             cacheDictClear();
-            if( Current.ProgramState != ProgramState.MapPlaying )
-            {
-                return;
-            }
             foreach( var door in Find.ListerBuildings.AllBuildingsColonistOfClass<Building_RestrictedDoor>() )
             {
-                door.QueueDoorStatusUpdate( true );
+                door.ClearCache();
             }
         }
 

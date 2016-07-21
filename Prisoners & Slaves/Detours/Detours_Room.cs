@@ -88,7 +88,8 @@ namespace PrisonersAndSlaves
                     var restrictedDoor = door as Building_RestrictedDoor;
                     if( restrictedDoor != null )
                     {
-                        restrictedDoor.QueueDoorStatusUpdate( true );
+                        //restrictedDoor.QueueDoorStatusUpdate( true );
+                        restrictedDoor.ClearCache( true );
                     }
                     //door.BroadcastCompSignal( Data.Signal.InternalRecache );
                 }
@@ -113,7 +114,7 @@ namespace PrisonersAndSlaves
             {
                 color = PrisonFieldColor;
             }
-            else if( room.IsSlaveWorkArea() )
+            else if( room.Role == Data.RoomRoleDefOf.SlaveWorkArea )
             {
                 color = SlaveFieldColor;
             }
