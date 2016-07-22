@@ -3,6 +3,7 @@
 
     <WorkGiverDef>
         <defName>SmoothWalls_WorkGiver</defName>
+        <label>smooth walls</label>
         <giverClass>esm.WorkGiver_SmoothWall</giverClass>
         <workType>Construction</workType>
         <priorityInType>8</priorityInType>

@@ -4,7 +4,7 @@
     <!-- New - Make a prisoner a slave -->
     <WorkGiverDef>
         <defName>EnslavePrisoner</defName>
-        <label>enslave prisoner</label>
+        <label>enslave prisoners</label>
         <giverClass>PrisonersAndSlaves.WorkGiver_Warden_EnslavePrisoner</giverClass>
         <workType>Warden</workType>
         <verb>enslave prisoner</verb>
@@ -18,7 +18,7 @@
     <!-- New - Restrain a pawn -->
     <WorkGiverDef>
         <defName>RestrainPawn</defName>
-        <label>restrain</label>
+        <label>restrain prisoners</label>
         <giverClass>PrisonersAndSlaves.WorkGiver_Warden_RestrainPawn</giverClass>
         <workType>Warden</workType>
         <verb>restrain pawn</verb>
@@ -32,7 +32,7 @@
     <!-- New - Free a slave -->
     <WorkGiverDef>
         <defName>FreeSlave</defName>
-        <label>free slave</label>
+        <label>free slaves</label>
         <giverClass>PrisonersAndSlaves.WorkGiver_Warden_FreeSlave</giverClass>
         <workType>Warden</workType>
         <verb>free slave</verb>
@@ -60,7 +60,7 @@
     <!-- New - Arrest law breakers -->
     <WorkGiverDef>
         <defName>ArrestLawBreakers</defName>
-        <label>arrest law breakers</label>
+        <label>enforce laws</label>
         <giverClass>PrisonersAndSlaves.WorkGiver_Warden_ArrestLawBreaker</giverClass>
         <workType>Warden</workType>
         <verb>arrest</verb>
@@ -88,7 +88,7 @@
     <!-- New - Unrestrain pawn -->
     <WorkGiverDef>
         <defName>UnrestrainPawn</defName>
-        <label>unrestrain</label>
+        <label>unrestrain prisoners</label>
         <giverClass>PrisonersAndSlaves.WorkGiver_Warden_UnrestrainPawn</giverClass>
         <workType>Warden</workType>
         <verb>remove restraints</verb>
