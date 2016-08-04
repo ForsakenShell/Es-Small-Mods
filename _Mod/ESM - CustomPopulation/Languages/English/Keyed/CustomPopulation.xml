@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+    <CP_Title>Custom Population</CP_Title>
+    <CP_Description>This menu allows you to set custom storyteller population limits.  The default values are the values set in the StorytellerDef xml files.\n\nWARNING: Setting very high values may cause your game to lag or crash!</CP_Description>
+
+    <CP_MinPopLabel>Minimum population</CP_MinPopLabel>
+    <CP_MaxPopLabel>Maximum population</CP_MaxPopLabel>
+    <CP_CritPopLabel>Critical population</CP_CritPopLabel>
+
+    <CP_MinPopTip>Set the minimum population limit for this storyteller.</CP_MinPopTip>
+    <CP_MaxPopTip>Set the maximum population limit for this storyteller.</CP_MaxPopTip>
+    <CP_CritPopTip>Set the critical population limit for this storyteller.</CP_CritPopTip>
+
+</LanguageData>

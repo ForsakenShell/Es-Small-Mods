@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <CommunityCoreLibrary.ModHelperDef>
+        <defName>CustomPopulation</defName>
+
+        <ModName>ESM - Custom Population</ModName>
+
+        <minCCLVersion>0.14.0</minCCLVersion>
+
+        <ModConfigurationMenus>
+            <li>
+                <label>Custom Population</label>
+                <mcmClass>CustomPopulation.ConfigurationMenu</mcmClass>
+            </li>
+        </ModConfigurationMenus>
+
+    </CommunityCoreLibrary.ModHelperDef>
+
+</Defs>

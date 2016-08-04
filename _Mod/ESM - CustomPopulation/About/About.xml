@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+    <name>ESM - Custom Population</name>
+    <author>1000101</author>
+    <url>TBA</url>
+    <targetVersion>0.14.1234</targetVersion>
+    <description>REQUIRES: Community Core Library v0.14.0 or later\n\nAdds a mod configuration menu that allows you to override the storyteller population limits.</description>
+</ModMetaData>

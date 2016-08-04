@@ -15,7 +15,7 @@ namespace esm
 {
 	public class JobDriver_SmoothWall : JobDriver
 	{
-		private const int 				TicksPerStrike = 100;
+		private const int 				TicksPerStrike = 25;
 		private const int				DamagePerStrike = 10;
 		private int						smoothTicks;
 		private int						nextSmoothStrike
